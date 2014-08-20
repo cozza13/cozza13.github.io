@@ -143,147 +143,147 @@ var lowerLegPitchOffsetSliderX;
 
 controlsBackground = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX, y: backgroundY, width: backgroundWidth, height: backgroundHeight},
-					imageURL: "overlays/ddao-background.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-background.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 controlsBackgroundWalkEdit = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX, y: backgroundY, width: 0, height: 0},
-					imageURL: "overlays/ddao-background-walk-edit.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-background-walk-edit.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 controlsBackgroundStandEdit = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX, y: backgroundY, width: 0, height: 0},
-					imageURL: "overlays/ddao-background-stand-edit.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-background-stand-edit.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 controlsBackgroundFlyingEdit = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX, y: backgroundY, width: 0, height: 0},
-					imageURL: "overlays/ddao-background-flying-edit.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-background-flying-edit.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 controlsMinimisedTab = Overlays.addOverlay("image", {
 					bounds: { x: Window.innerWidth - 35, y: Window.innerHeight/2 - 175, width: 0, height: 0},
-					imageURL: "overlays/ddao-tab.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-tab.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 walkSliderX = minSliderX + (walkSpeedIncX * baseFrequency);
 walkSpeedSlider = Overlays.addOverlay("image", {
 					bounds: { x: walkSliderX, y: backgroundY + 169, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 hipSwaySliderX = minSliderX + ((hipSwayAmount/HIP_SWAY_RANGE) * sliderRangeX ); // sets range
 hipSwaySlider = Overlays.addOverlay("image", {
 					bounds: { x: hipSwaySliderX, y: backgroundY + 234, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 hipBobSliderX = minSliderX + ((hipBobAmount/0.05) * sliderRangeX ); // 0.05 sets range
 hipBobSlider = Overlays.addOverlay("image", {
 					bounds: { x: hipBobSliderX, y: backgroundY + 298, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 hipRollSliderX = minSliderX + ((hipRollAmount/15) * sliderRangeX ); // 15 sets range
 hipRollSlider = Overlays.addOverlay("image", {
 					bounds: { x: hipRollSliderX, y: backgroundY + 363, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 upperLegPitchSliderX = minSliderX + ((upperLegPitch/UPPER_LEG_PITCH_RANGE) * sliderRangeX );
 upperLegPitchSlider = Overlays.addOverlay("image", {
 					bounds: { x: upperLegPitchSliderX, y: backgroundY + 428, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 lowerLegPitchSliderX = minSliderX + ((lowerLegPitch/LOWER_LEG_PITCH_RANGE) * sliderRangeX );
 lowerLegPitchSlider = Overlays.addOverlay("image", {
 					bounds: { x: lowerLegPitchSliderX, y: backgroundY + 493, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 upperLegPitchOffsetSliderX = minSliderX + ((upperLegPitchOffset/20) * sliderRangeX ); // 20 sets range
 upperLegPitchOffsetSlider = Overlays.addOverlay("image", {
 					bounds: { x: upperLegPitchOffsetSliderX, y: backgroundY + 558, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 lowerLegPitchOffsetSliderX = minSliderX + ((lowerLegPitchOffset/60) * sliderRangeX ); // 60 sets range
 lowerLegPitchOffsetSlider = Overlays.addOverlay("image", {
 					bounds: { x: lowerLegPitchOffsetSliderX, y: backgroundY + 623, width: 25, height: 25},
-					imageURL: "overlays/ddao-slider-handle.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-slider-handle.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 onButton = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+20, y: backgroundY+51, width: 60, height: 47},
-					imageURL: "overlays/ddao-on-button.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-on-button.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 offButton = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+20, y: backgroundY+51, width: 0, height: 0},
-					imageURL: "overlays/ddao-off-button.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-off-button.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 configWalkButton = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+83, y: backgroundY+51, width: 60, height: 47},
-					imageURL: "overlays/ddao-edit-walk-button.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-edit-walk-button.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 configWalkButtonSelected = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+83, y: backgroundY+51, width: 0, height: 0},
-					imageURL: "overlays/ddao-edit-walk-button-selected.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-edit-walk-button-selected.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 configStandButton = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+146, y: backgroundY+51, width: 60, height: 47},
-					imageURL: "overlays/ddao-edit-stand-button.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-edit-stand-button.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 configStandButtonSelected = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+146, y: backgroundY+51, width: 0, height: 0},
-					imageURL: "overlays/ddao-edit-stand-button-selected.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-edit-stand-button-selected.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 configFlyingButton = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+209, y: backgroundY+51, width: 60, height: 47},
-					imageURL: "overlays/ddao-edit-fly-button.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-edit-fly-button.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 configFlyingButtonSelected = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+209, y: backgroundY+51, width: 0, height: 0},
-					imageURL: "overlays/ddao-edit-fly-button-selected.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-edit-fly-button-selected.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 hideButton = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+272, y: backgroundY+51, width: 60, height: 47},
-					imageURL: "overlays/ddao-hide-button.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-hide-button.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
 hideButtonSelected = Overlays.addOverlay("image", {
 					bounds: { x: backgroundX+272, y: backgroundY+51, width: 0, height: 0},
-					imageURL: "overlays/ddao-hide-button-selected.png",
+					imageURL: "http://cozza13.github.io/overlays/ddao-hide-button-selected.png",
 					color: { red: 255, green: 255, blue: 255},
 					alpha: 1
 				});
