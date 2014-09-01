@@ -1,0 +1,208 @@
+//
+//  female flying down animation js
+//
+//  Created by Davedub, August 2014
+//
+//  Procedural animation datafile - use with walk.js
+//
+//  Saved animation file containing all the settings, properties and joint details to animate a High Fidelity character
+//
+//	'q' will dump your animation to the console or log. Copy / paste to here for formatted JSON:
+//  http://jsonformatter.curiousconcept.com/
+//
+//  Distributed under the Apache License, Version 2.0.
+//  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
+FemaleFlyingDown = function() {
+    this.animation =
+{
+   "name":"FemaleFlyingDown",
+   "settings":{
+      "baseFrequency":90,
+      "flyingHipsPitch":60,
+      "takeFlightVelocity":40,
+      "maxBankingAngle":40
+   },
+   "adjusters":{
+      "legsSeparation":{
+         "strength":-0.06,
+         "separationAngle":50
+      },
+      "stride":{
+         "strength":0,
+         "upperLegsPitch":30,
+         "lowerLegsPitch":15,
+         "upperLegsPitchOffset":0.2,
+         "lowerLegsPitchOffset":1.5
+      }
+   },
+   "joints":[
+      {
+         "name":"hips",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":-6.320754716981133,
+         "yawOffset":0,
+         "rollOffset":0,
+         "thrust":0,
+         "bob":0,
+         "sway":0,
+         "thrustPhase":180,
+         "bobPhase":0,
+         "swayPhase":-90,
+         "thrustOffset":0,
+         "bobOffset":0,
+         "swayOffset":0
+      },
+      {
+         "name":"upperLegs",
+         "pitch":0,
+         "yaw":0.5283018867924528,
+         "roll":0.5283018867924528,
+         "pitchPhase":0.6792452830188722,
+         "yawPhase":63.16981132075469,
+         "rollPhase":-76.75471698113208,
+         "pitchOffset":7.4716981132075455,
+         "yawOffset":-8.528301886792454,
+         "rollOffset":-1.5849056603773581
+      },
+      {
+         "name":"lowerLegs",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":-32.943396226415096,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"feet",
+         "pitch":0,
+         "yaw":1.9622641509433962,
+         "roll":0.6792452830188679,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":-56.37735849056604,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"toes",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":0,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"spine",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":-13.245283018867921,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"spine1",
+         "pitch":0,
+         "yaw":0,
+         "roll":1.0566037735849056,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":3.056603773584905,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"spine2",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":-6.452830188679243,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"shoulders",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":16.981132075471695,
+         "yawOffset":0.6792452830188678,
+         "rollOffset":15.622641509433958
+      },
+      {
+         "name":"upperArms",
+         "pitch":1.6981132075471697,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":28.188679245283012,
+         "yawOffset":9.849056603773583,
+         "rollOffset":0
+      },
+      {
+         "name":"lowerArms",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":0,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"hands",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":0,
+         "yawOffset":0,
+         "rollOffset":0
+      },
+      {
+         "name":"head",
+         "pitch":0,
+         "yaw":0,
+         "roll":0,
+         "pitchPhase":0,
+         "yawPhase":0,
+         "rollPhase":0,
+         "pitchOffset":9.849056603773583,
+         "yawOffset":0,
+         "rollOffset":0
+      }
+   ]
+}
+;
+    this.loadAnimation = function(){return this.animation;};
+};
