@@ -14,11 +14,11 @@
 // Set asset paths here:
 
 // path to the animation files
-var pathToAnimFiles = 'http://localhost/downloads/hf/scripts/animation-files/';
+var pathToAnimFiles = 'http://cozza13.github.io/animation-files/';
 //var pathToAnimFiles = 'http://highfidelity.davedub.co.uk/proceduralanimation/walk/animation-files/';
 
 // path to the images used for the overlays
-var pathToOverlays = 'http://localhost/downloads/hf/overlays/';
+var pathToOverlays = 'http://cozza13.github.io/overlays/';
 //var pathToOverlays = 'http://highfidelity.davedub.co.uk/overlays/walkScript/';
 
 // path to the sounds used for the footsteps
