@@ -14,12 +14,12 @@
 // Set asset paths here:
 
 // path to the animation files
-var pathToAnimFiles = 'http://cozza13.github.io/scripts/animation-files/';									// loads fine (files must be present on localhost)
+var pathToAnimFiles = 'http://cozza13.github.io/animation-files/';									// loads fine (files must be present on localhost)
 //var pathToAnimFiles = 'http://highfidelity.davedub.co.uk/procedural/walk/animation-files/';         				// files present, but load with errors - weird
 //var pathToAnimFiles = 'http://s3-us-west-1.amazonaws.com/highfidelity-public/procedural-animator/files/';			// working (but only without https)
 
 // path to the images used for the overlays
-var pathToOverlays = 'http://cozza13.github.io/scripts/overlays/';													// loads fine (files must be present on localhost)
+var pathToOverlays = 'http://cozza13.github.io/overlays/';													// loads fine (files must be present on localhost)
 //var pathToOverlays = 'http://highfidelity.davedub.co.uk/procedural/walk/overlays/';								// files present, but won't load - weird
 //var pathToOverlays = 'http://s3-us-west-1.amazonaws.com/highfidelity-public/procedural-animator/images/';			// working (but only without https)
 
