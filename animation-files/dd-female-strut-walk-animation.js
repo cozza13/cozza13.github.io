@@ -23,6 +23,10 @@ FemaleStrutWalk= function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.6387,
+	   "strideLengthBackwards":0.6828
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.06132075471698112,

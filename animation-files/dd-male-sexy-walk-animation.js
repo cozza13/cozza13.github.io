@@ -24,6 +24,10 @@ MaleSexyWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.5278,
+	   "strideLengthBackwards":0.6409
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.004716981132075471,

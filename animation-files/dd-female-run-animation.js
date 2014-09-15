@@ -23,6 +23,10 @@ FemaleRun = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":2.1596,
+	   "strideLengthBackwards":0.9981
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.0481132075471698,

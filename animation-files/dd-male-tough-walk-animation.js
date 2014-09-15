@@ -23,6 +23,10 @@ MaleToughWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.5040,
+	   "strideLengthBackwards":0.6366
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":0.04999999999999999,

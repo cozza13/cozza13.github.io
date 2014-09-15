@@ -23,6 +23,10 @@ MalePowerWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.6302,
+	   "strideLengthBackwards":0.6628
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":0.01792452830188679,

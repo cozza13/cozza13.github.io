@@ -23,6 +23,10 @@ FemaleCoolWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration": {
+	   "strideLengthForwards":1.6463,
+	   "strideLengthBackwards":0.6829
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.0481132075471698,

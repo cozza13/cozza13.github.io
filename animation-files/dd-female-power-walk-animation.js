@@ -23,6 +23,10 @@ FemalePowerWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":2.1123,
+	   "strideLengthBackwards":1.1429
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.06132075471698112,

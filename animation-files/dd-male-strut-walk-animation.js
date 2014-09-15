@@ -22,6 +22,10 @@ MaleStrutWalk= function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.3561,
+	   "strideLengthBackwards":1.2355
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":0.010377358490566035,

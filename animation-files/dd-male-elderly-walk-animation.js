@@ -23,6 +23,10 @@ MaleElderlyWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.0966,
+	   "strideLengthBackwards":0.4637
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.06132075471698112,

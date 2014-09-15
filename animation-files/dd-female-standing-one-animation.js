@@ -21,6 +21,10 @@ FemaleStandingOne = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":2.021,
+	   "strideLengthBackwards":0.9417
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.03679245283018867,

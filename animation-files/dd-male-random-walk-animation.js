@@ -23,6 +23,10 @@ MaleRandomWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":2.4095,
+	   "strideLengthBackwards":1.4740
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":0.01792452830188679,
@@ -63,7 +67,7 @@ MaleRandomWalk = function() {
          "pitch":49.92452830188679,
          "yaw":0,
          "roll":0,
-         "pitchPhase":0.6792452830188722,
+         "pitchPhase":-90,
          "yawPhase":90,
          "rollPhase":-180,
          "pitchOffset":27.84905660377358,

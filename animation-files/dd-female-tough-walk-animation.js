@@ -24,6 +24,10 @@ FemaleToughWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration": {
+	   "strideLengthForwards":1.9314,
+	   "strideLengthBackwards":0.5022
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.021698113207547165,

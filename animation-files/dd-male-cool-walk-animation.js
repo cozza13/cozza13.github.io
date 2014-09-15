@@ -22,6 +22,10 @@ MaleCoolWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.5467,
+	   "strideLengthBackwards":0.6663
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":0.0028301886792452824,

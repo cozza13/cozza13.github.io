@@ -24,6 +24,10 @@ FemaleRandomWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration": {
+	   "strideLengthForwards":1.6681,
+	   "strideLengthBackwards":0.6430
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.0009433962264150941,

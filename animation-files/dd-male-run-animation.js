@@ -24,6 +24,10 @@ MaleRun = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":2.0937,
+	   "strideLengthBackwards":1.0960
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":0.01792452830188679,

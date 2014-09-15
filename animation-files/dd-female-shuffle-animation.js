@@ -24,6 +24,10 @@ FemaleShuffle = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.6005,
+	   "strideLengthBackwards":0.0616
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.05188679245283018,

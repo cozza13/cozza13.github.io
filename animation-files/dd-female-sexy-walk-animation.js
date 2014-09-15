@@ -23,6 +23,10 @@ FemaleSexyWalk = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
+   "calibration":{
+	   "strideLengthForwards":1.5471,
+	   "strideLengthBackwards":0.6605
+   },
    "adjusters":{
       "legsSeparation":{
          "strength":-0.06132075471698112,
