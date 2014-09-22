@@ -23,19 +23,6 @@ MaleFlyingUp = function() {
       "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
-   "adjusters":{
-      "legsSeparation":{
-         "strength":-0.06,
-         "separationAngle":50
-      },
-      "stride":{
-         "strength":0,
-         "upperLegsPitch":30,
-         "lowerLegsPitch":15,
-         "upperLegsPitchOffset":0.2,
-         "lowerLegsPitchOffset":1.5
-      }
-   },
    "joints":[
       {
          "name":"hips",
@@ -68,7 +55,7 @@ MaleFlyingUp = function() {
          "rollPhase":0,
          "pitchOffset":-1.5849056603773581,
          "yawOffset":0.5283018867924527,
-         "rollOffset":6.41509433962264
+         "rollOffset":-6.867924528301888
       },
       {
          "name":"lowerLegs",
@@ -80,7 +67,7 @@ MaleFlyingUp = function() {
          "rollPhase":0,
          "pitchOffset":-16.64150943396226,
          "yawOffset":0,
-         "rollOffset":0
+         "rollOffset":3.849056603773584
       },
       {
          "name":"feet",
@@ -152,7 +139,7 @@ MaleFlyingUp = function() {
          "rollPhase":0,
          "pitchOffset":2.4905660377358485,
          "yawOffset":-41.88679245283019,
-         "rollOffset":0
+         "rollOffset":6.11320754716981
       },
       {
          "name":"upperArms",
@@ -174,9 +161,9 @@ MaleFlyingUp = function() {
          "pitchPhase":0,
          "yawPhase":0,
          "rollPhase":0,
-         "pitchOffset":0,
-         "yawOffset":0,
-         "rollOffset":0
+         "pitchOffset":15.622641509433958,
+         "yawOffset":3.396226415094339,
+         "rollOffset":3.396226415094339
       },
       {
          "name":"hands",
@@ -203,7 +190,6 @@ MaleFlyingUp = function() {
          "rollOffset":0
       }
    ]
-}
-;
+};
     this.loadAnimation = function(){return this.animation;};
 };

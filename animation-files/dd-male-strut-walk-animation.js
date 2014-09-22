@@ -1,5 +1,5 @@
 //
-//  sexy-walk js
+//  male strut walk js
 //
 //  Created by Davedub, August 2014
 //
@@ -12,32 +12,24 @@
 //
 //  Distributed under the Apache License, Version 2.0.
 //  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
+//
 MaleStrutWalk= function() {
+
     this.animation =
-{
+		{
    "name":"MaleStrutWalk",
    "settings":{
-      "baseFrequency":284,
+      "startAngleForwards":140,
+      "startAngleBackwards":40,
+      "stopAngleForwards":120,
+      "stopAngleBackwards":60,
+      "baseFrequency":322,
       "flyingHipsPitch":60,
-      "takeFlightVelocity":40,
       "maxBankingAngle":40
    },
    "calibration":{
-	   "strideLengthForwards":1.3561,
-	   "strideLengthBackwards":1.2355
-   },
-   "adjusters":{
-      "legsSeparation":{
-         "strength":0.010377358490566035,
-         "separationAngle":50
-      },
-      "stride":{
-         "strength":0,
-         "upperLegsPitch":30,
-         "lowerLegsPitch":15,
-         "upperLegsPitchOffset":0.2,
-         "lowerLegsPitchOffset":1.5
-      }
+      "strideLengthForwards":1.725128173828125,
+      "strideLengthBackwards":1.8518218994140625
    },
    "joints":[
       {
@@ -48,14 +40,14 @@ MaleStrutWalk= function() {
          "pitchPhase":180,
          "yawPhase":41.43396226415092,
          "rollPhase":180,
-         "pitchOffset":-3.113207547169811,
+         "pitchOffset":1.9811320754716977,
          "yawOffset":0,
          "rollOffset":0,
-         "thrust":0.005,
-         "bob":0.01,
-         "sway":0.002679245283018868,
+         "thrust":0.003660377358490566,
+         "bob":0.007698113207547171,
+         "sway":0.0035849056603773585,
          "thrustPhase":-160,
-         "bobPhase":0,
+         "bobPhase":180,
          "swayPhase":-90,
          "thrustOffset":0,
          "bobOffset":0,
@@ -69,40 +61,40 @@ MaleStrutWalk= function() {
          "pitchPhase":-90,
          "yawPhase":90,
          "rollPhase":-180,
-         "pitchOffset":16.52830188679245,
+         "pitchOffset":17.886792452830186,
          "yawOffset":-3.245283018867924,
-         "rollOffset":-0.07547169811320753
+         "rollOffset":-10.339622641509434
       },
       {
          "name":"lowerLegs",
-         "pitch":45.16981132075472,
+         "pitch":29.547169811320753,
          "yaw":0,
          "roll":0,
          "pitchPhase":10.188679245283026,
          "yawPhase":180,
          "rollPhase":90,
-         "pitchOffset":-37.69811320754717,
-         "yawOffset":0,
-         "rollOffset":0
+         "pitchOffset":-39.735849056603776,
+         "yawOffset":-1.283018867924528,
+         "rollOffset":5.81132075471698
       },
       {
          "name":"feet",
-         "pitch":25.358490566037737,
+         "pitch":29.88679245283019,
          "yaw":0,
          "roll":0,
-         "pitchPhase":-21.056603773584897,
+         "pitchPhase":-86.26415094339623,
          "yawPhase":90,
          "rollPhase":0,
-         "pitchOffset":8.377358490566035,
-         "yawOffset":6.41509433962264,
-         "rollOffset":-1.5849056603773581
+         "pitchOffset":1.5849056603773581,
+         "yawOffset":-6.6037735849056585,
+         "rollOffset":-3.9622641509433953
       },
       {
          "name":"toes",
          "pitch":22.415094,
          "yaw":0,
          "roll":0,
-         "pitchPhase":-90.33962264150944,
+         "pitchPhase":-106.64150943396226,
          "yawPhase":0,
          "rollPhase":0,
          "pitchOffset":11.886792452830186,
@@ -111,37 +103,37 @@ MaleStrutWalk= function() {
       },
       {
          "name":"spine",
-         "pitch":3.471698113207547,
+         "pitch":2.5660377358490565,
          "yaw":0,
-         "roll":6.188679245283018,
-         "pitchPhase":0,
+         "roll":2.7169811320754715,
+         "pitchPhase":-169.1320754716981,
          "yawPhase":-108,
          "rollPhase":15.622641509433947,
-         "pitchOffset":7.132075471698112,
+         "pitchOffset":0.3396226415094339,
          "yawOffset":0,
          "rollOffset":0
       },
       {
          "name":"spine1",
-         "pitch":0.9056604,
+         "pitch":0,
          "yaw":6.037735849056603,
-         "roll":0,
+         "roll":0.3773584905660377,
          "pitchPhase":0,
          "yawPhase":-180,
          "rollPhase":0,
-         "pitchOffset":7.132075471698112,
+         "pitchOffset":1.0188679245283017,
          "yawOffset":0,
          "rollOffset":0
       },
       {
          "name":"spine2",
-         "pitch":0.9056604,
+         "pitch":0,
          "yaw":2.4150943396226414,
-         "roll":3.471698113207547,
+         "roll":1.660377358490566,
          "pitchPhase":0,
          "yawPhase":-98.49056603773585,
-         "rollPhase":0,
-         "pitchOffset":0,
+         "rollPhase":-0.6792452830188722,
+         "pitchOffset":2.377358490566037,
          "yawOffset":0,
          "rollOffset":0,
          "pitchRange":20
@@ -190,8 +182,8 @@ MaleStrutWalk= function() {
          "pitchPhase":0,
          "yawPhase":-15.622641509433947,
          "rollPhase":-180,
-         "pitchOffset":0,
-         "yawOffset":-3.056603773584905,
+         "pitchOffset":4.754716981132074,
+         "yawOffset":11.547169811320753,
          "rollOffset":1.0188679245283017
       },
       {
@@ -207,7 +199,7 @@ MaleStrutWalk= function() {
          "rollOffset":0
       }
    ]
-}
-;
-       this.loadAnimation = function(){return this.animation;};
+};
+
+    this.loadAnimation = function(){return this.animation;};
 };

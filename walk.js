@@ -1,7 +1,7 @@
 //
 //  walk.js
 //
-//  version 1.004b
+//  version 1.006b
 //
 //  Created by Davedub, August / September 2014
 //
@@ -14,21 +14,21 @@
 // Set asset paths here:
 
 // path to the animation files
-var pathToAnimFiles = 'http://cozza13.github.io/animation-files/';									// loads fine (files must be present on localhost)
+var pathToAnimFiles = 'http://localhost/downloads/hf/scripts/animation-files/';									// loads fine (files must be present on localhost)
 //var pathToAnimFiles = 'http://highfidelity.davedub.co.uk/procedural/walk/animation-files/';         				// files present, but load with errors - weird
-//var pathToAnimFiles = 'http://s3-us-west-1.amazonaws.com/highfidelity-public/procedural-animator/animation-files/';			// working (but only without https)
+//var pathToAnimFiles = 'http://s3-us-west-1.amazonaws.com/highfidelity-public/procedural-animator/files/';			// working (but only without https)
 
 // path to the images used for the overlays
-var pathToOverlays = 'http://cozza13.github.io/overlays/';													// loads fine (files must be present on localhost)
+var pathToOverlays = 'http://localhost/downloads/hf/scripts/overlays/';													// loads fine (files must be present on localhost)
 //var pathToOverlays = 'http://highfidelity.davedub.co.uk/procedural/walk/overlays/';								// files present, but won't load - weird
 //var pathToOverlays = 'http://s3-us-west-1.amazonaws.com/highfidelity-public/procedural-animator/images/';			// working (but only without https)
 
 // path to the sounds used for the footsteps
-var pathToSounds = 'http://highfidelity-public.s3-us-west-1.amazonaws.com/sounds/Footsteps/';
-//var pathToSounds = 'http://localhost/downloads/hf/sounds/Footsteps/';
+//var pathToSounds = 'http://highfidelity-public.s3-us-west-1.amazonaws.com/sounds/Footsteps/';
+var pathToSounds = 'http://localhost/downloads/hf/sounds/Footsteps/';
 
 
-// load all the animation datafiles ( 15 female, 15 male ~ 240k )
+// load all the animation datafiles
 Script.include(pathToAnimFiles+"dd-female-cool-walk-animation.js");
 Script.include(pathToAnimFiles+"dd-female-elderly-walk-animation.js");
 Script.include(pathToAnimFiles+"dd-female-power-walk-animation.js");
@@ -42,8 +42,8 @@ Script.include(pathToAnimFiles+"dd-female-flying-up-animation.js");
 Script.include(pathToAnimFiles+"dd-female-flying-animation.js");
 Script.include(pathToAnimFiles+"dd-female-flying-down-animation.js");
 Script.include(pathToAnimFiles+"dd-female-standing-one-animation.js");
-Script.include(pathToAnimFiles+"dd-female-standing-two-animation.js");
-Script.include(pathToAnimFiles+"dd-female-sidestep-animation.js");
+Script.include(pathToAnimFiles+"dd-female-sidestep-left-animation.js");
+Script.include(pathToAnimFiles+"dd-female-sidestep-right-animation.js");
 Script.include(pathToAnimFiles+"dd-male-cool-walk-animation.js");
 Script.include(pathToAnimFiles+"dd-male-elderly-walk-animation.js");
 Script.include(pathToAnimFiles+"dd-male-power-walk-animation.js");
@@ -57,8 +57,8 @@ Script.include(pathToAnimFiles+"dd-male-flying-up-animation.js");
 Script.include(pathToAnimFiles+"dd-male-flying-animation.js");
 Script.include(pathToAnimFiles+"dd-male-flying-down-animation.js");
 Script.include(pathToAnimFiles+"dd-male-standing-one-animation.js");
-Script.include(pathToAnimFiles+"dd-male-standing-two-animation.js");
-Script.include(pathToAnimFiles+"dd-male-sidestep-animation.js");
+Script.include(pathToAnimFiles+"dd-male-sidestep-left-animation.js");
+Script.include(pathToAnimFiles+"dd-male-sidestep-right-animation.js");
 
 // read in the data from the animation files
 var FemaleCoolWalkFile = new FemaleCoolWalk();
@@ -87,10 +87,10 @@ var FemaleFlyingDownFile = new FemaleFlyingDown();
 var femaleFlyingDown = FemaleFlyingDownFile.loadAnimation();
 var FemaleStandOneFile = new FemaleStandingOne();
 var femaleStandOne = FemaleStandOneFile.loadAnimation();
-var FemaleStandTwoFile = new FemaleStandingTwo();
-var femaleStandTwo = FemaleStandTwoFile.loadAnimation();
-var FemaleSideStepFile = new FemaleSideStep();
-var femaleSideStep = FemaleSideStepFile.loadAnimation();
+var FemaleSideStepLeftFile = new FemaleSideStepLeft();
+var femaleSideStepLeft = FemaleSideStepLeftFile.loadAnimation();
+var FemaleSideStepRightFile = new FemaleSideStepRight();
+var femaleSideStepRight = FemaleSideStepRightFile.loadAnimation();
 var MaleCoolWalkFile = new MaleCoolWalk();
 var maleCoolWalk = MaleCoolWalkFile.loadAnimation();
 var MaleElderlyWalkFile = new MaleElderlyWalk();
@@ -117,10 +117,10 @@ var MaleFlyingDownFile = new MaleFlyingDown();
 var maleFlyingDown = MaleFlyingDownFile.loadAnimation();
 var MaleStandOneFile = new MaleStandingOne();
 var maleStandOne = MaleStandOneFile.loadAnimation();
-var MaleStandTwoFile = new MaleStandingTwo();
-var maleStandTwo = MaleStandTwoFile.loadAnimation();
-var MaleSideStepFile = new MaleSideStep();
-var maleSideStep = MaleSideStepFile.loadAnimation();
+var MaleSideStepLeftFile = new MaleSideStepLeft();
+var maleSideStepLeft = MaleSideStepLeftFile.loadAnimation();
+var MaleSideStepRightFile = new MaleSideStepRight();
+var maleSideStepRight = MaleSideStepRightFile.loadAnimation();
 
 // read in the sounds
 var footsteps = [];
@@ -132,27 +132,31 @@ footsteps.push(new Sound(pathToSounds+"FootstepW5Left-12db.wav"));
 footsteps.push(new Sound(pathToSounds+"FootstepW5Right-12db.wav"));
 
 // all slider controls have a range (with the exception of phase controls that are always +-180) so we store them all here
-var sliderRanges = {"joints":[{"name":"hips","pitchRange":25,"yawRange":25,"rollRange":25,"pitchOffsetRange":25,"yawOffsetRange":25,"rollOffsetRange":25,"thrustRange":0.1,"bobRange":0.5,"swayRange":0.08},{"name":"upperLegs","pitchRange":90,"yawRange":35,"rollRange":35,"pitchOffsetRange":60,"yawOffsetRange":20,"rollOffsetRange":20},{"name":"lowerLegs","pitchRange":90,"yawRange":20,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":20,"rollOffsetRange":20},{"name":"feet","pitchRange":60,"yawRange":20,"rollRange":20,"pitchOffsetRange":60,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"toes","pitchRange":90,"yawRange":20,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":20,"rollOffsetRange":20},{"name":"spine","pitchRange":40,"yawRange":40,"rollRange":40,"pitchOffsetRange":90,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"spine1","pitchRange":20,"yawRange":40,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"spine2","pitchRange":20,"yawRange":40,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"shoulders","pitchRange":35,"yawRange":40,"rollRange":20,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"upperArms","pitchRange":90,"yawRange":90,"rollRange":90,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"lowerArms","pitchRange":90,"yawRange":90,"rollRange":120,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"hands","pitchRange":90,"yawRange":180,"rollRange":90,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"head","pitchRange":20,"yawRange":20,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":90,"rollOffsetRange":90}]};
+var sliderRanges = {"joints":[{"name":"hips","pitchRange":25,"yawRange":25,"rollRange":25,"pitchOffsetRange":25,"yawOffsetRange":25,"rollOffsetRange":25,"thrustRange":0.01,"bobRange":0.02,"swayRange":0.01},{"name":"upperLegs","pitchRange":90,"yawRange":35,"rollRange":35,"pitchOffsetRange":60,"yawOffsetRange":20,"rollOffsetRange":20},{"name":"lowerLegs","pitchRange":90,"yawRange":20,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":20,"rollOffsetRange":20},{"name":"feet","pitchRange":60,"yawRange":20,"rollRange":20,"pitchOffsetRange":60,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"toes","pitchRange":90,"yawRange":20,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":20,"rollOffsetRange":20},{"name":"spine","pitchRange":40,"yawRange":40,"rollRange":40,"pitchOffsetRange":90,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"spine1","pitchRange":20,"yawRange":40,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"spine2","pitchRange":20,"yawRange":40,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":50,"rollOffsetRange":50},{"name":"shoulders","pitchRange":35,"yawRange":40,"rollRange":20,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"upperArms","pitchRange":90,"yawRange":90,"rollRange":90,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"lowerArms","pitchRange":90,"yawRange":90,"rollRange":120,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"hands","pitchRange":90,"yawRange":180,"rollRange":90,"pitchOffsetRange":180,"yawOffsetRange":180,"rollOffsetRange":180},{"name":"head","pitchRange":20,"yawRange":20,"rollRange":20,"pitchOffsetRange":90,"yawOffsetRange":90,"rollOffsetRange":90}]};
 
 //  internal state (FSM based) constants
-var STANDING = 2;
-var WALKING = 4;
-var SIDE_STEPPING = 8;
-var FLYING = 16;
-var CONFIG_WALK_STYLES = 32;
-var CONFIG_WALK_TWEAKS = 64;
-var CONFIG_WALK_JOINTS = 128;
-var CONFIG_STANDING = 256;
-var CONFIG_FLYING = 512;
+var STANDING = 1;
+var WALKING = 2;
+var SIDE_STEPPING = 3;
+var FLYING = 4;
+var CONFIG_WALK_STYLES = 5;
+var CONFIG_WALK_TWEAKS = 6;
+var CONFIG_WALK_JOINTS = 7;
+var CONFIG_STANDING = 8;
+var CONFIG_FLYING = 9;
+var CONFIG_FLYING_UP = 10;
+var CONFIG_FLYING_DOWN = 11;
+var CONFIG_SIDESTEP_LEFT = 12;
+var CONFIG_SIDESTEP_RIGHT = 14;
 var INTERNAL_STATE = STANDING;
 
 // status
 var powerOn = true;
 var paused = false; // pause animation playback whilst adjusting certain parameters
-var minimised = false;
-var armsFree = true; // set true for hydra support - experimental
+var minimised = true;
+var armsFree = true; // set true for hydra support - temporary fix for Hydras
 var statsOn = false;
-var playFootStepSounds = false;
+var playFootStepSounds = true;
 
 // constants
 var MAX_WALK_SPEED = 1257; // max oscillation speed
@@ -164,101 +168,181 @@ var DIRECTION_LEFT = 4;
 var DIRECTION_RIGHT = 8;
 var DIRECTION_FORWARDS = 16;
 var DIRECTION_BACKWARDS = 32;
-var MALE = 64;
-var FEMALE = 128;
+var DIRECTION_NONE = 64;
+var MALE = 1;
+var FEMALE = 2;
 
 // start of animation control section
 var cumulativeTime = 0.0;
 var lastOrientation;
-var movementDirection = DIRECTION_FORWARDS;
+
+// avi gender and default animations
 var avatarGender = MALE;
 var selectedWalk = maleStrutWalk; // the currently selected animation walk file (to edit any animation, paste it's name here and select walk editing mode)
 var selectedStand = maleStandOne;
 var selectedFlyUp = maleFlyingUp;
 var selectedFly = maleFlying;
 var selectedFlyDown = maleFlyingDown;
-var selectedSideStepLeft = maleSideStep;
-var selectedSideStepRight = maleSideStep;
+var selectedSideStepLeft = maleSideStepLeft;
+var selectedSideStepRight = maleSideStepRight;
+if(avatarGender===FEMALE) {
+
+	// to make toggling the default quick
+	selectedWalk = femaleStrutWalk;
+	selectedStand = femaleStandOne;
+	selectedFlyUp = femaleFlyingUp;
+	selectedFly = femaleFlying;
+	selectedFlyDown = femaleFlyingDown;
+	selectedSideStepLeft = femaleSideStepLeft;
+	selectedSideStepRight = femaleSideStepRight;
+}
 var currentAnimation = selectedStand; // the current animation
 var selectedJointIndex = 0; // the index of the joint currently selected for editing
 var currentTransition = null; // used as a pointer to a Transition
 
 // walkwheel (foot / ground speed matching)
-var walkCycleStart = 105; // best foot forwards - TODO: if found to be different for different anims, add as setting to anim files
-var walkWheelPosition = walkCycleStart;
+//var walkCycleStart = 140; // 105 for female strut... best foot forwards - TODO: if found to be different for different anims, add as setting to anim files
+var sideStepCycleStartLeft = 270;
+var sideStepCycleStartRight = 90;
+var walkWheelPosition = 0;
 var nextStep = DIRECTION_RIGHT; // first step is always right, because the sine waves say so. Unless you're mirrored.
-var nFrames = 0; // for showing walk wheel stats only
+var nFrames = 0; // counts number of frames
 var strideLength = 0; // stride calibration
-var aviFootSize = {x:0.1, y:0.1, z:0.25}; // experimental values for addition to stride length - TODO: analyse and confirm is increasing smaller stride lengths accuracy
+var aviFootSize = {x:0.1, y:0.1, z:0.25}; // experimental values for addition to stride length - TODO: analyse and confirm is increasing smaller stride lengths accuracy once we have better ground detection
+
+// stats
+var frameStartTime = 0;  // when the frame first starts we take a note of the time
+var frameExecutionTimeMax = 0; // keep track of the longest frame execution time
 
 // constructor for recent RecentMotion (i.e. frame data) class
-function RecentMotion(velocity, acceleration, principleDirection) {
-    this.velocity = velocity;
-    this.acceleration = acceleration;
-    this.principleDirection = principleDirection;
-    // add INTERNAL_STATE so can remove 'hints' system for state changes?
+function RecentMotion(velocity, acceleration, principleDirection, state) {
+	this.velocity = velocity;
+	this.acceleration = acceleration;
+	this.principleDirection = principleDirection;
+	this.state = state;
+	// TODO: add INTERNAL_STATE so can remove 'hints' system for state changes
 }
+
+// constructor for the FramesHistory object
+function FramesHistory() {
+	this.recentMotions = [];
+	for(var i = 0 ; i < 10 ; i++) {
+		var blank = new RecentMotion({ x:0, y:0, z:0 }, { x:0, y:0, z:0 }, DIRECTION_FORWARDS, STANDING );
+		this.recentMotions.push(blank);
+	}
+
+	// recentDirection 'method'
+	// args: (direction enum, number of steps back to compare)
+	this.recentDirection = function () {
+
+		if( arguments[0] && arguments[1] ) {
+
+			var directionCount = 0;
+			if( arguments[1] > this.recentMotions.length )
+				arguments[1] = this.recentMotions.length;
+
+			for(var i = 0 ; i < arguments[1] ; i++ ) {
+				if( this.recentMotions[i].principleDirection === arguments[0] )
+					directionCount++;
+				//print('looking for '+directionAsString(arguments[0])+' directionCount '+directionCount+' count '+i+' dircetion '+directionAsString(this.recentMotions[i].principleDirection));
+			}
+			return directionCount / arguments[1] === 1 ? true : false;
+		}
+		return false;
+	}
+
+	// recentState 'method'
+	// args: (state enum, number of steps back to compare)
+	this.recentState = function () {
+
+		if( arguments[0] && arguments[1] ) {
+
+			var stateCount = 0;
+			if( arguments[1] > this.recentMotions.length )
+				arguments[1] = this.recentMotions.length;
+
+			for(var i = 0 ; i < arguments[1] ; i++ ) {
+				if( this.recentMotions[i].state === arguments[0] )
+					stateCount++;
+			}
+			return stateCount / arguments[1] === 1 ? true : false;
+		}
+		return false;
+	}
+	this.lastWalkStartTime = 0; 	// short walks and long walks need different handling
+}
+var framesHistory = new FramesHistory();
 
 // constructor for animation Transition class
 function Transition(lastAnimation, nextAnimation, reachPoses, transitionDuration, easingLower, easingUpper) {
-    this.lastAnimation = lastAnimation;             // name of last animation
-    if(lastAnimation === selectedWalk)
-        this.beginWalking = true;                   // boolean - is the last animation a walking animation?
-    else
-        this.beginWalking = false;                  // boolean - is the last animation a walking animation?
-    this.nextAnimation = nextAnimation;             // name of next animation
-    if(nextAnimation === selectedWalk)
-        this.endWalking = true;                     // boolean - is the next animation a walking animation?
-    else
-        this.endWalking = false;                    // boolean - is the next animation a walking animation?
-    this.reachPoses = reachPoses;                   // array of reach poses - am very much looking forward to putting these it!
-    this.transitionDuration = transitionDuration;   // length of transition (seconds)
-    this.easingLower = easingLower;                 // Bezier curve handle (normalised)
-    this.easingUpper = easingUpper;                 // Bezier curve handle (normalised)
-    this.startTime = new Date().getTime();          // Starting timestamp (seconds)
-    this.progress = 0;                              // how far are we through the transition?
-    this.startingQuadrant = 0;                      // helps decide which direction to turn the walkwheel when aiming for stop position
+	this.lastAnimation = lastAnimation; 			// name of last animation
+	if(lastAnimation === selectedWalk ||
+	   nextAnimation === selectedSideStepLeft ||
+	   nextAnimation === selectedSideStepRight)
+		this.walkingAtStart = true;					// boolean - is the last animation a walking animation?
+	else
+		this.walkingAtStart = false;					// boolean - is the last animation a walking animation?
+	this.nextAnimation = nextAnimation;				// name of next animation
+	if(nextAnimation === selectedWalk ||
+	   nextAnimation === selectedSideStepLeft ||
+	   nextAnimation === selectedSideStepRight)
+		this.walkingAtEnd = true;						// boolean - is the next animation a walking animation?
+	else
+		this.walkingAtEnd = false;					// boolean - is the next animation a walking animation?
+	this.reachPoses = reachPoses;					// array of reach poses - am very much looking forward to putting these in!
+	this.transitionDuration = transitionDuration;	// length of transition (seconds)
+	this.easingLower = easingLower;					// Bezier curve handle (normalised)
+	this.easingUpper = easingUpper;					// Bezier curve handle (normalised)
+	this.startTime = new Date().getTime();			// Starting timestamp (seconds)
+	this.progress = 0;								// how far are we through the transition?
+	this.walkWheelIncrement = 3;					// how much to turn the walkwheel each frame when coming to a halt. Get's set to 0 once the feet are under the avi
+	this.walkWheelAdvance = 0;						// how many degrees the walk wheel has been advanced during the transition
+	this.walkStopAngle = 0;							// what angle should we stop the walk cycle? (calculated on the fly)
+
+	//print('Transition initiated from '+this.lastAnimation.name+' to '+this.nextAnimation.name+' duration '+transitionDuration.toFixed(2));
 }
 
 // convert a local (to the avi) translation to a global one
 function localToGlobal(localTranslation) {
 
-        var aviOrientation = MyAvatar.orientation;
-        var front = Quat.getFront(aviOrientation);
-        var right = Quat.getRight(aviOrientation);
-        var up    = Quat.getUp   (aviOrientation);
-        var aviFront = Vec3.multiply(front,localTranslation.z);
-        var aviRight = Vec3.multiply(right,localTranslation.x);
-        var aviUp    = Vec3.multiply(up   ,localTranslation.y);
-        var globalTranslation = {x:0,y:0,z:0}; // final value
-        globalTranslation = Vec3.sum(globalTranslation, aviFront);
-        globalTranslation = Vec3.sum(globalTranslation, aviRight);
-        globalTranslation = Vec3.sum(globalTranslation, aviUp);
-        return globalTranslation;
+	var aviOrientation = MyAvatar.orientation;
+	var front = Quat.getFront(aviOrientation);
+	var right = Quat.getRight(aviOrientation);
+	var up    = Quat.getUp   (aviOrientation);
+	var aviFront = Vec3.multiply(front,localTranslation.z);
+	var aviRight = Vec3.multiply(right,localTranslation.x);
+	var aviUp    = Vec3.multiply(up   ,localTranslation.y);
+	var globalTranslation = {x:0,y:0,z:0}; // final value
+	globalTranslation = Vec3.sum(globalTranslation, aviFront);
+	globalTranslation = Vec3.sum(globalTranslation, aviRight);
+	globalTranslation = Vec3.sum(globalTranslation, aviUp);
+	return globalTranslation;
 }
 
 // similar ot above - convert hips translations to global and apply
 function translateHips(localHipsTranslation) {
-        var aviOrientation = MyAvatar.orientation;
-        var front = Quat.getFront(aviOrientation);
-        var right = Quat.getRight(aviOrientation);
-        var up    = Quat.getUp   (aviOrientation);
-        var aviFront = Vec3.multiply(front,localHipsTranslation.y);
-        var aviRight = Vec3.multiply(right,localHipsTranslation.x);
-        var aviUp    = Vec3.multiply(up   ,localHipsTranslation.z);
-        var AviTranslationOffset = {x:0,y:0,z:0}; // final value
-        AviTranslationOffset = Vec3.sum(AviTranslationOffset, aviFront);
-        AviTranslationOffset = Vec3.sum(AviTranslationOffset, aviRight);
-        AviTranslationOffset = Vec3.sum(AviTranslationOffset, aviUp);
 
-        //MyAvatar.addThrust(AviTranslationOffset * 10);
-        MyAvatar.position = {x: MyAvatar.position.x + AviTranslationOffset.x,
-                             y: MyAvatar.position.y + AviTranslationOffset.y,
-                             z: MyAvatar.position.z + AviTranslationOffset.z };
+	var aviOrientation = MyAvatar.orientation;
+	var front = Quat.getFront(aviOrientation);
+	var right = Quat.getRight(aviOrientation);
+	var up    = Quat.getUp   (aviOrientation);
+	var aviFront = Vec3.multiply(front,localHipsTranslation.y);
+	var aviRight = Vec3.multiply(right,localHipsTranslation.x);
+	var aviUp    = Vec3.multiply(up   ,localHipsTranslation.z);
+	var AviTranslationOffset = {x:0,y:0,z:0}; // final value
+	AviTranslationOffset = Vec3.sum(AviTranslationOffset, aviFront);
+	AviTranslationOffset = Vec3.sum(AviTranslationOffset, aviRight);
+	AviTranslationOffset = Vec3.sum(AviTranslationOffset, aviUp);
+
+	//MyAvatar.addThrust(AviTranslationOffset * 10);
+	MyAvatar.position = {x: MyAvatar.position.x + AviTranslationOffset.x,
+						 y: MyAvatar.position.y + AviTranslationOffset.y,
+						 z: MyAvatar.position.z + AviTranslationOffset.z };
 }
 
 // clear all joint data
 function resetJoints() {
+
     var avatarJointNames = MyAvatar.getJointNames();
     for (var i = 0; i < avatarJointNames.length; i++) {
         //MyAvatar.setJointData(avatarJointNames[i], Quat.fromPitchYawRollDegrees(0,0,0));
@@ -267,847 +351,1438 @@ function resetJoints() {
 }
 // play footstep sound
 function playFootstep(side) {
+
     var options = new AudioInjectionOptions();
     options.position = Camera.getPosition();
-    options.volume = 0.7;
+    options.volume = 0.5;
     var walkNumber = 2; // 0 to 2
     if(side===DIRECTION_RIGHT && playFootStepSounds) {
-        //print('playing right footstep - if you can not hear sound, try turning your mic on then off again.');
-        Audio.playSound(footsteps[walkNumber+1], options);
-    }
+		//print('playing right footstep - if you can not hear sound, try turning your mic on then off again.');
+		Audio.playSound(footsteps[walkNumber+1], options);
+	}
     else if(side===DIRECTION_LEFT && playFootStepSounds) {
-        //print('playing left footstep - if you can not hear sound, try turning your mic on then off again.');
-        Audio.playSound(footsteps[walkNumber], options);
-    }
+		//print('playing left footstep - if you can not hear sound, try turning your mic on then off again.');
+		Audio.playSound(footsteps[walkNumber], options);
+	}
 }
-// this is work in progress
-// currently, it's not known if there are working finger joints on the avi
+
+// put the fingers into a relaxed pose
 function curlFingers() {
-    MyAvatar.setJointData("RightHandMiddle1", Quat.fromPitchYawRollDegrees(90,0,0));
-    for(var i = 24 ; i < 44 ; i++) {
-        MyAvatar.setJointData(jointList[i], Quat.fromPitchYawRollDegrees(0,90,0));
+
+    // left hand fingers
+    for(var i = 18 ; i < 34 ; i++) {
+        MyAvatar.setJointData(jointList[i], Quat.fromPitchYawRollDegrees(8,0,0));
     }
-    for(var i = 48 ; i < 68 ; i++) {
-        MyAvatar.setJointData(jointList[i], Quat.fromPitchYawRollDegrees(10,0,90));
+    // left hand thumb
+    for(var i = 34 ; i < 38 ; i++) {
+        MyAvatar.setJointData(jointList[i], Quat.fromPitchYawRollDegrees(0,0,0));
+    }
+    // right hand fingers
+    for(var i = 42 ; i < 58 ; i++) {
+        MyAvatar.setJointData(jointList[i], Quat.fromPitchYawRollDegrees(8,0,0));
+    }
+    // right hand thumb
+    for(var i = 58 ; i < 62 ; i++) {
+        MyAvatar.setJointData(jointList[i], Quat.fromPitchYawRollDegrees(0,0,0));
     }
 }
 
 
-// maths functions
-function degToRad(degreesValue) {
-    return degreesValue * Math.PI / 180;
-}
-function radToDeg(radiansValue) {
-    return radiansValue * 180 / Math.PI;
-}
-function cubicRoot(x) {
-    var y = Math.pow(Math.abs(x), 1/3);
-    return x < 0 ? -y : y;
-}
+// additional maths functions
+function degToRad(degreesValue) { return degreesValue * Math.PI / 180; }
+function radToDeg(radiansValue) { return radiansValue * 180 / Math.PI; }
+//function cubicRoot(x) { var y = Math.pow(Math.abs(x), 1/3); return x < 0 ? -y : y; }
 
-// animateAvatar - animates the avatar
+// animateAvatar - sine wave generators working like clockwork
 function animateAvatar(deltaTime, velocity, principleDirection) {
 
-        // some slider adjustemnts cause a nasty flicker when adjusting
-        // pausing the animation stops this
+	    // adjusting the walk speed in edit mode causes a nasty flicker
+	    // pausing the animation stops this
         if(paused) return;
 
+		var cycle = cumulativeTime;
         var transitionProgress = 1;
+        var adjustedFrequency = currentAnimation.settings.baseFrequency;
 
-        // is there any Transition to include?
-        if(currentTransition!==null) {
-
-            var elapasedTime = (new Date().getTime() - currentTransition.startTime) / 1000;
-            currentTransition.progress = elapasedTime / currentTransition.transitionDuration;
-
-            transitionProgress = getBezier((1-currentTransition.progress), {x:0,y:0}, currentTransition.easingLower, currentTransition.easingUpper, {x:1,y:1}).y;
-
-            //print('Checking Bezier response: currentTransition.progress '+currentTransition.progress.toFixed(2)+' transitionProgress '+transitionProgress.toFixed(2));
-
-            if(currentTransition.progress>=1) {
-
-                // time to kill off the transition
-                delete currentTransition;
-                currentTransition = null;
-
-            } else {
-
-                // define angle(s) of the walk wheel at which we should stop walking
-                var leftStop = 105;
-                var rightStop = 290;
-                var tolerance = 2;
-
-                if(principleDirection===DIRECTION_BACKWARDS) {
-                    leftStop = 55;
-                    rightStop = 235;
-                }
-
-                if(currentTransition.startingQuadrant===0) {
-                    if(walkWheelPosition<leftStop) currentTransition.startingQuadrant = 1;
-                    else if(walkWheelPosition<leftStop+90) currentTransition.startingQuadrant = 2;
-                    else if(walkWheelPosition<rightStop) currentTransition.startingQuadrant = 3;
-                    else if(walkWheelPosition<rightStop+90) currentTransition.startingQuadrant = 4;
-                    else currentTransition.startingQuadrant = 1;
-                }
-
-                // keep the walkwheel turning until our feet are tucked nicely underneath us
-                if(currentTransition.beginWalking) {
-                    // fold back (reverse walk) if we narrowly missed our stop target on the walkwheel when we stopped walking
-                    if(currentTransition.startingQuadrant%2===0)
-                        walkWheelPosition -= 3; // careful tweaking here, can't go too low, as any remaining velocity will go to negate this...
-                    else
-                        walkWheelPosition += 3;
-                }
-
-                // keep walking until both feet are below the avi, then hold that walk wheel position for remainder of transition
-                if( ( walkWheelPosition > (leftStop - tolerance)  && walkWheelPosition < (leftStop  + tolerance) ) ||
-                    ( walkWheelPosition > (rightStop - tolerance) && walkWheelPosition < (rightStop + tolerance) ) ){
-                    currentTransition.beginWalking = false;
-                }
-                //print('strideLength '+strideLength.toFixed(3)
-                //  + ' elapasedTime '+elapasedTime
-                //  + ' progress '+transitionProgress.toFixed(3)
-                //  + ' walkWheelPosition '+walkWheelPosition.toFixed(0)
-                //  + ' beginWalking ' + currentTransition.beginWalking
-                //  + ' endWalking ' + currentTransition.endWalking
-                //  + ' starting quadrant '+currentTransition.startingQuadrant);
-            }
-        }
-
-        var adjustedFrequency = currentAnimation.settings.baseFrequency;  // only relevant for standing and flying
-
-        // upper legs phase reversal for walking backwards
+		// upper legs phase reversal for walking backwards
         var forwardModifier = 1;
-        if(principleDirection===DIRECTION_BACKWARDS) {
-            forwardModifier = -1;
-        }
+        if(principleDirection===DIRECTION_BACKWARDS)
+			forwardModifier = -1;
 
         // don't want to lean forwards if going directly upwards
         var leanPitchModifier = 1;
-        if(principleDirection===DIRECTION_UP) {
-            leanPitchModifier = 0;
-        }
+        if(principleDirection===DIRECTION_UP)
+			leanPitchModifier = 0;
 
-        // adjust the side stepping animation for left / right
-        var directionModifier = -1;
-        if(principleDirection===DIRECTION_RIGHT) {
-            directionModifier = 1;
-        }
+        // is there a Transition to include?
+        if(currentTransition!==null) {
 
-        if(currentAnimation === selectedWalk ||
-           currentAnimation === selectedSideStepLeft ||
-           currentAnimation === selectedSideStepRight ||
+			// if is a new transiton
+			if(currentTransition.progress===0) {
+
+				if( currentTransition.walkingAtStart ) {
+
+					if( INTERNAL_STATE !== SIDE_STEPPING ) {
+
+						// work out where we want the walk cycle to stop
+						var leftStop  = selectedWalk.settings.stopAngleForwards + 180;
+						var rightStop = selectedWalk.settings.stopAngleForwards;
+						if( principleDirection === DIRECTION_BACKWARDS ) {
+							leftStop  = selectedWalk.settings.stopAngleBackwards + 180;
+							rightStop = selectedWalk.settings.stopAngleBackwards;
+						}
+
+						// find the closest stop point from the walk wheel's angle
+						var angleToLeftStop  = 180 - Math.abs( Math.abs( walkWheelPosition - leftStop  ) - 180);
+						var angleToRightStop = 180 - Math.abs( Math.abs( walkWheelPosition - rightStop ) - 180);
+						if( walkWheelPosition > angleToLeftStop ) angleToLeftStop = 360 - angleToLeftStop;
+						if( walkWheelPosition > angleToRightStop ) angleToRightStop = 360 - angleToRightStop;
+
+						currentTransition.walkWheelIncrement = 6;
+
+						// keep the walkwheel turning by setting the walkWheelIncrement until our feet are tucked nicely underneath us.
+						// fold back (reverse walk) if we just missed our stop target on the walkwheel when we stopped walking - depricated
+						//var stepIncrement = 2; // just used to set currentTransition.walkWheelIncrement in multiple locations
+						if( angleToLeftStop < angleToRightStop ) {
+
+							//if(angleToLeftStop<270) currentTransition.walkStopAngle = rightStop;
+							//else if(walkWheelPosition>angleToLeftStop) currentTransition.walkStopAngle = rightStop;
+							//else currentTransition.walkStopAngle = leftStop;
+
+							currentTransition.walkStopAngle = leftStop;
+
+							//if( leftStop > 270 && walkWheelPosition < 90 ) currentTransition.walkWheelIncrement = -stepIncrement;
+							//else if( walkWheelPosition > 270 && leftStop < 90 ) currentTransition.walkWheelIncrement = stepIncrement;
+							//else if( walkWheelPosition <  leftStop ) currentTransition.walkWheelIncrement = stepIncrement;
+							//else if( walkWheelPosition >= leftStop ) currentTransition.walkWheelIncrement = -stepIncrement;
+							//currentTransition.walkWheelIncrement = stepIncrement;
+
+						} else {
+
+							//if(angleToRightStop<270) currentTransition.walkStopAngle = leftStop;
+							//else if(walkWheelPosition>angleToRightStop) currentTransition.walkStopAngle = leftStop;
+							//else currentTransition.walkStopAngle = rightStop;
+							currentTransition.walkStopAngle = rightStop;
+
+							//currentTransition.walkStopAngle = rightStop;
+							//if( rightStop > 270 && walkWheelPosition < 90 ) currentTransition.walkWheelIncrement = -stepIncrement;
+							//else if( walkWheelPosition > 270 && rightStop < 90 ) currentTransition.walkWheelIncrement = stepIncrement;
+							//else if( walkWheelPosition <  rightStop ) currentTransition.walkWheelIncrement = stepIncrement;
+							//else if( walkWheelPosition >= rightStop ) currentTransition.walkWheelIncrement = -stepIncrement;
+							//currentTransition.walkWheelIncrement = stepIncrement;
+						}
+
+						//print('walkWheelPosition '+walkWheelPosition.toFixed(2)+' leftStop '+leftStop+' rightStop '+rightStop+' angleToLeftStop '+angleToLeftStop.toFixed(2)+' angleToRightStop '+angleToRightStop.toFixed(2)+' stop angle '+currentTransition.walkStopAngle)
+
+					} else {
+
+						// just freeze wheel for sidestepping
+						currentTransition.walkWheelIncrement = 0;
+					}
+				}
+			} // end if( currentTransition.walkingAtStart )
+
+			// calculate the Transition progress
+			var elapasedTime = (new Date().getTime() - currentTransition.startTime) / 1000;
+			currentTransition.progress = elapasedTime / currentTransition.transitionDuration;
+			transitionProgress = getBezier((1-currentTransition.progress), {x:0,y:0}, currentTransition.easingLower, currentTransition.easingUpper, {x:1,y:1}).y;
+
+			if(currentTransition.progress>=1) {
+
+				// time to kill off the transition
+				delete currentTransition;
+				currentTransition = null;
+
+			} else {
+
+				if( currentTransition.walkingAtStart ) {
+
+					if( INTERNAL_STATE !== SIDE_STEPPING ) {
+
+						// if at a stop angle, hold the walk wheel position for remainder of transition
+						var tolerance = 10;  // must be greater than the walkWheel increment
+						if(( walkWheelPosition > (currentTransition.walkStopAngle - tolerance )) &&
+						   ( walkWheelPosition < (currentTransition.walkStopAngle + tolerance ))) {
+
+							//print('stop now? walkWheelAdvance '+currentTransition.walkWheelAdvance);
+
+							//if( currentTransition.walkWheelAdvance < 45 ) {
+
+							//	currentTransition.walkStopAngle += 180; // not enough of a transition - keep moving...
+							//	if( currentTransition.walkStopAngle > 360 ) currentTransition.walkStopAngle %= 360;
+
+							//	print('walkStopAngle incremented ');
+							//}
+							//else
+							currentTransition.walkWheelIncrement = 0;
+						}
+						// keep turning walk wheel until both feet are below the avi
+
+						//print('walkWheelAdvance '+currentTransition.walkWheelAdvance);
+						walkWheelPosition += currentTransition.walkWheelIncrement;
+						currentTransition.walkWheelAdvance += currentTransition.walkWheelIncrement;
+					}
+				}
+			}
+		}
+
+        // will we need to use the walk wheel this frame?
+        if(currentAnimation  === selectedWalk ||
+           currentAnimation  === selectedSideStepLeft ||
+           currentAnimation  === selectedSideStepRight ||
            currentTransition !== null) {
 
-            if(INTERNAL_STATE!==SIDE_STEPPING && currentTransition===null) {
+			// set the stride length
+			if(	INTERNAL_STATE!==SIDE_STEPPING &&
+		    	INTERNAL_STATE!==CONFIG_SIDESTEP_LEFT &&
+		    	INTERNAL_STATE!==CONFIG_SIDESTEP_RIGHT &&
+				currentTransition===null ) {
 
-                // if the timing's right, take a snapshot of the stride max and recalibrate the stride length
-                var tolerance = 1.0; // higher the number, the higher the chance of a calibration taking place, but is traded off with lower accuracy
-                if(walkWheelPosition < tolerance || walkWheelPosition > (360-tolerance) ||
-                  (walkWheelPosition < (180+tolerance) && walkWheelPosition >(180-tolerance) )) {
+				// if the timing's right, take a snapshot of the stride max and recalibrate
+				var tolerance = 1.0; // higher the number, the higher the chance of a calibration taking place, but is traded off with lower accuracy
+				var strideOne = 40; // 130
+				var strideTwo = 220; // 300
 
-                    // calculate the feet's offset from the hips (in local Z only)
-                    //var hipsPos = localToGlobal(MyAvatar.getJointPosition("Hips"));
-                    var footRPos = localToGlobal(MyAvatar.getJointPosition("RightFoot"));
-                    var footLPos = localToGlobal(MyAvatar.getJointPosition("LeftFoot"));
-                    var footOffsetZ = Math.abs(footRPos.z - footLPos.z);
-                    strideLength = 2 * footOffsetZ + aviFootSize.z;
-                    print('Stride length calibrated to '+strideLength.toFixed(4)+' metres');
-                    if(principleDirection===DIRECTION_FORWARDS) {
-                        currentAnimation.calibration.strideLengthForwards = strideLength;
-                    } else if (principleDirection===DIRECTION_BACKWARDS) {
-                        currentAnimation.calibration.strideLengthBackwards = strideLength;
-                    }
-                }
-                else {
+				if( principleDirection === DIRECTION_BACKWARDS ) {
+					strideOne = 130;
+					strideTwo = 300;
+				}
 
-                    if(principleDirection===DIRECTION_FORWARDS) {
-                        strideLength = currentAnimation.calibration.strideLengthForwards;
-                    } else if (principleDirection===DIRECTION_BACKWARDS) {
-                        strideLength = currentAnimation.calibration.strideLengthBackwards;
-                    }
-                }
-            }
-            else if(INTERNAL_STATE===SIDE_STEPPING) {
+				if(( walkWheelPosition < (strideOne+tolerance) && walkWheelPosition > (strideOne-tolerance) ) ||
+				  (  walkWheelPosition < (strideTwo+tolerance) && walkWheelPosition > (strideTwo-tolerance) )) {
 
-                // calculate lateral stride - same same, but different
-                // if the timing's right, take a snapshot of the stride max and recalibrate the stride length
-                var tolerance = 1.0; // higher the number, the higher the chance of a calibration taking place, but is traded off with lower accuracy
-                if(walkWheelPosition < (90+tolerance) && walkWheelPosition > (90-tolerance) ||
-                  (walkWheelPosition < (270+tolerance) && walkWheelPosition >(270-tolerance) )) {
+					// calculate the feet's offset from each other (in local Z only)
+					var footRPos = localToGlobal(MyAvatar.getJointPosition("RightFoot"));
+					var footLPos = localToGlobal(MyAvatar.getJointPosition("LeftFoot"));
+					var footOffsetZ = Math.abs(footRPos.z - footLPos.z);
+					if(footOffsetZ>1) strideLength = 2 * footOffsetZ + aviFootSize.z; // sometimes getting very low value here - just ignore for now
+					//if(statsOn) print('Stride length calibrated to '+strideLength.toFixed(4)+' metres at '+walkWheelPosition.toFixed(1)+' degrees');
+					if(principleDirection===DIRECTION_FORWARDS) {
+						currentAnimation.calibration.strideLengthForwards = strideLength;
+					} else if (principleDirection===DIRECTION_BACKWARDS) {
+						currentAnimation.calibration.strideLengthBackwards = strideLength;
+					}
+				}
+				else {
 
-                    // calculate the feet's offset from the hips (in local Z only)
-                    //var hipsPos = localToGlobal(MyAvatar.getJointPosition("Hips"));
-                    var footRPos = localToGlobal(MyAvatar.getJointPosition("RightFoot"));
-                    var footLPos = localToGlobal(MyAvatar.getJointPosition("LeftFoot"));
-                    var footOffsetX = Math.abs(footRPos.x - footLPos.x);
-                    strideLength = footOffsetX;
-                    print('Stride width calibrated to '+strideLength.toFixed(4)+ ' metres for sidestepping (work in progress)');
-                    if(principleDirection===DIRECTION_LEFT) {
-                        currentAnimation.calibration.strideLengthLeft = strideLength;
-                    } else if (principleDirection===DIRECTION_RIGHT) {
-                        currentAnimation.calibration.strideLengthRight = strideLength;
-                    }
-                }
-                else {
+					if(principleDirection===DIRECTION_FORWARDS) {
+						strideLength = currentAnimation.calibration.strideLengthForwards;
+					} else if (principleDirection===DIRECTION_BACKWARDS) {
+						strideLength = currentAnimation.calibration.strideLengthBackwards;
+					}
+				}
+			}
+			else if(( INTERNAL_STATE===SIDE_STEPPING ||
+		        	  INTERNAL_STATE===CONFIG_SIDESTEP_LEFT ||
+		    		  INTERNAL_STATE===CONFIG_SIDESTEP_RIGHT )  ) {
 
-                    if(principleDirection===DIRECTION_LEFT) {
-                        strideLength = currentAnimation.calibration.strideLengthLeft;
-                    } else if (principleDirection===DIRECTION_RIGHT) {
-                        strideLength = currentAnimation.calibration.strideLengthRight;
-                    }
-                }
-            }
+				// calculate lateral stride - same same, but different
+				// if the timing's right, take a snapshot of the stride max and recalibrate the stride length
+				var tolerance = 1.0; // higher the number, the higher the chance of a calibration taking place, but is traded off with lower accuracy
+				if(principleDirection===DIRECTION_LEFT) {
 
-            // wrap the stride length around a 'surveyor's wheel' twice and calculate the angular velocity at the given (linear) velocity
-            // omega = v / r , where r = circumference / 2 PI , where circumference = 2 * stride length
-            var wheelRadius = strideLength / Math.PI;
-            var angularVelocity = velocity / wheelRadius;
+					if( walkWheelPosition < (3+tolerance) && walkWheelPosition > (3-tolerance) ) {
 
-            // calculate the degrees turned (at this angular velocity) since last frame
-            var radiansTurnedSinceLastFrame = deltaTime * angularVelocity;
-            var degreesTurnedSinceLastFrame = radToDeg(radiansTurnedSinceLastFrame);
+						// calculate the feet's offset from the hips (in local X only)
+						var footRPos = localToGlobal(MyAvatar.getJointPosition("RightFoot"));
+						var footLPos = localToGlobal(MyAvatar.getJointPosition("LeftFoot"));
+						var footOffsetX = Math.abs(footRPos.x - footLPos.x);
+						strideLength = footOffsetX;
+						//if(statsOn) print('Stride width calibrated to '+strideLength.toFixed(4)+ ' metres at '+walkWheelPosition.toFixed(1)+' degrees');
+						//print('Stride width calibrated to '+strideLength.toFixed(4)+ ' metres at '+walkWheelPosition.toFixed(1)+' degrees. footRPos '+footRPos.x.toFixed(3)+' footLPos '+footLPos.x.toFixed(3)+' footOffsetX '+footOffsetX.toFixed(3));
+						currentAnimation.calibration.strideLengthLeft = strideLength;
 
-            // if we are in an edit mode, we will need fake time to turn the wheel
-            if(INTERNAL_STATE!==WALKING)
-                degreesTurnedSinceLastFrame = currentAnimation.settings.baseFrequency / 70;
+					} else {
 
-            // advance the walk wheel the appropriate amount
-            // TODO: use radians, as Math.sin needs radians below anyway!
-            walkWheelPosition += degreesTurnedSinceLastFrame;
+						strideLength = currentAnimation.calibration.strideLengthLeft;
+					}
+				}
+				else if (principleDirection===DIRECTION_RIGHT) {
 
-            if( walkWheelPosition >= 360 )
-                walkWheelPosition = walkWheelPosition % 360;
+					if( walkWheelPosition < (170+tolerance) && walkWheelPosition > (170-tolerance) ) {
 
-            // set the new values for the exact correct walk cycle speed at this velocity
-            adjustedFrequency = 1;
-            cumulativeTime = walkWheelPosition;
+						// calculate the feet's offset from the hips (in local X only)
+						var footRPos = localToGlobal(MyAvatar.getJointPosition("RightFoot"));
+						var footLPos = localToGlobal(MyAvatar.getJointPosition("LeftFoot"));
+						var footOffsetX = Math.abs(footRPos.x - footLPos.x);
+						strideLength = footOffsetX;
+						//if(statsOn) print('Stride width calibrated to '+strideLength.toFixed(4)+ ' metres at '+walkWheelPosition.toFixed(1)+' degrees');
+						//print('Stride width calibrated to '+strideLength.toFixed(4)+ ' metres at '+walkWheelPosition.toFixed(1)+' degrees. footRPos '+footRPos.x.toFixed(3)+' footLPos '+footLPos.x.toFixed(3)+' footOffsetX '+footOffsetX.toFixed(3));
+						currentAnimation.calibration.strideLengthRight = strideLength;
 
-            // show stats and walk wheel?
-            if(statsOn) {
+					} else {
 
-                nFrames++;
-                var distanceTravelled = velocity * deltaTime;
-                var deltaTimeMS = deltaTime * 1000;
+						strideLength = currentAnimation.calibration.strideLengthRight;
+					}
+				}
+			} // end stride length calculations
 
-                if(INTERNAL_STATE===SIDE_STEPPING) {
+			// wrap the stride length around a 'surveyor's wheel' twice and calculate the angular velocity at the given (linear) velocity
+			// omega = v / r , where r = circumference / 2 PI , where circumference = 2 * stride length
+			var wheelRadius = strideLength / Math.PI;
+			var angularVelocity = velocity / wheelRadius;
 
-                    // draw the walk wheel turning around the z axis for sidestepping
-                    var yOffset = hipsToFeetDistance - (wheelRadius/1.1); // /1.1 is a visual kludge, probably necessary because of either the 'avi feet penetrate floor' issue or this script not including the avi's foot length in the walkwheel circumference - TODO - once ground plane following is in Interface, lock this down
-                    var sinWalkWheelPosition = wheelRadius * Math.sin(degToRad((directionModifier*-1) * walkWheelPosition));
-                    var cosWalkWheelPosition = wheelRadius * Math.cos(degToRad((directionModifier*-1) * -walkWheelPosition));
-                    var wheelXPos = {x: cosWalkWheelPosition, y:-sinWalkWheelPosition - yOffset, z: 0};
-                    var wheelXEnd = {x: -cosWalkWheelPosition, y:sinWalkWheelPosition - yOffset, z: 0};
-                    sinWalkWheelPosition = wheelRadius * Math.sin(degToRad(directionModifier * walkWheelPosition+90));
-                    cosWalkWheelPosition = wheelRadius * Math.cos(degToRad(directionModifier * walkWheelPosition+90));
-                    var wheelYPos = {x:cosWalkWheelPosition, y:sinWalkWheelPosition - yOffset, z: 0};
-                    var wheelYEnd = {x:-cosWalkWheelPosition, y:-sinWalkWheelPosition - yOffset, z: 0};
-                    Overlays.editOverlay(walkWheelYLine, {visible: true, position:wheelYPos, end:wheelYEnd});
-                    Overlays.editOverlay(walkWheelZLine, {visible: true, position:wheelXPos, end:wheelXEnd});
+			// calculate the degrees turned (at this angular velocity) since last frame
+			var radiansTurnedSinceLastFrame = deltaTime * angularVelocity;
+			var degreesTurnedSinceLastFrame = radToDeg(radiansTurnedSinceLastFrame);
 
-                } else {
+			// if we are in an edit mode, we will need fake time to turn the wheel
+			if( INTERNAL_STATE!==WALKING &&
+				INTERNAL_STATE!==SIDE_STEPPING )
+				degreesTurnedSinceLastFrame = currentAnimation.settings.baseFrequency / 70;
 
-                    // draw the walk wheel turning around the x axis for walking forwards or backwards
-                    var yOffset = hipsToFeetDistance - (wheelRadius/1.1); // /1.1 is a visual kludge, probably necessary because of either the 'avi feet penetrate floor' issue or this script not including the avi's foot length in the walkwheel circumference - TODO - once ground plane following is in Interface, lock this down
-                    var sinWalkWheelPosition = wheelRadius * Math.sin(degToRad((forwardModifier*-1) * walkWheelPosition));
-                    var cosWalkWheelPosition = wheelRadius * Math.cos(degToRad((forwardModifier*-1) * -walkWheelPosition));
-                    var wheelZPos = {x:0, y:-sinWalkWheelPosition - yOffset, z: cosWalkWheelPosition};
-                    var wheelZEnd = {x:0, y:sinWalkWheelPosition - yOffset, z: -cosWalkWheelPosition};
-                    sinWalkWheelPosition = wheelRadius * Math.sin(degToRad(forwardModifier * walkWheelPosition+90));
-                    cosWalkWheelPosition = wheelRadius * Math.cos(degToRad(forwardModifier * walkWheelPosition+90));
-                    var wheelYPos = {x:0, y:sinWalkWheelPosition - yOffset, z: cosWalkWheelPosition};
-                    var wheelYEnd = {x:0, y:-sinWalkWheelPosition - yOffset, z: -cosWalkWheelPosition};
-                    Overlays.editOverlay(walkWheelYLine, { visible: true, position:wheelYPos, end:wheelYEnd });
-                    Overlays.editOverlay(walkWheelZLine, { visible: true, position:wheelZPos, end:wheelZEnd });
-                }
+			if( walkWheelPosition >= 360 )
+				walkWheelPosition = walkWheelPosition % 360;
 
-                // populate debug overlay
-                var debugInfo = 'Frame number: '+nFrames
-                              + '\nFrame time: '+deltaTimeMS.toFixed(2)
-                              + ' mS\nVelocity: '+velocity.toFixed(2)
-                              + ' m/s\nDistance: '+distanceTravelled.toFixed(3)
-                              + ' m\nOmega: '+angularVelocity.toFixed(3)
-                              + ' rad / s\nDeg to turn: '+degreesTurnedSinceLastFrame.toFixed(2)
-                              + ' deg\nStride: '+strideLength.toFixed(3)
-                              + ' m\nWheel position: '+cumulativeTime.toFixed(1)
-                              + ' deg\n';
-                Overlays.editOverlay(debugText, {text: debugInfo});
-            }
+			// advance the walk wheel the appropriate amount
+			if( currentTransition===null || currentTransition.walkingAtEnd )
+			    walkWheelPosition += degreesTurnedSinceLastFrame;
 
-        } else {
-            // not performing an action that requires ground / foot syncing
-            //Overlays.editOverlay(walkWheelYLine, { visible: false });
-            //Overlays.editOverlay(walkWheelZLine, { visible: false });
-            nFrames = 0;
-            if(currentTransition===null)
-                walkWheelPosition = walkCycleStart; // best foot forwards for next time (set after any transitions have finished)
-        }
+			// set the new values for the exact correct walk cycle speed at this velocity
+			adjustedFrequency = 1;
+			cycle = walkWheelPosition;
 
-        // TODO: optimise by precalculating and re-using Math.sin((cumulativeTime * femaleSexyWalk.settings.baseFrequency) when there is no phase to be applied
-        // TODO: optimise by 'baking' offsets and phases after editing and use during normal playback
+			// show stats and walk wheel?
+			if(statsOn) {
 
+				var distanceTravelled = velocity * deltaTime;
+				var deltaTimeMS = deltaTime * 1000;
+
+				if( INTERNAL_STATE===SIDE_STEPPING ||
+		    		INTERNAL_STATE===CONFIG_SIDESTEP_LEFT ||
+		    		INTERNAL_STATE===CONFIG_SIDESTEP_RIGHT ) {
+
+					// draw the walk wheel turning around the z axis for sidestepping
+					var directionSign = 1;
+					if(principleDirection===DIRECTION_RIGHT) directionSign = -1;
+					var yOffset = hipsToFeetDistance - (wheelRadius/1.2); // /1.2 is a visual kludge, probably necessary because of either the 'avi feet penetrate floor' issue - TODO - once ground plane following is in Interface, lock this down
+					var sinWalkWheelPosition = wheelRadius * Math.sin(degToRad( directionSign * walkWheelPosition ));
+					var cosWalkWheelPosition = wheelRadius * Math.cos(degToRad( directionSign * -walkWheelPosition ));
+					var wheelXPos = {x: cosWalkWheelPosition, y:-sinWalkWheelPosition - yOffset, z: 0};
+					var wheelXEnd = {x: -cosWalkWheelPosition, y:sinWalkWheelPosition - yOffset, z: 0};
+					sinWalkWheelPosition = wheelRadius * Math.sin(degToRad( -directionSign * walkWheelPosition+90 ));
+					cosWalkWheelPosition = wheelRadius * Math.cos(degToRad( -directionSign * walkWheelPosition+90 ));
+					var wheelYPos = {x:cosWalkWheelPosition, y:sinWalkWheelPosition - yOffset, z: 0};
+					var wheelYEnd = {x:-cosWalkWheelPosition, y:-sinWalkWheelPosition - yOffset, z: 0};
+					Overlays.editOverlay(walkWheelYLine, {visible: true, position:wheelYPos, end:wheelYEnd});
+					Overlays.editOverlay(walkWheelZLine, {visible: true, position:wheelXPos, end:wheelXEnd});
+
+				} else {
+
+					// draw the walk wheel turning around the x axis for walking forwards or backwards
+					var yOffset = hipsToFeetDistance - (wheelRadius/1.2); // /1.2 is a visual kludge, probably necessary because of either the 'avi feet penetrate floor' issue - TODO - once ground plane following is in Interface, lock this down
+					var sinWalkWheelPosition = wheelRadius * Math.sin(degToRad((forwardModifier*-1) * walkWheelPosition));
+					var cosWalkWheelPosition = wheelRadius * Math.cos(degToRad((forwardModifier*-1) * -walkWheelPosition));
+					var wheelZPos = {x:0, y:-sinWalkWheelPosition - yOffset, z: cosWalkWheelPosition};
+					var wheelZEnd = {x:0, y:sinWalkWheelPosition - yOffset, z: -cosWalkWheelPosition};
+					sinWalkWheelPosition = wheelRadius * Math.sin(degToRad(forwardModifier * walkWheelPosition+90));
+					cosWalkWheelPosition = wheelRadius * Math.cos(degToRad(forwardModifier * walkWheelPosition+90));
+					var wheelYPos = {x:0, y:sinWalkWheelPosition - yOffset, z: cosWalkWheelPosition};
+					var wheelYEnd = {x:0, y:-sinWalkWheelPosition - yOffset, z: -cosWalkWheelPosition};
+					Overlays.editOverlay(walkWheelYLine, { visible: true, position:wheelYPos, end:wheelYEnd });
+					Overlays.editOverlay(walkWheelZLine, { visible: true, position:wheelZPos, end:wheelZEnd });
+				}
+
+				// populate stats overlay
+				var walkWheelInfo =
+					'         Walk Wheel Stats\n--------------------------------------\n \n \n'
+					+ '\nFrame time: '+deltaTimeMS.toFixed(2)
+					+ ' mS\nVelocity: '+velocity.toFixed(2)
+					+ ' m/s\nDistance: '+distanceTravelled.toFixed(3)
+					+ ' m\nOmega: '+angularVelocity.toFixed(3)
+					+ ' rad / s\nDeg to turn: '+degreesTurnedSinceLastFrame.toFixed(2)
+					+ ' deg\nWheel position: '+cycle.toFixed(1)
+					+ ' deg\nWheel radius: '+wheelRadius.toFixed(3)
+					+ ' m\nHips To Feet: '+hipsToFeetDistance.toFixed(3)
+					+ ' m\nStride: '+strideLength.toFixed(3)
+					+ ' m\n';
+				Overlays.editOverlay(walkWheelStats, {text: walkWheelInfo});
+			}
+		} // end of walk wheel and stride length calculation
+
+
+		// Start applying motion
+		var pitchOscillation = 0;
+		var yawOscillation = 0;
+		var rollOscillation = 0;
+		var pitchOscillationLast = 0;
+		var yawOscillationLast = 0;
+		var rollOscillationLast = 0;
         var pitchOffset = 0;
         var yawOffset = 0;
         var rollOffset = 0;
+        var pitchOffsetLast = 0;
+        var yawOffsetLast = 0;
+        var rollOffsetLast = 0;
 
-        // calcualte any hips translation (only for sidestepping at the moment)
-        if(INTERNAL_STATE===SIDE_STEPPING) {
 
-            // do the translation
-            var motorOscillation  = 0;
-            var swayOscillation   = 0;
-            if(principleDirection===DIRECTION_RIGHT)
-                swayOscillation = Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[0].swayPhase)) + currentAnimation.joints[0].swayOffset;
-            else
-                swayOscillation = Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + (180-currentAnimation.joints[0].swayPhase) )) + currentAnimation.joints[0].swayOffset;
+		// calcualte any hips translation
+		// Note: can only apply hips translations whilst in a config (edit) mode at present, not whilst under locomotion
+		if( INTERNAL_STATE===CONFIG_WALK_STYLES ||
+		    INTERNAL_STATE===CONFIG_WALK_TWEAKS ||
+		    INTERNAL_STATE===CONFIG_WALK_JOINTS ||
+		    INTERNAL_STATE===CONFIG_SIDESTEP_LEFT  ||
+		    INTERNAL_STATE===CONFIG_SIDESTEP_RIGHT ||
+		    INTERNAL_STATE===CONFIG_FLYING ||
+		    INTERNAL_STATE===CONFIG_FLYING_UP ||
+		    INTERNAL_STATE===CONFIG_FLYING_DOWN ) {
 
-            var bobOscillation    = 0;//Math.sin(degToRad((cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[0].bobPhase)) + currentAnimation.joints[0].bobOffset;
+			// calculate hips translation TODO: get this working in normal motion!
+			var motorOscillation  = Math.sin(degToRad((cycle * adjustedFrequency * 2) + currentAnimation.joints[0].thrustPhase)) + currentAnimation.joints[0].thrustOffset;
+			var swayOscillation   = Math.sin(degToRad((cycle * adjustedFrequency    ) + currentAnimation.joints[0].swayPhase)) + currentAnimation.joints[0].swayOffset;
+			var bobOscillation    = Math.sin(degToRad((cycle * adjustedFrequency * 2) + currentAnimation.joints[0].bobPhase)) + currentAnimation.joints[0].bobOffset;
 
-            translateHips({ x:swayOscillation * currentAnimation.joints[0].sway,
-                            y:bobOscillation,
-                            z:motorOscillation });
-        }
+			// apply hips translation TODO: get this working!
+			translateHips({x:swayOscillation*currentAnimation.joints[0].sway, y:motorOscillation*currentAnimation.joints[0].thrust, z:bobOscillation*currentAnimation.joints[0].bob});
+		}
 
-        // calculate hips translation TODO: get this working!
-        //var motorOscillation  = Math.sin(degToRad((cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[0].thrustPhase)) + currentAnimation.joints[0].thrustOffset;
-        //var swayOscillation   = Math.sin(degToRad((cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[0].swayPhase)) + currentAnimation.joints[0].swayOffset;
-        //var bobOscillation    = Math.sin(degToRad((cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[0].bobPhase)) + currentAnimation.joints[0].bobOffset;
-
-        // apply hips translation TODO: get this working!
-        //translateHips({x:swayOscillation*currentAnimation.joints[0].sway, y:motorOscillation*currentAnimation.joints[0].thrust, z:bobOscillation*currentAnimation.joints[0].bob});
-
-        // calculate hips rotation
-        var pitchOscillation = currentAnimation.joints[0].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency * 2)
-                               + currentAnimation.joints[0].pitchPhase)) + currentAnimation.joints[0].pitchOffset;
-        var yawOscillation   = currentAnimation.joints[0].yaw   * Math.sin(degToRad((cumulativeTime * adjustedFrequency )
-                               + currentAnimation.joints[0].yawPhase))   + currentAnimation.joints[0].yawOffset;
-        var rollOscillation  = (currentAnimation.joints[0].roll  * Math.sin(degToRad((cumulativeTime * adjustedFrequency )
-                               + currentAnimation.joints[0].rollPhase))  + currentAnimation.joints[0].rollOffset);
-
+        // hips rotation
         // apply the current Transition?
         if(currentTransition!==null) {
 
-            var pitchOscillationLast = currentTransition.lastAnimation.joints[0].pitch * Math.sin(degToRad((walkWheelPosition * 2)
-                                   + currentTransition.lastAnimation.joints[0].pitchPhase)) + currentTransition.lastAnimation.joints[0].pitchOffset;
-            var yawOscillationLast   = currentTransition.lastAnimation.joints[0].yaw   * Math.sin(degToRad((walkWheelPosition )
-                                   + currentTransition.lastAnimation.joints[0].yawPhase))   + currentTransition.lastAnimation.joints[0].yawOffset;
-            var rollOscillationLast  = (currentTransition.lastAnimation.joints[0].roll  * Math.sin(degToRad((walkWheelPosition )
-                                   + currentTransition.lastAnimation.joints[0].rollPhase))  + currentTransition.lastAnimation.joints[0].rollOffset);
+			if( currentTransition.walkingAtStart ) {
 
-            pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-            yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-            rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-        }
+				pitchOscillation = currentAnimation.joints[0].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency * 2)
+									   + currentAnimation.joints[0].pitchPhase)) + currentAnimation.joints[0].pitchOffset;
+
+				yawOscillation   = currentAnimation.joints[0].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency )
+									   + currentAnimation.joints[0].yawPhase)) + currentAnimation.joints[0].yawOffset;
+
+				rollOscillation  = (currentAnimation.joints[0].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency )
+									   + currentAnimation.joints[0].rollPhase)) + currentAnimation.joints[0].rollOffset);
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[0].pitch * Math.sin(degToRad(( walkWheelPosition * 2)
+									   + currentTransition.lastAnimation.joints[0].pitchPhase)) + currentTransition.lastAnimation.joints[0].pitchOffset;
+
+				yawOscillationLast = currentTransition.lastAnimation.joints[0].yaw * Math.sin(degToRad(( walkWheelPosition )
+									   + currentTransition.lastAnimation.joints[0].yawPhase)) + currentTransition.lastAnimation.joints[0].yawOffset;
+
+				rollOscillationLast = (currentTransition.lastAnimation.joints[0].roll * Math.sin(degToRad(( walkWheelPosition )
+									   + currentTransition.lastAnimation.joints[0].rollPhase)) + currentTransition.lastAnimation.joints[0].rollOffset);
+
+			} else {//if( currentTransition.walkingAtEnd ) {
+
+				pitchOscillation = currentAnimation.joints[0].pitch * Math.sin(degToRad((cycle * adjustedFrequency * 2)
+									   + currentAnimation.joints[0].pitchPhase)) + currentAnimation.joints[0].pitchOffset;
+
+				yawOscillation   = currentAnimation.joints[0].yaw   * Math.sin(degToRad((cycle * adjustedFrequency )
+									   + currentAnimation.joints[0].yawPhase))   + currentAnimation.joints[0].yawOffset;
+
+				rollOscillation  = (currentAnimation.joints[0].roll  * Math.sin(degToRad((cycle * adjustedFrequency )
+									   + currentAnimation.joints[0].rollPhase))  + currentAnimation.joints[0].rollOffset);
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[0].pitch * Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency * 2)
+									   + currentTransition.lastAnimation.joints[0].pitchPhase)) + currentTransition.lastAnimation.joints[0].pitchOffset;
+
+				yawOscillationLast = currentTransition.lastAnimation.joints[0].yaw * Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+									   + currentTransition.lastAnimation.joints[0].yawPhase)) + currentTransition.lastAnimation.joints[0].yawOffset;
+
+				rollOscillationLast = (currentTransition.lastAnimation.joints[0].roll * Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+									   + currentTransition.lastAnimation.joints[0].rollPhase)) + currentTransition.lastAnimation.joints[0].rollOffset);
+
+			}
+
+			pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+			yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+			rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+			//print('Hips: '+pitchOscillation+' '+yawOscillation+' '+rollOscillation);
+
+		} else {
+
+			pitchOscillation = currentAnimation.joints[0].pitch * Math.sin(degToRad((cycle * adjustedFrequency * 2)
+								   + currentAnimation.joints[0].pitchPhase)) + currentAnimation.joints[0].pitchOffset;
+
+			yawOscillation   = currentAnimation.joints[0].yaw   * Math.sin(degToRad((cycle * adjustedFrequency )
+								   + currentAnimation.joints[0].yawPhase))   + currentAnimation.joints[0].yawOffset;
+
+			rollOscillation  = (currentAnimation.joints[0].roll  * Math.sin(degToRad((cycle * adjustedFrequency )
+								   + currentAnimation.joints[0].rollPhase))  + currentAnimation.joints[0].rollOffset);
+		}
 
         // apply hips rotation
-        MyAvatar.setJointData("Hips", Quat.fromPitchYawRollDegrees(-pitchOscillation + (leanPitchModifier * getLeanPitch(velocity)),   // getLeanPitch - lean forwards as velocity increases
-                                                                    yawOscillation,                                       // Yup, that's correct ;-)
-                                                                    rollOscillation + getLeanRoll(deltaTime, velocity))); // getLeanRoll - banking on cornering
-
-        if(INTERNAL_STATE!==SIDE_STEPPING) {
-
-            // calculate upper leg rotations
-            // TODO: increase stride a bit as velocity increases
-            var runningModifier = velocity / 12.4;//currentAnimation.settings.takeFlightVelocity;
-            if(runningModifier>1) {
-                runningModifier *= 2;
-                runningModifier += 0.5;
-            }
-            else if(runningModifier>0) {
-                runningModifier *= 2;
-                runningModifier += 0.5;
-            }
-            else runningModifier = 1; // standing
-
-            runningModifier = 1; // disabling hack for work in progress
-
-            pitchOscillation = runningModifier * currentAnimation.joints[1].pitch *
-                               Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + (forwardModifier * currentAnimation.joints[1].pitchPhase)));
-            yawOscillation   = currentAnimation.joints[1].yaw   * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[1].yawPhase));
-            rollOscillation  = currentAnimation.joints[1].roll  * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[1].rollPhase));
-
-            // apply the current Transition for the upper legs?
-            if(currentTransition!==null) {
-
-                var pitchOscillationLast = runningModifier * currentTransition.lastAnimation.joints[1].pitch *
-                                            Math.sin(degToRad((walkWheelPosition * adjustedFrequency ) + (forwardModifier * currentTransition.lastAnimation.joints[1].pitchPhase)));
-                var yawOscillationLast   = currentTransition.lastAnimation.joints[1].yaw   * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[1].yawPhase));
-                var rollOscillationLast  = currentTransition.lastAnimation.joints[1].roll  * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[1].rollPhase));
-
-                var pitchOffsetLast = currentTransition.lastAnimation.joints[1].pitchOffset;
-                var pitchOffset = currentAnimation.joints[1].pitchOffset;
-                var yawOffsetLast = currentTransition.lastAnimation.joints[1].yawOffset;
-                var yawOffset = currentAnimation.joints[1].yawOffset;
-                var rollOffsetLast = currentTransition.lastAnimation.joints[1].rollOffset;
-                var rollOffset = currentAnimation.joints[1].rollOffset;
-
-                pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
-                yawOffset = (transitionProgress * yawOffset) + ((1-transitionProgress) * yawOffsetLast);
-                rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
-
-                pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-                yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-                rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-
-                //print('pitchOscillation '+pitchOscillation.toFixed(2)
-                //  +' yawOscillation '+yawOscillation.toFixed(2)
-                //  +' rollOscillation '+rollOscillation.toFixed(2)
-                //  +' pitchOffset '+pitchOffset.toFixed(2)
-                //  +' yawOffset '+yawOffset.toFixed(2)
-                //  +' rollOffset '+rollOffset.toFixed(2)
-                //  +' beginWalking '+currentTransition.beginWalking
-                //  +' walkWheelPosition '+ walkWheelPosition);
-
-                // apply the upper leg rotations
-                MyAvatar.setJointData("RightUpLeg", Quat.fromPitchYawRollDegrees(
-                    pitchOscillation + pitchOffset,
-                    yawOscillation + yawOffset,
-                   -rollOscillation - rollOffset ));
-                MyAvatar.setJointData("LeftUpLeg",  Quat.fromPitchYawRollDegrees(
-                   -pitchOscillation + pitchOffset,
-                    yawOscillation - yawOffset,
-                   -rollOscillation + rollOffset ));
-            }
-            else {
-                // apply the upper leg rotations
-                MyAvatar.setJointData("RightUpLeg", Quat.fromPitchYawRollDegrees(
-                    pitchOscillation + currentAnimation.joints[1].pitchOffset,
-                    yawOscillation + currentAnimation.joints[1].yawOffset,
-                   -rollOscillation - currentAnimation.joints[1].rollOffset ));
-                MyAvatar.setJointData("LeftUpLeg",  Quat.fromPitchYawRollDegrees(
-                   - pitchOscillation + currentAnimation.joints[1].pitchOffset,
-                    yawOscillation - currentAnimation.joints[1].yawOffset,
-                   -rollOscillation + currentAnimation.joints[1].rollOffset ));
-            }
-
-            // calculate lower leg joint rotations
-            strideAdjusterPitch = 0;
-            strideAdjusterPitchOffset = 0;
-            if(INTERNAL_STATE===WALKING ||
-               INTERNAL_STATE===CONFIG_WALK_STYLES ||
-               INTERNAL_STATE===CONFIG_WALK_TWEAKS ||
-               INTERNAL_STATE===CONFIG_WALK_JOINTS) {
-                strideAdjusterPitch = currentAnimation.adjusters.stride.strength * currentAnimation.adjusters.stride.lowerLegsPitch;
-                strideAdjusterPitchOffset = currentAnimation.adjusters.stride.strength*currentAnimation.adjusters.stride.lowerLegsPitchOffset;
-            }
-            pitchOscillation = currentAnimation.joints[2].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[2].pitchPhase));
-            yawOscillation   = currentAnimation.joints[2].yaw   * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[2].yawPhase));
-            rollOscillation  = currentAnimation.joints[2].roll  * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[2].rollPhase));
-
-            // apply the current Transition for the lower legs
-            if(currentTransition!==null) {
-
-                var pitchOscillationLast = currentTransition.lastAnimation.joints[2].pitch * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[2].pitchPhase));
-                var yawOscillationLast   = currentTransition.lastAnimation.joints[2].yaw   * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[2].yawPhase));
-                var rollOscillationLast  = currentTransition.lastAnimation.joints[2].roll  * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[2].rollPhase));
-
-                var pitchOffsetLast = currentTransition.lastAnimation.joints[2].pitchOffset;
-                pitchOffset = currentAnimation.joints[2].pitchOffset;
-                var yawOffsetLast = currentTransition.lastAnimation.joints[2].yawOffset;
-                yawOffset = currentAnimation.joints[2].yawOffset;
-                var rollOffsetLast = currentTransition.lastAnimation.joints[2].rollOffset;
-                rollOffset = currentAnimation.joints[2].rollOffset;
-
-                pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
-                yawOffset = (transitionProgress * yawOffset) + ((1-transitionProgress) * yawOffsetLast);
-                rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
-
-                // if stopping a walk, continue the walk until the legs are in a good position
-                pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-                yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-                rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-
-                // apply lower leg joint rotations
-                MyAvatar.setJointData("RightLeg", Quat.fromPitchYawRollDegrees(
-                    -pitchOscillation + pitchOffset,
-                     yawOscillation - yawOffset,
-                     rollOscillation - rollOffset)); // TODO: needs a kick just before fwd peak
-                MyAvatar.setJointData("LeftLeg",  Quat.fromPitchYawRollDegrees(
-                     pitchOscillation + pitchOffset,
-                     yawOscillation + yawOffset,
-                     rollOscillation + rollOffset));
-            }
-            else {
-                // apply lower leg joint rotations
-                MyAvatar.setJointData("RightLeg", Quat.fromPitchYawRollDegrees(
-                    -pitchOscillation + currentAnimation.joints[2].pitchOffset,
-                     yawOscillation - currentAnimation.joints[2].yawOffset,
-                     rollOscillation - currentAnimation.joints[2].rollOffset)); // TODO: needs a kick just before fwd peak
-                MyAvatar.setJointData("LeftLeg",  Quat.fromPitchYawRollDegrees(
-                     pitchOscillation + currentAnimation.joints[2].pitchOffset,
-                     yawOscillation + currentAnimation.joints[2].yawOffset,
-                     rollOscillation + currentAnimation.joints[2].rollOffset));
-             }
-        // end if !SIDE_STEPPING
-       }
-       else if( INTERNAL_STATE===SIDE_STEPPING ) {
-
-            // sidestepping uses the leg's sinewave generators slightly differently
-            var rollAngle = (cumulativeTime * adjustedFrequency ) + currentAnimation.joints[1].rollPhase;
-            var rollOscillationLeft;
-            var rollOscillationRight;
-
-            if(principleDirection===DIRECTION_RIGHT)
-                pitchOscillation = currentAnimation.joints[1].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[1].pitchPhase));
-            else
-                pitchOscillation = currentAnimation.joints[1].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) - currentAnimation.joints[1].pitchPhase));
-
-            yawOscillation   = currentAnimation.joints[1].yaw   * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[1].yawPhase));
-            if(rollAngle%360<180) {
-                rollOscillationRight = currentAnimation.joints[1].roll * Math.sin(degToRad(rollAngle));
-                rollOscillationLeft  = 0;//(rollAngle/180) * -0.25 * currentAnimation.joints[1].roll * Math.sin(degToRad(rollAngle));
-            } else {
-                rollOscillationRight = 0;//((rollAngle-180)/180) * -0.25 * currentAnimation.joints[1].roll * Math.sin(degToRad(rollAngle));
-                rollOscillationLeft  = currentAnimation.joints[1].roll * Math.sin(degToRad(rollAngle));
-            }
-
-            // apply upper leg rotations for sidestepping
-            MyAvatar.setJointData("RightUpLeg", Quat.fromPitchYawRollDegrees(
-                pitchOscillation + currentAnimation.joints[1].pitchOffset,
-                yawOscillation + currentAnimation.joints[1].yawOffset,
-               -rollOscillationRight  - currentAnimation.joints[1].rollOffset ));
-            MyAvatar.setJointData("LeftUpLeg",  Quat.fromPitchYawRollDegrees(
-               - pitchOscillation + currentAnimation.joints[1].pitchOffset,
-                yawOscillation - currentAnimation.joints[1].yawOffset,
-               -rollOscillationLeft  + currentAnimation.joints[1].rollOffset ));
-
-            // calculate lower leg joint rotations for sidestepping
-            strideAdjusterPitch = 0;
-            strideAdjusterPitchOffset = 0;
-            if(INTERNAL_STATE===WALKING ||
-               INTERNAL_STATE===CONFIG_WALK_STYLES ||
-               INTERNAL_STATE===CONFIG_WALK_TWEAKS ||
-               INTERNAL_STATE===CONFIG_WALK_JOINTS) {
-                strideAdjusterPitch = currentAnimation.adjusters.stride.strength * currentAnimation.adjusters.stride.lowerLegsPitch;
-                strideAdjusterPitchOffset = currentAnimation.adjusters.stride.strength*currentAnimation.adjusters.stride.lowerLegsPitchOffset;
-            }
-            if(principleDirection===DIRECTION_RIGHT)
-                pitchOscillation = currentAnimation.joints[2].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[2].pitchPhase));
-            else
-                pitchOscillation = currentAnimation.joints[2].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) - currentAnimation.joints[2].pitchPhase));
-
-            yawOscillation   = currentAnimation.joints[2].yaw   * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[2].yawPhase));
-            rollOscillation  = currentAnimation.joints[2].roll  * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[2].rollPhase));
-
-            // apply lower leg joint rotations
-            MyAvatar.setJointData("RightLeg", Quat.fromPitchYawRollDegrees(
-                -pitchOscillation + currentAnimation.joints[2].pitchOffset - strideAdjusterPitch * (Math.sin(degToRad((cumulativeTime * adjustedFrequency) + currentAnimation.joints[2].pitchPhase)) + strideAdjusterPitchOffset),
-                 yawOscillation - currentAnimation.joints[2].yawOffset,
-                 rollOscillation - currentAnimation.joints[2].rollOffset)); // TODO: needs a kick just before fwd peak
-            MyAvatar.setJointData("LeftLeg",  Quat.fromPitchYawRollDegrees(
-                 pitchOscillation + currentAnimation.joints[2].pitchOffset + strideAdjusterPitch * (Math.sin(degToRad((cumulativeTime * adjustedFrequency) + currentAnimation.joints[2].pitchPhase)) - strideAdjusterPitchOffset),
-                 yawOscillation + currentAnimation.joints[2].yawOffset,
-                 rollOscillation + currentAnimation.joints[2].rollOffset));
-       }
-
-        // foot joint oscillation is a hard curve to replicate
-        pitchOscillation = currentAnimation.joints[3].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[3].pitchPhase));
-        yawOscillation   = currentAnimation.joints[3].yaw  * Math.sin(degToRad((cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[3].yawPhase));
-        rollOscillation  = currentAnimation.joints[3].roll * Math.sin(degToRad((cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[3].rollPhase));
-        if(currentTransition!==null) {
-
-            pitchOscillationLast = currentTransition.lastAnimation.joints[3].pitch * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[3].pitchPhase));
-            yawOscillationLast   = currentTransition.lastAnimation.joints[3].yaw   * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[3].yawPhase));
-            rollOscillationLast  = currentTransition.lastAnimation.joints[3].roll  * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[3].rollPhase));
-
-
-            pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-            yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-            rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-        }
-        MyAvatar.setJointData("RightFoot", Quat.fromPitchYawRollDegrees( pitchOscillation + currentAnimation.joints[3].pitchOffset, yawOscillation + currentAnimation.joints[3].yawOffset, rollOscillation + currentAnimation.joints[3].rollOffset));
-        MyAvatar.setJointData("LeftFoot",  Quat.fromPitchYawRollDegrees(-pitchOscillation + currentAnimation.joints[3].pitchOffset, yawOscillation - currentAnimation.joints[3].yawOffset, rollOscillation - currentAnimation.joints[3].rollOffset));
-
-        // play footfall sound yet? To determine this, we take the differential of
-        // the foot's pitch curve to decide when the foot hits the ground.
-        if(INTERNAL_STATE===WALKING ||
-           INTERNAL_STATE===CONFIG_WALK_STYLES ||
-           INTERNAL_STATE===CONFIG_WALK_TWEAKS ||
-           INTERNAL_STATE===CONFIG_WALK_JOINTS) {
-            // As luck would have it, we're using a sine wave, so finding dy/dx is as
-            // simple as determining the cosine wave for the foot's pitch function.
-            var feetPitchDifferential = Math.cos(degToRad((cumulativeTime * adjustedFrequency ) + currentAnimation.joints[3].pitchPhase));
-            var threshHold = 0.9; // sets the audio trigger point. with accuracy.
-            if(feetPitchDifferential<-threshHold &&
-               nextStep===DIRECTION_LEFT &&
-               principleDirection!==DIRECTION_UP &&
-               principleDirection!==DIRECTION_DOWN) {
-                playFootstep(DIRECTION_LEFT);
-                nextStep = DIRECTION_RIGHT;
-            }
-            else if(feetPitchDifferential>threshHold &&
-                    nextStep===DIRECTION_RIGHT &&
-                    principleDirection!==DIRECTION_UP &&
-                    principleDirection!==DIRECTION_DOWN) {
-                playFootstep(DIRECTION_RIGHT);
-                nextStep = DIRECTION_LEFT;
-            }
-        }
-
-        // toes joint oscillation
-        pitchOscillation = currentAnimation.joints[4].pitch * Math.sin(degToRad((cumulativeTime * adjustedFrequency) + currentAnimation.joints[4].pitchPhase));
-        yawOscillation   = currentAnimation.joints[4].yaw   * Math.sin(degToRad((cumulativeTime * adjustedFrequency) + currentAnimation.joints[4].yawPhase)) + currentAnimation.joints[4].yawOffset;
-        rollOscillation  = currentAnimation.joints[4].roll  * Math.sin(degToRad((cumulativeTime * adjustedFrequency) + currentAnimation.joints[4].rollPhase)) + currentAnimation.joints[4].rollOffset;
-        pitchOffset = currentAnimation.joints[4].pitchOffset;
-        if(currentTransition!==null) {
-
-            var pitchOffsetLast = currentTransition.lastAnimation.joints[4].pitchOffset;
-            pitchOscillationLast = currentTransition.lastAnimation.joints[4].pitch * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[4].pitchPhase));
-            yawOscillationLast   = currentTransition.lastAnimation.joints[4].yaw   * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[4].yawPhase)) + currentAnimation.joints[4].yawOffset;;
-            rollOscillationLast  = currentTransition.lastAnimation.joints[4].roll  * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[4].rollPhase))+ currentAnimation.joints[4].rollOffset;
-            pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
-            pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-            yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-            rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-        }
-        MyAvatar.setJointData("RightToeBase", Quat.fromPitchYawRollDegrees(-pitchOscillation + pitchOffset, yawOscillation, rollOscillation));
-        MyAvatar.setJointData("LeftToeBase",  Quat.fromPitchYawRollDegrees( pitchOscillation + pitchOffset, yawOscillation, rollOscillation));
-
-
-        // calculate spine joint rotations
-        pitchOscillation = currentAnimation.joints[5].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[5].pitchPhase)) + currentAnimation.joints[5].pitchOffset;
-        yawOscillation   = currentAnimation.joints[5].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[5].yawPhase)) + currentAnimation.joints[5].yawOffset;
-        rollOscillation  = currentAnimation.joints[5].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[5].rollPhase)) + currentAnimation.joints[5].rollOffset;
-        if(currentTransition!==null) {
-
-            pitchOscillationLast = currentTransition.lastAnimation.joints[5].pitch
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[5].pitchPhase))
-                                    + currentTransition.lastAnimation.joints[5].pitchOffset;
-            yawOscillationLast   = currentTransition.lastAnimation.joints[5].yaw
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[5].yawPhase))
-                                    + currentTransition.lastAnimation.joints[5].yawOffset;
-            rollOscillationLast  = currentTransition.lastAnimation.joints[5].roll
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[5].rollPhase))
-                                    + currentTransition.lastAnimation.joints[5].rollOffset;
-
-            pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-            yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-            rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-        }
-        // apply spine joint rotations
-        MyAvatar.setJointData("Spine", Quat.fromPitchYawRollDegrees(-pitchOscillation, yawOscillation, rollOscillation));
-
-        // calcualte spine 1 rotatations
-        pitchOscillation = currentAnimation.joints[6].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[6].pitchPhase)) + currentAnimation.joints[6].pitchOffset;
-        yawOscillation   = currentAnimation.joints[6].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[6].yawPhase))   + currentAnimation.joints[6].yawOffset;
-        rollOscillation  = currentAnimation.joints[6].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[6].rollPhase))  + currentAnimation.joints[6].rollOffset;
-        if(currentTransition!==null) {
-
-            pitchOscillationLast = currentTransition.lastAnimation.joints[6].pitch
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[6].pitchPhase))
-                                    + currentTransition.lastAnimation.joints[6].pitchOffset;
-            yawOscillationLast   = currentTransition.lastAnimation.joints[6].yaw
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[6].yawPhase))
-                                    + currentTransition.lastAnimation.joints[6].yawOffset;
-            rollOscillationLast  = currentTransition.lastAnimation.joints[6].roll
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[6].rollPhase))
-                                    + currentTransition.lastAnimation.joints[6].rollOffset;
-
-            pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-            yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-            rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-        }
-        // apply spine1 joint rotations
-        MyAvatar.setJointData("Spine1", Quat.fromPitchYawRollDegrees( pitchOscillation, -yawOscillation, rollOscillation));
-
-        // spine 2
-        pitchOscillation = currentAnimation.joints[7].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[7].pitchPhase)) + currentAnimation.joints[7].pitchOffset;
-        yawOscillation   = currentAnimation.joints[7].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[7].yawPhase))   + currentAnimation.joints[7].yawOffset;
-        rollOscillation  = currentAnimation.joints[7].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[7].rollPhase))  + currentAnimation.joints[7].rollOffset;
-        if(currentTransition!==null) {
-
-            pitchOscillationLast = currentTransition.lastAnimation.joints[7].pitch
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[7].pitchPhase))
-                                    + currentTransition.lastAnimation.joints[7].pitchOffset;
-            yawOscillationLast   = currentTransition.lastAnimation.joints[7].yaw
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[7].yawPhase))
-                                    + currentTransition.lastAnimation.joints[7].yawOffset;
-            rollOscillationLast  = currentTransition.lastAnimation.joints[7].roll
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[7].rollPhase))
-                                    + currentTransition.lastAnimation.joints[7].rollOffset;
-
-            pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-            yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-            rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-        }
-        // apply spine2 joint rotations
-        MyAvatar.setJointData("Spine2", Quat.fromPitchYawRollDegrees(-pitchOscillation, yawOscillation, -rollOscillation));
-
-        if(!armsFree) {
-
-            // shoulders
-            pitchOscillation = currentAnimation.joints[8].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[8].pitchPhase)) + currentAnimation.joints[8].pitchOffset;
-            yawOscillation   = currentAnimation.joints[8].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[8].yawPhase));
-            rollOscillation  = currentAnimation.joints[8].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[8].rollPhase))  + currentAnimation.joints[8].rollOffset;
-            yawOffset = currentAnimation.joints[8].yawOffset;
-            if(currentTransition!==null) {
-
-                pitchOscillationLast = currentTransition.lastAnimation.joints[8].pitch
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[8].pitchPhase))
-                                        + currentTransition.lastAnimation.joints[8].pitchOffset;
-                yawOscillationLast   = currentTransition.lastAnimation.joints[8].yaw
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[8].yawPhase))
-
-                rollOscillationLast  = currentTransition.lastAnimation.joints[8].roll
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[8].rollPhase))
-                                        + currentTransition.lastAnimation.joints[8].rollOffset;
-                var yawOffsetLast = currentTransition.lastAnimation.joints[8].yawOffset;
-
-                pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-                yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-                rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-
-                yawOffset = (transitionProgress * yawOffset) + ((1-transitionProgress) * yawOffsetLast);
-            }
-            MyAvatar.setJointData("RightShoulder", Quat.fromPitchYawRollDegrees(pitchOscillation, yawOscillation + yawOffset,  rollOscillation ));
-            MyAvatar.setJointData("LeftShoulder",  Quat.fromPitchYawRollDegrees(pitchOscillation, yawOscillation - yawOffset, -rollOscillation ));
-
-            // upper arms
-            pitchOscillation = currentAnimation.joints[9].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency ) + currentAnimation.joints[9].pitchPhase));
-            yawOscillation   = currentAnimation.joints[9].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency ) + currentAnimation.joints[9].yawPhase));
-            rollOscillation  = currentAnimation.joints[9].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[9].rollPhase)) + currentAnimation.joints[9].rollOffset;
-            pitchOffset = currentAnimation.joints[9].pitchOffset;
-            yawOffset = currentAnimation.joints[9].yawOffset;
-            if(currentTransition!==null) {
-
-                pitchOscillationLast = currentTransition.lastAnimation.joints[9].pitch
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[9].pitchPhase))
-
-                yawOscillationLast   = currentTransition.lastAnimation.joints[9].yaw
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[9].yawPhase))
-
-                rollOscillationLast  = currentTransition.lastAnimation.joints[9].roll
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[9].rollPhase))
-                                        + currentTransition.lastAnimation.joints[9].rollOffset;
-                var pitchOffsetLast = currentTransition.lastAnimation.joints[9].pitchOffset;
-                var yawOffsetLast = currentTransition.lastAnimation.joints[9].yawOffset;
-
-                pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-                yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-                rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-
-                pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
-                yawOffset = (transitionProgress * yawOffset) + ((1-transitionProgress) * yawOffsetLast);
-            }
-            MyAvatar.setJointData("RightArm", Quat.fromPitchYawRollDegrees( -1 * pitchOscillation - ( -1 * pitchOffset),  yawOscillation - yawOffset,  rollOscillation ));
-            MyAvatar.setJointData("LeftArm",  Quat.fromPitchYawRollDegrees( pitchOscillation + pitchOffset,  yawOscillation + yawOffset, -rollOscillation ));
-
-            // forearms
-            pitchOscillation = currentAnimation.joints[10].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[10].pitchPhase)) + currentAnimation.joints[10].pitchOffset;
-            yawOscillation   = currentAnimation.joints[10].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[10].yawPhase));
-            rollOscillation  = currentAnimation.joints[10].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[10].rollPhase));
-            yawOffset = currentAnimation.joints[10].yawOffset;
-            rollOffset = currentAnimation.joints[10].rollOffset;
-            if(currentTransition!==null) {
-
-                pitchOscillationLast = currentTransition.lastAnimation.joints[10].pitch
-                                        * Math.sin(degToRad((walkWheelPosition )
-                                        + currentTransition.lastAnimation.joints[10].pitchPhase))
-                yawOscillationLast   = currentTransition.lastAnimation.joints[10].yaw
-                                        * Math.sin(degToRad((walkWheelPosition )
-                                        + currentTransition.lastAnimation.joints[10].yawPhase))
-                rollOscillationLast  = currentTransition.lastAnimation.joints[10].roll
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[10].rollPhase))
-                                        + currentTransition.lastAnimation.joints[10].rollOffset;
-
-                var yawOffsetLast  = currentTransition.lastAnimation.joints[10].yawOffset;
-                var rollOffsetLast = currentTransition.lastAnimation.joints[10].rollOffset;
-
-                pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-                yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-                rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-
-                yawOffset  = (transitionProgress * yawOffset) +  ((1-transitionProgress) * yawOffsetLast);
-                rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
-            }
-            MyAvatar.setJointData("RightForeArm", Quat.fromPitchYawRollDegrees( pitchOscillation,  yawOscillation + yawOffset,  rollOscillation + rollOffset ));
-            MyAvatar.setJointData("LeftForeArm",  Quat.fromPitchYawRollDegrees( pitchOscillation,  yawOscillation - yawOffset,  rollOscillation - rollOffset ));
-
-            // hands
-            var sideStepSign = 1;
-            if(INTERNAL_STATE===SIDE_STEPPING) {
-                sideStepSign = -1;
-            }
-            pitchOscillation = currentAnimation.joints[11].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[11].pitchPhase)) + currentAnimation.joints[11].pitchOffset;
-            yawOscillation   = currentAnimation.joints[11].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[11].yawPhase))   + currentAnimation.joints[11].yawOffset;
-            rollOscillation  = currentAnimation.joints[11].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[11].rollPhase))  ;
-            rollOffset = currentAnimation.joints[11].rollOffset;
-            if(currentTransition!==null) {
-
-                pitchOscillationLast = currentTransition.lastAnimation.joints[11].pitch
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[11].pitchPhase))
-                                        + currentTransition.lastAnimation.joints[11].pitchOffset;
-                yawOscillationLast   = currentTransition.lastAnimation.joints[11].yaw
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[11].yawPhase))
-                                        + currentTransition.lastAnimation.joints[11].yawOffset;
-                rollOscillationLast  = currentTransition.lastAnimation.joints[11].roll
-                                        * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[11].rollPhase))
-
-                var rollOffsetLast = currentTransition.lastAnimation.joints[11].rollOffset;
-
-                pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-                yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-                rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-
-                rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
-            }
-            MyAvatar.setJointData("RightHand", Quat.fromPitchYawRollDegrees( sideStepSign * pitchOscillation,  yawOscillation,  rollOscillation + rollOffset));
-            MyAvatar.setJointData("LeftHand",  Quat.fromPitchYawRollDegrees( pitchOscillation, -yawOscillation,  rollOscillation - rollOffset));
-
-        } // if(!armsFree)
-        //else {
-            // TODO: free up the arms for the Hydras somehow? Code below fails...
-            //MyAvatar.clearJointData("LeftShoulder");
-            //MyAvatar.clearJointData("RightShoulder");
-            //MyAvatar.clearJointData("LeftArm");
-            //MyAvatar.clearJointData("RightArm");
-            //MyAvatar.clearJointData("LeftForeArm");
-            //MyAvatar.clearJointData("RightForeArm");
-            //MyAvatar.clearJointData("LeftHand");
-            //MyAvatar.clearJointData("RightHand");
-        //}
-
-        // head
-        pitchOscillation = 0.5 * currentAnimation.joints[12].pitch * Math.sin(degToRad(( cumulativeTime * adjustedFrequency * 2) + currentAnimation.joints[12].pitchPhase)) + currentAnimation.joints[12].pitchOffset;
-        yawOscillation   = 0.5 * currentAnimation.joints[12].yaw   * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[12].yawPhase))   + currentAnimation.joints[12].yawOffset;
-        rollOscillation  = 0.5 * currentAnimation.joints[12].roll  * Math.sin(degToRad(( cumulativeTime * adjustedFrequency    ) + currentAnimation.joints[12].rollPhase))  + currentAnimation.joints[12].rollOffset;
-        if(currentTransition!==null) {
-
-            pitchOscillationLast = 0.5 * currentTransition.lastAnimation.joints[12].pitch
-                                    * Math.sin(degToRad((walkWheelPosition * 2) + currentTransition.lastAnimation.joints[12].pitchPhase))
-                                    + currentTransition.lastAnimation.joints[12].pitchOffset;
-            yawOscillationLast   = 0.5 * currentTransition.lastAnimation.joints[12].yaw
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[12].yawPhase))
-                                    + currentTransition.lastAnimation.joints[12].yawOffset;
-            rollOscillationLast  = 0.5 * currentTransition.lastAnimation.joints[12].roll
-                                    * Math.sin(degToRad((walkWheelPosition ) + currentTransition.lastAnimation.joints[12].rollPhase))
-                                    + currentTransition.lastAnimation.joints[12].rollOffset;
-
-            // TODO: track down and fix glitch
-            //pitchOscillation = (transitionProgress * pitchOscillation) ;//+ ((1-transitionProgress) * pitchOscillationLast);
-            //yawOscillation   = (transitionProgress * yawOscillation)   ;//+ ((1-transitionProgress) * yawOscillationLast);
-            //rollOscillation  = (transitionProgress * rollOscillation)  ;//+ ((1-transitionProgress) * rollOscillationLast);
-
-            //pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
-            //yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
-            //rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
-        }
-        MyAvatar.setJointData("Head", Quat.fromPitchYawRollDegrees( pitchOscillation, yawOscillation, rollOscillation));
-        MyAvatar.setJointData("Neck", Quat.fromPitchYawRollDegrees( pitchOscillation, yawOscillation, rollOscillation));
+        MyAvatar.setJointData("Hips", Quat.fromPitchYawRollDegrees(-pitchOscillation + (leanPitchModifier * getLeanPitch(velocity)),   	// getLeanPitch - lean forwards as velocity increases
+                                                                    yawOscillation,                                       				// Yup, that's correct ;-)
+                                                                    rollOscillation + getLeanRoll(deltaTime, velocity))); 				// getLeanRoll - banking on cornering
+
+		// upper legs
+		if( INTERNAL_STATE!==SIDE_STEPPING &&
+		    INTERNAL_STATE!==CONFIG_SIDESTEP_LEFT &&
+		    INTERNAL_STATE!==CONFIG_SIDESTEP_RIGHT ) {
+
+			// apply the current Transition to the upper legs?
+			if(currentTransition!==null) {
+
+				if(currentTransition.walkingAtStart) {
+
+					pitchOscillation = currentAnimation.joints[1].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + (forwardModifier * currentAnimation.joints[1].pitchPhase)));
+					yawOscillation   = currentAnimation.joints[1].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[1].yawPhase));
+					rollOscillation  = currentAnimation.joints[1].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[1].rollPhase));
+
+					pitchOffset = currentAnimation.joints[1].pitchOffset;
+					yawOffset = currentAnimation.joints[1].yawOffset;
+					rollOffset = currentAnimation.joints[1].rollOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[1].pitch
+											   * Math.sin(degToRad( walkWheelPosition + (forwardModifier * currentTransition.lastAnimation.joints[1].pitchPhase )));
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[1].yaw
+											   * Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[1].yawPhase ));
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[1].roll
+											   * Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[1].rollPhase ));
+
+					pitchOffsetLast = currentTransition.lastAnimation.joints[1].pitchOffset;
+					yawOffsetLast = currentTransition.lastAnimation.joints[1].yawOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[1].rollOffset;
+
+				} else {
+
+					pitchOscillation = currentAnimation.joints[1].pitch * Math.sin(degToRad((cycle * adjustedFrequency ) + (forwardModifier * currentAnimation.joints[1].pitchPhase)));
+					yawOscillation   = currentAnimation.joints[1].yaw   * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[1].yawPhase));
+					rollOscillation  = currentAnimation.joints[1].roll  * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[1].rollPhase));
+
+					pitchOffset = currentAnimation.joints[1].pitchOffset;
+					yawOffset   = currentAnimation.joints[1].yawOffset;
+					rollOffset  = currentAnimation.joints[1].rollOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[1].pitch
+											   * Math.sin(degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											   + (forwardModifier * currentTransition.lastAnimation.joints[1].pitchPhase )));
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[1].yaw
+											   * Math.sin(degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											   + currentTransition.lastAnimation.joints[1].yawPhase ));
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[1].roll
+											   * Math.sin(degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											   + currentTransition.lastAnimation.joints[1].rollPhase ));
+
+					pitchOffsetLast = currentTransition.lastAnimation.joints[1].pitchOffset;
+					yawOffsetLast = currentTransition.lastAnimation.joints[1].yawOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[1].rollOffset;
+				}
+
+				pitchOscillation = (transitionProgress * pitchOscillation ) + ((1-transitionProgress) * pitchOscillationLast);
+				yawOscillation   = (transitionProgress * yawOscillation )   + ((1-transitionProgress) * yawOscillationLast);
+				rollOscillation  = (transitionProgress * rollOscillation )  + ((1-transitionProgress) * rollOscillationLast);
+
+				pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
+				yawOffset = (transitionProgress * yawOffset) + ((1-transitionProgress) * yawOffsetLast);
+				rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
+
+			} else {
+
+				pitchOscillation = currentAnimation.joints[1].pitch * Math.sin(degToRad((cycle * adjustedFrequency ) + (forwardModifier * currentAnimation.joints[1].pitchPhase)));
+				yawOscillation   = currentAnimation.joints[1].yaw   * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[1].yawPhase));
+				rollOscillation  = currentAnimation.joints[1].roll  * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[1].rollPhase));
+
+				pitchOffset = currentAnimation.joints[1].pitchOffset;
+				yawOffset   = currentAnimation.joints[1].yawOffset;
+				rollOffset  = currentAnimation.joints[1].rollOffset;
+			}
+
+			// apply the upper leg rotations
+			MyAvatar.setJointData("RightUpLeg", Quat.fromPitchYawRollDegrees(  pitchOscillation + pitchOffset, yawOscillation + yawOffset, -rollOscillation - rollOffset ));
+			MyAvatar.setJointData("LeftUpLeg",  Quat.fromPitchYawRollDegrees( -pitchOscillation + pitchOffset, yawOscillation - yawOffset, -rollOscillation + rollOffset ));
+
+
+			// lower leg
+			if(currentTransition!==null) {
+
+				if(currentTransition.walkingAtStart) {
+
+					pitchOscillation = currentAnimation.joints[2].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[2].pitchPhase));
+					yawOscillation   = currentAnimation.joints[2].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[2].yawPhase));
+					rollOscillation  = currentAnimation.joints[2].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[2].rollPhase));
+
+					pitchOffset = currentAnimation.joints[2].pitchOffset;
+					yawOffset = currentAnimation.joints[2].yawOffset;
+					rollOffset = currentAnimation.joints[2].rollOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[2].pitch * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[2].pitchPhase));
+					yawOscillationLast   = currentTransition.lastAnimation.joints[2].yaw   * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[2].yawPhase));
+					rollOscillationLast  = currentTransition.lastAnimation.joints[2].roll  * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[2].rollPhase));
+
+					pitchOffsetLast = currentTransition.lastAnimation.joints[2].pitchOffset;
+					yawOffsetLast = currentTransition.lastAnimation.joints[2].yawOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[2].rollOffset;
+
+				} else {
+
+					pitchOscillation = currentAnimation.joints[2].pitch * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[2].pitchPhase));
+					yawOscillation   = currentAnimation.joints[2].yaw   * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[2].yawPhase));
+					rollOscillation  = currentAnimation.joints[2].roll  * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[2].rollPhase));
+
+					pitchOffset = currentAnimation.joints[2].pitchOffset;
+					yawOffset   = currentAnimation.joints[2].yawOffset;
+					rollOffset  = currentAnimation.joints[2].rollOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[2].pitch
+											* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										   	+ currentTransition.lastAnimation.joints[2].pitchPhase));
+					yawOscillationLast   = currentTransition.lastAnimation.joints[2].yaw
+											* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+					                       	+ currentTransition.lastAnimation.joints[2].yawPhase));
+					rollOscillationLast  = currentTransition.lastAnimation.joints[2].roll
+											* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+					                        + currentTransition.lastAnimation.joints[2].rollPhase));
+
+					pitchOffsetLast = currentTransition.lastAnimation.joints[2].pitchOffset;
+					yawOffsetLast = currentTransition.lastAnimation.joints[2].yawOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[2].rollOffset;
+				}
+
+				pitchOscillation = ( transitionProgress * pitchOscillation ) + ( (1-transitionProgress) * pitchOscillationLast );
+				yawOscillation   = ( transitionProgress * yawOscillation )   + ( (1-transitionProgress) * yawOscillationLast );
+				rollOscillation  = ( transitionProgress * rollOscillation )  + ( (1-transitionProgress) * rollOscillationLast );
+
+				pitchOffset = ( transitionProgress * pitchOffset ) + ( (1-transitionProgress) * pitchOffsetLast );
+				yawOffset   = ( transitionProgress * yawOffset )   + ( (1-transitionProgress) * yawOffsetLast );
+				rollOffset  = ( transitionProgress * rollOffset )  + ( (1-transitionProgress) * rollOffsetLast );
+
+			} else {
+
+				pitchOscillation = currentAnimation.joints[2].pitch * Math.sin( degToRad(( cycle * adjustedFrequency ) + currentAnimation.joints[2].pitchPhase ));
+				yawOscillation   = currentAnimation.joints[2].yaw   * Math.sin( degToRad(( cycle * adjustedFrequency ) + currentAnimation.joints[2].yawPhase ));
+				rollOscillation  = currentAnimation.joints[2].roll  * Math.sin( degToRad(( cycle * adjustedFrequency ) + currentAnimation.joints[2].rollPhase ));
+
+				pitchOffset = currentAnimation.joints[2].pitchOffset;
+				yawOffset   = currentAnimation.joints[2].yawOffset;
+				rollOffset  = currentAnimation.joints[2].rollOffset;
+			}
+
+			// apply lower leg joint rotations
+			MyAvatar.setJointData("RightLeg", Quat.fromPitchYawRollDegrees( -pitchOscillation + pitchOffset, yawOscillation - yawOffset, rollOscillation - rollOffset ));
+			MyAvatar.setJointData("LeftLeg",  Quat.fromPitchYawRollDegrees(  pitchOscillation + pitchOffset, yawOscillation + yawOffset, rollOscillation + rollOffset ));
+
+	   } // end if !SIDE_STEPPING
+
+	   else if( INTERNAL_STATE===SIDE_STEPPING ||
+		    	INTERNAL_STATE===CONFIG_SIDESTEP_LEFT ||
+		    	INTERNAL_STATE===CONFIG_SIDESTEP_RIGHT ) {
+
+		   	// sidestepping uses the sinewave generators slightly differently for the legs
+		   	pitchOscillation = currentAnimation.joints[1].pitch * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[1].pitchPhase));
+			yawOscillation   = currentAnimation.joints[1].yaw   * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[1].yawPhase));
+			rollOscillation  = currentAnimation.joints[1].roll  * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[1].rollPhase));
+
+			// apply upper leg rotations for sidestepping
+			MyAvatar.setJointData("RightUpLeg", Quat.fromPitchYawRollDegrees(
+			   -pitchOscillation + currentAnimation.joints[1].pitchOffset,
+				yawOscillation + currentAnimation.joints[1].yawOffset,
+			    rollOscillation  + currentAnimation.joints[1].rollOffset ));
+			MyAvatar.setJointData("LeftUpLeg",  Quat.fromPitchYawRollDegrees(
+			    pitchOscillation + currentAnimation.joints[1].pitchOffset,
+				yawOscillation - currentAnimation.joints[1].yawOffset,
+			   -rollOscillation  - currentAnimation.joints[1].rollOffset ));
+
+			// calculate lower leg joint rotations for sidestepping
+			pitchOscillation = currentAnimation.joints[2].pitch * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[2].pitchPhase));
+			yawOscillation   = currentAnimation.joints[2].yaw   * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[2].yawPhase));
+			rollOscillation  = currentAnimation.joints[2].roll  * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[2].rollPhase));
+
+			// apply lower leg joint rotations
+			MyAvatar.setJointData("RightLeg", Quat.fromPitchYawRollDegrees(
+				-pitchOscillation + currentAnimation.joints[2].pitchOffset,
+				 yawOscillation - currentAnimation.joints[2].yawOffset,
+				 rollOscillation - currentAnimation.joints[2].rollOffset)); // TODO: needs a kick just before fwd peak
+			MyAvatar.setJointData("LeftLeg",  Quat.fromPitchYawRollDegrees(
+				 pitchOscillation + currentAnimation.joints[2].pitchOffset,
+				 yawOscillation + currentAnimation.joints[2].yawOffset,
+				 rollOscillation + currentAnimation.joints[2].rollOffset));
+	   	}
+
+		// feet
+		if(currentTransition!==null) {
+
+			if(currentTransition.walkingAtStart) {
+
+				pitchOscillation = currentAnimation.joints[3].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[3].pitchPhase));
+				yawOscillation   = currentAnimation.joints[3].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[3].yawPhase));
+				rollOscillation  = currentAnimation.joints[3].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[3].rollPhase));
+
+				pitchOffset = currentAnimation.joints[3].pitchOffset;
+				yawOffset = currentAnimation.joints[3].yawOffset;
+				rollOffset = currentAnimation.joints[3].rollOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[3].pitch * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[3].pitchPhase));
+				yawOscillationLast   = currentTransition.lastAnimation.joints[3].yaw   * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[3].yawPhase));
+				rollOscillationLast  = currentTransition.lastAnimation.joints[3].roll  * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[3].rollPhase));
+
+				pitchOffsetLast = currentTransition.lastAnimation.joints[3].pitchOffset;
+				yawOffsetLast = currentTransition.lastAnimation.joints[3].yawOffset;
+				rollOffsetLast = currentTransition.lastAnimation.joints[3].rollOffset;
+
+			} else { //if( currentTransition.walkingAtEnd ) {
+
+				pitchOscillation = currentAnimation.joints[3].pitch * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[3].pitchPhase));
+				yawOscillation   = currentAnimation.joints[3].yaw   * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[3].yawPhase));
+				rollOscillation  = currentAnimation.joints[3].roll  * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[3].rollPhase));
+
+				pitchOffset = currentAnimation.joints[3].pitchOffset;
+				yawOffset   = currentAnimation.joints[3].yawOffset;
+				rollOffset  = currentAnimation.joints[3].rollOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[3].pitch
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[3].pitchPhase));
+
+				yawOscillationLast   = currentTransition.lastAnimation.joints[3].yaw
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[3].yawPhase));
+
+				rollOscillationLast  = currentTransition.lastAnimation.joints[3].roll
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[3].rollPhase));
+
+				pitchOffsetLast = currentTransition.lastAnimation.joints[3].pitchOffset;
+				yawOffsetLast = currentTransition.lastAnimation.joints[3].yawOffset;
+				rollOffsetLast = currentTransition.lastAnimation.joints[3].rollOffset;
+			}
+
+			pitchOscillation = (transitionProgress * pitchOscillation ) + ((1-transitionProgress) * pitchOscillationLast);
+			yawOscillation   = (transitionProgress * yawOscillation )   + ((1-transitionProgress) * yawOscillationLast);
+			rollOscillation  = (transitionProgress * rollOscillation )  + ((1-transitionProgress) * rollOscillationLast);
+
+			pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
+			yawOffset = (transitionProgress * yawOffset) + ((1-transitionProgress) * yawOffsetLast);
+			rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
+
+		} else {
+
+			pitchOscillation = currentAnimation.joints[3].pitch * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[3].pitchPhase));
+			yawOscillation   = currentAnimation.joints[3].yaw   * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[3].yawPhase));
+			rollOscillation  = currentAnimation.joints[3].roll  * Math.sin(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[3].rollPhase));
+
+			pitchOffset = currentAnimation.joints[3].pitchOffset;
+			yawOffset   = currentAnimation.joints[3].yawOffset;
+			rollOffset  = currentAnimation.joints[3].rollOffset;
+		}
+
+		// apply foot rotations
+		MyAvatar.setJointData("RightFoot", Quat.fromPitchYawRollDegrees(  pitchOscillation + pitchOffset, yawOscillation + yawOffset, rollOscillation + rollOffset ));
+		MyAvatar.setJointData("LeftFoot",  Quat.fromPitchYawRollDegrees( -pitchOscillation + pitchOffset, yawOscillation - yawOffset, rollOscillation - rollOffset ));
+
+
+		// play footfall sound yet? To determine this, we take the differential of
+		// the foot's pitch curve to decide when the foot hits the ground.
+		if( INTERNAL_STATE===WALKING ||
+		    INTERNAL_STATE===SIDE_STEPPING ||
+		    INTERNAL_STATE===CONFIG_WALK_STYLES ||
+		    INTERNAL_STATE===CONFIG_WALK_TWEAKS ||
+		    INTERNAL_STATE===CONFIG_WALK_JOINTS ||
+		    INTERNAL_STATE===CONFIG_SIDESTEP_LEFT ||
+		    INTERNAL_STATE===CONFIG_SIDESTEP_RIGHT ) {
+
+			// As luck would have it, we're using sine waves, so finding dy/dx is as
+			// simple as determining the cosine wave for the foot's pitch function.
+			var feetPitchDifferential = Math.cos(degToRad((cycle * adjustedFrequency ) + currentAnimation.joints[3].pitchPhase));
+			var threshHold = 0.9; // sets the audio trigger point. with accuracy.
+			if(feetPitchDifferential<-threshHold &&
+			   nextStep===DIRECTION_LEFT &&
+			   principleDirection!==DIRECTION_UP &&
+			   principleDirection!==DIRECTION_DOWN) {
+
+				playFootstep(DIRECTION_LEFT);
+				nextStep = DIRECTION_RIGHT;
+			}
+			else if(feetPitchDifferential>threshHold &&
+					nextStep===DIRECTION_RIGHT &&
+					principleDirection!==DIRECTION_UP &&
+					principleDirection!==DIRECTION_DOWN) {
+
+				playFootstep(DIRECTION_RIGHT);
+				nextStep = DIRECTION_LEFT;
+			}
+		}
+
+		// toes
+		if(currentTransition!==null) {
+
+			if(currentTransition.walkingAtStart) {
+
+				pitchOscillation = currentAnimation.joints[4].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[4].pitchPhase));
+				yawOscillation   = currentAnimation.joints[4].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[4].yawPhase)) + currentAnimation.joints[4].yawOffset;
+				rollOscillation  = currentAnimation.joints[4].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[4].rollPhase)) + currentAnimation.joints[4].rollOffset;
+
+				pitchOffset = currentAnimation.joints[4].pitchOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[4].pitch * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[4].pitchPhase));
+				yawOscillationLast   = currentTransition.lastAnimation.joints[4].yaw   * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[4].yawPhase)) + currentTransition.lastAnimation.joints[4].yawOffset;;
+				rollOscillationLast  = currentTransition.lastAnimation.joints[4].roll  * Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[4].rollPhase))+ currentTransition.lastAnimation.joints[4].rollOffset;
+
+				pitchOffsetLast = currentTransition.lastAnimation.joints[4].pitchOffset;
+
+			} else { //if( currentTransition.walkingAtEnd ) {
+
+				pitchOscillation = currentAnimation.joints[4].pitch * Math.sin(degToRad((cycle * adjustedFrequency) + currentAnimation.joints[4].pitchPhase));
+				yawOscillation   = currentAnimation.joints[4].yaw   * Math.sin(degToRad((cycle * adjustedFrequency) + currentAnimation.joints[4].yawPhase)) + currentAnimation.joints[4].yawOffset;
+				rollOscillation  = currentAnimation.joints[4].roll  * Math.sin(degToRad((cycle * adjustedFrequency) + currentAnimation.joints[4].rollPhase)) + currentAnimation.joints[4].rollOffset;
+
+				pitchOffset = currentAnimation.joints[4].pitchOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[4].pitch
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[4].pitchPhase));
+
+				yawOscillationLast   = currentTransition.lastAnimation.joints[4].yaw
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[4].yawPhase)) + currentTransition.lastAnimation.joints[4].yawOffset;;
+
+				rollOscillationLast  = currentTransition.lastAnimation.joints[4].roll
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[4].rollPhase))+ currentTransition.lastAnimation.joints[4].rollOffset;
+
+				pitchOffsetLast = currentTransition.lastAnimation.joints[4].pitchOffset;
+			}
+
+			pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+			yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+			rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+			pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
+
+		} else {
+
+			pitchOscillation = currentAnimation.joints[4].pitch * Math.sin(degToRad((cycle * adjustedFrequency) + currentAnimation.joints[4].pitchPhase));
+			yawOscillation   = currentAnimation.joints[4].yaw   * Math.sin(degToRad((cycle * adjustedFrequency) + currentAnimation.joints[4].yawPhase)) + currentAnimation.joints[4].yawOffset;
+			rollOscillation  = currentAnimation.joints[4].roll  * Math.sin(degToRad((cycle * adjustedFrequency) + currentAnimation.joints[4].rollPhase)) + currentAnimation.joints[4].rollOffset;
+
+			pitchOffset = currentAnimation.joints[4].pitchOffset;
+		}
+
+		// apply toe rotations
+		MyAvatar.setJointData("RightToeBase", Quat.fromPitchYawRollDegrees(-pitchOscillation + pitchOffset, yawOscillation, rollOscillation));
+		MyAvatar.setJointData("LeftToeBase",  Quat.fromPitchYawRollDegrees( pitchOscillation + pitchOffset, yawOscillation, rollOscillation));
+
+
+		// spine
+		if( currentTransition !== null ) {
+
+			if( currentTransition.walkingAtStart ) {
+
+				pitchOscillation = currentAnimation.joints[5].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency * 2 ) + currentAnimation.joints[5].pitchPhase)) + currentAnimation.joints[5].pitchOffset;
+				yawOscillation   = currentAnimation.joints[5].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    ) + currentAnimation.joints[5].yawPhase))   + currentAnimation.joints[5].yawOffset;
+				rollOscillation  = currentAnimation.joints[5].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    ) + currentAnimation.joints[5].rollPhase))  + currentAnimation.joints[5].rollOffset;
+
+				// calculate where we would have been if we'd continued in the last state
+				pitchOscillationLast = currentTransition.lastAnimation.joints[5].pitch
+										* Math.sin(degToRad(( walkWheelPosition * 2  ) + currentTransition.lastAnimation.joints[5].pitchPhase))
+										+ currentTransition.lastAnimation.joints[5].pitchOffset;
+				yawOscillationLast   = currentTransition.lastAnimation.joints[5].yaw
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[5].yawPhase))
+										+ currentTransition.lastAnimation.joints[5].yawOffset;
+				rollOscillationLast  = currentTransition.lastAnimation.joints[5].roll
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[5].rollPhase))
+										+ currentTransition.lastAnimation.joints[5].rollOffset;
+
+			} else { //if( currentTransition.walkingAtEnd ) {
+
+				pitchOscillation = currentAnimation.joints[5].pitch * Math.sin( degToRad(( cycle * adjustedFrequency * 2)
+									+ currentAnimation.joints[5].pitchPhase)) + currentAnimation.joints[5].pitchOffset;
+
+				yawOscillation   = currentAnimation.joints[5].yaw   * Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[5].yawPhase)) + currentAnimation.joints[5].yawOffset;
+
+				rollOscillation  = currentAnimation.joints[5].roll  * Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[5].rollPhase)) + currentAnimation.joints[5].rollOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[5].pitch
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency * 2  )
+										+ currentTransition.lastAnimation.joints[5].pitchPhase))
+										+ currentTransition.lastAnimation.joints[5].pitchOffset;
+
+				yawOscillationLast   = currentTransition.lastAnimation.joints[5].yaw
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[5].yawPhase))
+										+ currentTransition.lastAnimation.joints[5].yawOffset;
+
+				rollOscillationLast  = currentTransition.lastAnimation.joints[5].roll
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[5].rollPhase))
+										+ currentTransition.lastAnimation.joints[5].rollOffset;
+			}
+
+			pitchOscillation = (transitionProgress * pitchOscillation ) + ((1-transitionProgress) * pitchOscillationLast);
+			yawOscillation   = (transitionProgress * yawOscillation )   + ((1-transitionProgress) * yawOscillationLast);
+			rollOscillation  = (transitionProgress * rollOscillation )  + ((1-transitionProgress) * rollOscillationLast);
+
+		} else {
+
+			pitchOscillation = currentAnimation.joints[5].pitch * Math.sin(degToRad(( cycle * adjustedFrequency * 2) + currentAnimation.joints[5].pitchPhase)) + currentAnimation.joints[5].pitchOffset;
+			yawOscillation   = currentAnimation.joints[5].yaw   * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[5].yawPhase))   + currentAnimation.joints[5].yawOffset;
+			rollOscillation  = currentAnimation.joints[5].roll  * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[5].rollPhase))  + currentAnimation.joints[5].rollOffset;
+		}
+
+		// apply spine joint rotations
+		MyAvatar.setJointData("Spine", Quat.fromPitchYawRollDegrees( pitchOscillation, yawOscillation, rollOscillation ));
+
+
+		// spine 1
+		if(currentTransition!==null) {
+
+			if(currentTransition.walkingAtStart) {
+
+				pitchOscillation = currentAnimation.joints[6].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency * 2) + currentAnimation.joints[6].pitchPhase)) + currentAnimation.joints[6].pitchOffset;
+				yawOscillation   = currentAnimation.joints[6].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    ) + currentAnimation.joints[6].yawPhase))   + currentAnimation.joints[6].yawOffset;
+				rollOscillation  = currentAnimation.joints[6].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    ) + currentAnimation.joints[6].rollPhase))  + currentAnimation.joints[6].rollOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[6].pitch
+										* Math.sin(degToRad(( walkWheelPosition * 2 ) + currentTransition.lastAnimation.joints[6].pitchPhase))
+										+ currentTransition.lastAnimation.joints[6].pitchOffset;
+				yawOscillationLast   = currentTransition.lastAnimation.joints[6].yaw
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[6].yawPhase))
+										+ currentTransition.lastAnimation.joints[6].yawOffset;
+				rollOscillationLast  = currentTransition.lastAnimation.joints[6].roll
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[6].rollPhase))
+										+ currentTransition.lastAnimation.joints[6].rollOffset;
+
+			} else { //if( currentTransition.walkingAtEnd ) {
+
+				pitchOscillation = currentAnimation.joints[6].pitch * Math.sin( degToRad(( cycle * adjustedFrequency * 2)
+									+ currentAnimation.joints[6].pitchPhase)) + currentAnimation.joints[6].pitchOffset;
+
+				yawOscillation   = currentAnimation.joints[6].yaw   * Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[6].yawPhase))   + currentAnimation.joints[6].yawOffset;
+
+				rollOscillation  = currentAnimation.joints[6].roll  * Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[6].rollPhase))  + currentAnimation.joints[6].rollOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[6].pitch
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency * 2 )
+										+ currentTransition.lastAnimation.joints[6].pitchPhase))
+										+ currentTransition.lastAnimation.joints[6].pitchOffset;
+
+				yawOscillationLast   = currentTransition.lastAnimation.joints[6].yaw
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[6].yawPhase))
+										+ currentTransition.lastAnimation.joints[6].yawOffset;
+
+				rollOscillationLast  = currentTransition.lastAnimation.joints[6].roll
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[6].rollPhase))
+										+ currentTransition.lastAnimation.joints[6].rollOffset;
+			}
+
+			pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+			yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+			rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+		} else {
+
+			pitchOscillation = currentAnimation.joints[6].pitch * Math.sin(degToRad(( cycle * adjustedFrequency * 2) + currentAnimation.joints[6].pitchPhase)) + currentAnimation.joints[6].pitchOffset;
+			yawOscillation   = currentAnimation.joints[6].yaw   * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[6].yawPhase))   + currentAnimation.joints[6].yawOffset;
+			rollOscillation  = currentAnimation.joints[6].roll  * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[6].rollPhase))  + currentAnimation.joints[6].rollOffset;
+		}
+		// apply spine1 joint rotations
+		MyAvatar.setJointData("Spine1", Quat.fromPitchYawRollDegrees( pitchOscillation, yawOscillation, rollOscillation ));
+
+		// spine 2
+		if(currentTransition!==null) {
+
+			if(currentTransition.walkingAtStart) {
+				pitchOscillation = currentAnimation.joints[7].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency * 2) + currentAnimation.joints[7].pitchPhase)) + currentAnimation.joints[7].pitchOffset;
+				yawOscillation   = currentAnimation.joints[7].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    ) + currentAnimation.joints[7].yawPhase))   + currentAnimation.joints[7].yawOffset;
+				rollOscillation  = currentAnimation.joints[7].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    ) + currentAnimation.joints[7].rollPhase))  + currentAnimation.joints[7].rollOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[7].pitch
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[7].pitchPhase))
+										+ currentTransition.lastAnimation.joints[7].pitchOffset;
+
+				yawOscillationLast   = currentTransition.lastAnimation.joints[7].yaw
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[7].yawPhase))
+										+ currentTransition.lastAnimation.joints[7].yawOffset;
+
+				rollOscillationLast  = currentTransition.lastAnimation.joints[7].roll
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[7].rollPhase))
+										+ currentTransition.lastAnimation.joints[7].rollOffset;
+
+			} else { //if( currentTransition.walkingAtEnd ) {
+
+				pitchOscillation = currentAnimation.joints[7].pitch
+									* Math.sin( degToRad(( cycle * adjustedFrequency * 2)
+									+ currentAnimation.joints[7].pitchPhase))
+								   	+ currentAnimation.joints[7].pitchOffset;
+
+				yawOscillation   = currentAnimation.joints[7].yaw
+									* Math.sin( degToRad(( cycle * adjustedFrequency    )
+									+ currentAnimation.joints[7].yawPhase))
+								   	+ currentAnimation.joints[7].yawOffset;
+
+				rollOscillation  = currentAnimation.joints[7].roll
+									* Math.sin( degToRad(( cycle * adjustedFrequency    )
+									+ currentAnimation.joints[7].rollPhase))
+								   	+ currentAnimation.joints[7].rollOffset;
+
+				pitchOscillationLast = currentTransition.lastAnimation.joints[7].pitch
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[7].pitchPhase))
+										+ currentTransition.lastAnimation.joints[7].pitchOffset;
+
+				yawOscillationLast   = currentTransition.lastAnimation.joints[7].yaw
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[7].yawPhase))
+										+ currentTransition.lastAnimation.joints[7].yawOffset;
+
+				rollOscillationLast  = currentTransition.lastAnimation.joints[7].roll
+										* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+										+ currentTransition.lastAnimation.joints[7].rollPhase))
+										+ currentTransition.lastAnimation.joints[7].rollOffset;
+			}
+
+			pitchOscillation = (transitionProgress * pitchOscillation ) + ((1-transitionProgress) * pitchOscillationLast);
+			yawOscillation   = (transitionProgress * yawOscillation )   + ((1-transitionProgress) * yawOscillationLast);
+			rollOscillation  = (transitionProgress * rollOscillation )  + ((1-transitionProgress) * rollOscillationLast);
+
+		} else {
+
+			pitchOscillation = currentAnimation.joints[7].pitch * Math.sin(degToRad(( cycle * adjustedFrequency * 2) + currentAnimation.joints[7].pitchPhase))
+							   + currentAnimation.joints[7].pitchOffset;
+
+			yawOscillation   = currentAnimation.joints[7].yaw   * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[7].yawPhase))
+			                   + currentAnimation.joints[7].yawOffset;
+
+			rollOscillation  = currentAnimation.joints[7].roll  * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[7].rollPhase))
+			                   + currentAnimation.joints[7].rollOffset;
+		}
+		// apply spine2 joint rotations
+		MyAvatar.setJointData("Spine2", Quat.fromPitchYawRollDegrees( pitchOscillation, yawOscillation, rollOscillation ));
+
+		if(!armsFree) {
+
+			// shoulders
+			if(currentTransition!==null) {
+
+				if(currentTransition.walkingAtStart) {
+					pitchOscillation = currentAnimation.joints[8].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    )
+										+ currentAnimation.joints[8].pitchPhase)) + currentAnimation.joints[8].pitchOffset;
+
+					yawOscillation   = currentAnimation.joints[8].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    )
+										+ currentAnimation.joints[8].yawPhase));
+
+					rollOscillation  = currentAnimation.joints[8].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency * 2)
+										+ currentAnimation.joints[8].rollPhase))  + currentAnimation.joints[8].rollOffset;
+
+					yawOffset = currentAnimation.joints[8].yawOffset;
+
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[8].pitch
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[8].pitchPhase))
+											+ currentTransition.lastAnimation.joints[8].pitchOffset;
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[8].yaw
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[8].yawPhase))
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[8].roll
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[8].rollPhase))
+											+ currentTransition.lastAnimation.joints[8].rollOffset;
+
+					yawOffsetLast = currentTransition.lastAnimation.joints[8].yawOffset;
+
+				} else { //if( currentTransition.walkingAtEnd ) {
+
+					pitchOscillation = currentAnimation.joints[8].pitch * Math.sin( degToRad(( cycle * adjustedFrequency    )
+										+ currentAnimation.joints[8].pitchPhase)) + currentAnimation.joints[8].pitchOffset;
+
+					yawOscillation   = currentAnimation.joints[8].yaw   * Math.sin( degToRad(( cycle * adjustedFrequency    )
+										+ currentAnimation.joints[8].yawPhase));
+
+					rollOscillation  = currentAnimation.joints[8].roll  * Math.sin( degToRad(( cycle * adjustedFrequency * 2)
+										+ currentAnimation.joints[8].rollPhase))  + currentAnimation.joints[8].rollOffset;
+
+					yawOffset = currentAnimation.joints[8].yawOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[8].pitch
+											* Math.sin( degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[8].pitchPhase))
+											+ currentTransition.lastAnimation.joints[8].pitchOffset;
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[8].yaw
+											* Math.sin( degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[8].yawPhase))
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[8].roll
+											* Math.sin( degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[8].rollPhase))
+											+ currentTransition.lastAnimation.joints[8].rollOffset;
+
+					yawOffsetLast = currentTransition.lastAnimation.joints[8].yawOffset;
+				}
+
+				pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+				yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+				rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+				yawOffset = (transitionProgress * yawOffset) + ((1-transitionProgress) * yawOffsetLast);
+
+			} else {
+
+				pitchOscillation = currentAnimation.joints[8].pitch * Math.sin(degToRad(( cycle * adjustedFrequency    )
+									+ currentAnimation.joints[8].pitchPhase)) + currentAnimation.joints[8].pitchOffset;
+
+				yawOscillation   = currentAnimation.joints[8].yaw   * Math.sin(degToRad(( cycle * adjustedFrequency    )
+									+ currentAnimation.joints[8].yawPhase));
+
+				rollOscillation  = currentAnimation.joints[8].roll  * Math.sin(degToRad(( cycle * adjustedFrequency * 2)
+									+ currentAnimation.joints[8].rollPhase))  + currentAnimation.joints[8].rollOffset;
+
+				yawOffset = currentAnimation.joints[8].yawOffset;
+			}
+
+			MyAvatar.setJointData("RightShoulder", Quat.fromPitchYawRollDegrees(pitchOscillation, yawOscillation + yawOffset,  rollOscillation ));
+			MyAvatar.setJointData("LeftShoulder",  Quat.fromPitchYawRollDegrees(pitchOscillation, yawOscillation - yawOffset, -rollOscillation ));
+
+			// upper arms
+			if(currentTransition!==null) {
+
+				if(currentTransition.walkingAtStart) {
+
+					pitchOscillation = currentAnimation.joints[9].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[9].pitchPhase));
+					yawOscillation   = currentAnimation.joints[9].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[9].yawPhase));
+					rollOscillation  = currentAnimation.joints[9].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency * 2) + currentAnimation.joints[9].rollPhase)) + currentAnimation.joints[9].rollOffset;
+
+					pitchOffset = currentAnimation.joints[9].pitchOffset;
+					yawOffset = currentAnimation.joints[9].yawOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[9].pitch
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[9].pitchPhase))
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[9].yaw
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[9].yawPhase))
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[9].roll
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[9].rollPhase))
+											+ currentTransition.lastAnimation.joints[9].rollOffset;
+
+					pitchOffsetLast = currentTransition.lastAnimation.joints[9].pitchOffset;
+					yawOffsetLast = currentTransition.lastAnimation.joints[9].yawOffset;
+
+				} else { //if( currentTransition.walkingAtEnd ) {
+
+					pitchOscillation = currentAnimation.joints[9].pitch
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[9].pitchPhase));
+
+					yawOscillation   = currentAnimation.joints[9].yaw
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[9].yawPhase));
+
+					rollOscillation  = currentAnimation.joints[9].roll
+										* Math.sin(degToRad(( cycle * adjustedFrequency * 2)
+										+ currentAnimation.joints[9].rollPhase))
+										+ currentAnimation.joints[9].rollOffset;
+
+					pitchOffset = currentAnimation.joints[9].pitchOffset;
+					yawOffset = currentAnimation.joints[9].yawOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[9].pitch
+											* Math.sin( degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[9].pitchPhase))
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[9].yaw
+											* Math.sin( degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[9].yawPhase))
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[9].roll
+											* Math.sin( degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[9].rollPhase))
+											+ currentTransition.lastAnimation.joints[9].rollOffset;
+
+					pitchOffsetLast = currentTransition.lastAnimation.joints[9].pitchOffset;
+					yawOffsetLast = currentTransition.lastAnimation.joints[9].yawOffset;
+				}
+
+				pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+				yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+				rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+				pitchOffset = (transitionProgress * pitchOffset) + ((1-transitionProgress) * pitchOffsetLast);
+				yawOffset   = (transitionProgress * yawOffset)   + ((1-transitionProgress) * yawOffsetLast);
+
+			} else {
+
+				pitchOscillation = currentAnimation.joints[9].pitch
+									* Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[9].pitchPhase));
+
+				yawOscillation   = currentAnimation.joints[9].yaw
+									* Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[9].yawPhase));
+
+				rollOscillation  = currentAnimation.joints[9].roll
+									* Math.sin( degToRad(( cycle * adjustedFrequency * 2)
+									+ currentAnimation.joints[9].rollPhase))
+									+ currentAnimation.joints[9].rollOffset;
+
+				pitchOffset = currentAnimation.joints[9].pitchOffset;
+				yawOffset   = currentAnimation.joints[9].yawOffset;
+
+			}
+			MyAvatar.setJointData("RightArm", Quat.fromPitchYawRollDegrees( -pitchOscillation + pitchOffset, yawOscillation - yawOffset,  rollOscillation ));
+			MyAvatar.setJointData("LeftArm",  Quat.fromPitchYawRollDegrees(  pitchOscillation + pitchOffset, yawOscillation + yawOffset, -rollOscillation ));
+
+			// forearms
+			if(currentTransition!==null) {
+
+				if(currentTransition.walkingAtStart) {
+
+					pitchOscillation = currentAnimation.joints[10].pitch
+										* Math.sin( degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency )
+										+ currentAnimation.joints[10].pitchPhase ))
+										+ currentAnimation.joints[10].pitchOffset;
+
+					yawOscillation   = currentAnimation.joints[10].yaw
+										* Math.sin( degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency )
+										+ currentAnimation.joints[10].yawPhase ));
+
+					rollOscillation  = currentAnimation.joints[10].roll
+										* Math.sin( degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency )
+										+ currentAnimation.joints[10].rollPhase ));
+
+					yawOffset = currentAnimation.joints[10].yawOffset;
+					rollOffset = currentAnimation.joints[10].rollOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[10].pitch
+											* Math.sin( degToRad(( walkWheelPosition )
+											+ currentTransition.lastAnimation.joints[10].pitchPhase))
+											+ currentTransition.lastAnimation.joints[10].pitchOffset;
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[10].yaw
+											* Math.sin( degToRad(( walkWheelPosition )
+											+ currentTransition.lastAnimation.joints[10].yawPhase));
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[10].roll
+											* Math.sin( degToRad(( walkWheelPosition )
+											+ currentTransition.lastAnimation.joints[10].rollPhase));
+
+					yawOffsetLast  = currentTransition.lastAnimation.joints[10].yawOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[10].rollOffset;
+
+				} else { //if( currentTransition.walkingAtEnd ) {
+
+					pitchOscillation = currentAnimation.joints[10].pitch
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[10].pitchPhase ))
+										+ currentAnimation.joints[10].pitchOffset;
+
+					yawOscillation   = currentAnimation.joints[10].yaw
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[10].yawPhase ));
+
+					rollOscillation  = currentAnimation.joints[10].roll
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[10].rollPhase ));
+
+					yawOffset  = currentAnimation.joints[10].yawOffset;
+					rollOffset = currentAnimation.joints[10].rollOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[10].pitch
+											* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+											+ currentTransition.lastAnimation.joints[10].pitchPhase))
+											+ currentTransition.lastAnimation.joints[10].pitchOffset;
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[10].yaw
+											* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+											+ currentTransition.lastAnimation.joints[10].yawPhase));
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[10].roll
+											* Math.sin( degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency )
+											+ currentTransition.lastAnimation.joints[10].rollPhase));
+
+					yawOffsetLast  = currentTransition.lastAnimation.joints[10].yawOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[10].rollOffset;
+				}
+
+				// blend the previous and next
+				pitchOscillation =  (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+				yawOscillation   = -(transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+				rollOscillation  =  (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+				yawOffset  = (transitionProgress * yawOffset)  + ((1-transitionProgress) * yawOffsetLast);
+				rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
+
+			} else {
+
+				pitchOscillation = currentAnimation.joints[10].pitch
+									* Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[10].pitchPhase ))
+									+ currentAnimation.joints[10].pitchOffset;
+
+				yawOscillation   = currentAnimation.joints[10].yaw
+									* Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[10].yawPhase ));
+
+				rollOscillation  = currentAnimation.joints[10].roll
+									* Math.sin( degToRad(( cycle * adjustedFrequency )
+									+ currentAnimation.joints[10].rollPhase ));
+
+				yawOffset  = currentAnimation.joints[10].yawOffset;
+				rollOffset = currentAnimation.joints[10].rollOffset;
+			}
+
+			// transitionProgress pitchOscillation yawOscillation rollOscillation
+			//print(transitionProgress+' '+pitchOscillation+' '+yawOscillation+' '+rollOscillation);
+
+			// apply forearms rotations
+			MyAvatar.setJointData("RightForeArm", Quat.fromPitchYawRollDegrees( pitchOscillation,  yawOscillation + yawOffset,  rollOscillation + rollOffset ));
+			MyAvatar.setJointData("LeftForeArm",  Quat.fromPitchYawRollDegrees( pitchOscillation,  yawOscillation - yawOffset,  rollOscillation - rollOffset ));
+
+			// hands
+			var sideStepSign = 1;
+			if(INTERNAL_STATE===SIDE_STEPPING) {
+				sideStepSign = 1;
+			} // TODO: check status of hand rotations
+			if(currentTransition!==null) {
+
+				if(currentTransition.walkingAtStart) {
+
+					pitchOscillation = currentAnimation.joints[11].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[11].pitchPhase)) + currentAnimation.joints[11].pitchOffset;
+					yawOscillation   = currentAnimation.joints[11].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[11].yawPhase))   + currentAnimation.joints[11].yawOffset;
+					rollOscillation  = currentAnimation.joints[11].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency ) + currentAnimation.joints[11].rollPhase))  ;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[11].pitch
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[11].pitchPhase))
+											+ currentTransition.lastAnimation.joints[11].pitchOffset;
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[11].yaw
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[11].yawPhase))
+											+ currentTransition.lastAnimation.joints[11].yawOffset;
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[11].roll
+											* Math.sin(degToRad( walkWheelPosition + currentTransition.lastAnimation.joints[11].rollPhase))
+
+					rollOffset = currentAnimation.joints[11].rollOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[11].rollOffset;
+
+				} else { //if( currentTransition.walkingAtEnd ) {
+
+					pitchOscillation = currentAnimation.joints[11].pitch
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[11].pitchPhase))
+										+ currentAnimation.joints[11].pitchOffset;
+
+					yawOscillation   = currentAnimation.joints[11].yaw
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[11].yawPhase))
+										+ currentAnimation.joints[11].yawOffset;
+
+					rollOscillation  = currentAnimation.joints[11].roll
+										* Math.sin( degToRad(( cycle * adjustedFrequency )
+										+ currentAnimation.joints[11].rollPhase));
+
+					rollOffset = currentAnimation.joints[11].rollOffset;
+
+					pitchOscillationLast = currentTransition.lastAnimation.joints[11].pitch
+											* Math.sin(degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[11].pitchPhase))
+											+ currentTransition.lastAnimation.joints[11].pitchOffset;
+
+					yawOscillationLast   = currentTransition.lastAnimation.joints[11].yaw
+											* Math.sin(degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[11].yawPhase))
+											+ currentTransition.lastAnimation.joints[11].yawOffset;
+
+					rollOscillationLast  = currentTransition.lastAnimation.joints[11].roll
+											* Math.sin(degToRad( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency
+											+ currentTransition.lastAnimation.joints[11].rollPhase))
+
+					rollOffset = currentAnimation.joints[11].rollOffset;
+					rollOffsetLast = currentTransition.lastAnimation.joints[11].rollOffset;
+				}
+
+				pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+				yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+				rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+				rollOffset = (transitionProgress * rollOffset) + ((1-transitionProgress) * rollOffsetLast);
+
+			} else {
+
+				pitchOscillation = currentAnimation.joints[11].pitch * Math.sin(degToRad(( cycle * adjustedFrequency ) + currentAnimation.joints[11].pitchPhase)) + currentAnimation.joints[11].pitchOffset;
+				yawOscillation   = currentAnimation.joints[11].yaw   * Math.sin(degToRad(( cycle * adjustedFrequency ) + currentAnimation.joints[11].yawPhase))   + currentAnimation.joints[11].yawOffset;
+				rollOscillation  = currentAnimation.joints[11].roll  * Math.sin(degToRad(( cycle * adjustedFrequency ) + currentAnimation.joints[11].rollPhase));
+
+				rollOffset = currentAnimation.joints[11].rollOffset;
+			}
+
+			// set the hand rotations
+			MyAvatar.setJointData("RightHand", Quat.fromPitchYawRollDegrees( sideStepSign * pitchOscillation,  yawOscillation,  rollOscillation + rollOffset));
+			MyAvatar.setJointData("LeftHand",  Quat.fromPitchYawRollDegrees( pitchOscillation, -yawOscillation,  rollOscillation - rollOffset));
+
+		} // end if(!armsFree)
+
+        // head (includes neck joint) - currently zeroed out in STANDING by request
+        if( currentTransition !== null ) {
+
+			if(currentTransition.walkingAtStart) {
+
+				pitchOscillation = 0.5 * currentAnimation.joints[12].pitch * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency * 2)
+									+ currentAnimation.joints[12].pitchPhase)) + currentAnimation.joints[12].pitchOffset;
+
+				yawOscillation   = 0.5 * currentAnimation.joints[12].yaw   * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    )
+									+ currentAnimation.joints[12].yawPhase))   + currentAnimation.joints[12].yawOffset;
+
+				rollOscillation  = 0.5 * currentAnimation.joints[12].roll  * Math.sin(degToRad(( cumulativeTime * currentAnimation.settings.baseFrequency    )
+									+ currentAnimation.joints[12].rollPhase))  + currentAnimation.joints[12].rollOffset;
+
+				pitchOscillationLast = 0.5 * currentTransition.lastAnimation.joints[12].pitch
+										* Math.sin(degToRad(( walkWheelPosition * 2) + currentTransition.lastAnimation.joints[12].pitchPhase))
+										+ currentTransition.lastAnimation.joints[12].pitchOffset;
+
+				yawOscillationLast   = 0.5 * currentTransition.lastAnimation.joints[12].yaw
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[12].yawPhase))
+										+ currentTransition.lastAnimation.joints[12].yawOffset;
+
+				rollOscillationLast  = 0.5 * currentTransition.lastAnimation.joints[12].roll
+										* Math.sin(degToRad(( walkWheelPosition ) + currentTransition.lastAnimation.joints[12].rollPhase))
+										+ currentTransition.lastAnimation.joints[12].rollOffset;
+
+			} else { //if( currentTransition.walkingAtEnd ) {
+
+				pitchOscillation = 0.5 * currentAnimation.joints[12].pitch * Math.sin(degToRad(( cycle * adjustedFrequency * 2) + currentAnimation.joints[12].pitchPhase)) + currentAnimation.joints[12].pitchOffset;
+				yawOscillation   = 0.5 * currentAnimation.joints[12].yaw   * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[12].yawPhase))   + currentAnimation.joints[12].yawOffset;
+				rollOscillation  = 0.5 * currentAnimation.joints[12].roll  * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[12].rollPhase))  + currentAnimation.joints[12].rollOffset;
+
+				pitchOscillationLast = 0.5 * currentTransition.lastAnimation.joints[12].pitch
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency  * 2)
+										+ currentTransition.lastAnimation.joints[12].pitchPhase))
+										+ currentTransition.lastAnimation.joints[12].pitchOffset;
+
+				yawOscillationLast   = 0.5 * currentTransition.lastAnimation.joints[12].yaw
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency  )
+										+ currentTransition.lastAnimation.joints[12].yawPhase))
+										+ currentTransition.lastAnimation.joints[12].yawOffset;
+
+				rollOscillationLast  = 0.5 * currentTransition.lastAnimation.joints[12].roll
+										* Math.sin(degToRad(( cumulativeTime * currentTransition.lastAnimation.settings.baseFrequency  )
+										+ currentTransition.lastAnimation.joints[12].rollPhase))
+										+ currentTransition.lastAnimation.joints[12].rollOffset;
+			}
+
+			// TODO: see if can animate separate heads in any way...
+			pitchOscillation = (transitionProgress * pitchOscillation) + ((1-transitionProgress) * pitchOscillationLast);
+			yawOscillation   = (transitionProgress * yawOscillation)   + ((1-transitionProgress) * yawOscillationLast);
+			rollOscillation  = (transitionProgress * rollOscillation)  + ((1-transitionProgress) * rollOscillationLast);
+
+		} else {
+
+			pitchOscillation = 0.5 * currentAnimation.joints[12].pitch * Math.sin(degToRad(( cycle * adjustedFrequency * 2) + currentAnimation.joints[12].pitchPhase)) + currentAnimation.joints[12].pitchOffset;
+			yawOscillation   = 0.5 * currentAnimation.joints[12].yaw   * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[12].yawPhase))   + currentAnimation.joints[12].yawOffset;
+			rollOscillation  = 0.5 * currentAnimation.joints[12].roll  * Math.sin(degToRad(( cycle * adjustedFrequency    ) + currentAnimation.joints[12].rollPhase))  + currentAnimation.joints[12].rollOffset;
+		}
+
+		MyAvatar.setJointData( "Head", Quat.fromPitchYawRollDegrees( pitchOscillation, yawOscillation, rollOscillation ));
+		MyAvatar.setJointData( "Neck", Quat.fromPitchYawRollDegrees( pitchOscillation, yawOscillation, rollOscillation ));
 }
 
 
 
-// getBezier - working - source: http://13thparallel.com/archive/bezier-curves/
-//====================================\\
-// 13thParallel.org Beziér Curve Code \\
-//   by Dan Pupius (www.pupius.net)   \\
-//====================================\\
-/**/
+// getBezier - src: Dan Pupius (www.pupius.net) http://13thparallel.com/archive/bezier-curves/
 Coord = function (x,y) {
-    if(!x) var x=0;
-    if(!y) var y=0;
-    return {x: x, y: y};
+	if(!x) var x=0;
+	if(!y) var y=0;
+	return {x: x, y: y};
 }
 
 function B1(t) { return t*t*t }
@@ -1116,17 +1791,16 @@ function B3(t) { return 3*t*(1-t)*(1-t) }
 function B4(t) { return (1-t)*(1-t)*(1-t) }
 
 function getBezier(percent,C1,C2,C3,C4) {
-    var pos = new Coord();
-    pos.x = C1.x*B1(percent) + C2.x*B2(percent) + C3.x*B3(percent) + C4.x*B4(percent);
-    pos.y = C1.y*B1(percent) + C2.y*B2(percent) + C3.y*B3(percent) + C4.y*B4(percent);
-    return pos;
+	var pos = new Coord();
+	pos.x = C1.x*B1(percent) + C2.x*B2(percent) + C3.x*B3(percent) + C4.x*B4(percent);
+	pos.y = C1.y*B1(percent) + C2.y*B2(percent) + C3.y*B3(percent) + C4.y*B4(percent);
+	return pos;
 }
 
-/* Butterworth LP filter - working but not currently used - kept for future use
-// coeffs calculated using: http://www-users.cs.york.ac.uk/~fisher/mkfilter/trad.html
+// Butterworth LP filter - coeffs calculated using: http://www-users.cs.york.ac.uk/~fisher/mkfilter/trad.html
 var NZEROS = 8;
 var NPOLES = 8;
-var GAIN =  34.17516196;
+var GAIN =   17.40692157;
 var xv = [0,0,0,0,0,0,0,0,0];
 //xv.length = NZEROS+1;
 var yv = [0,0,0,0,0,0,0,0,0];
@@ -1134,89 +1808,88 @@ var yv = [0,0,0,0,0,0,0,0,0];
 
 function filterButterworth(nextInputValue)
 {
-    xv[0] = xv[1]; xv[1] = xv[2]; xv[2] = xv[3]; xv[3] = xv[4]; xv[4] = xv[5]; xv[5] = xv[6]; xv[6] = xv[7]; xv[7] = xv[8];
-            xv[8] = nextInputValue / GAIN;
-            yv[0] = yv[1]; yv[1] = yv[2]; yv[2] = yv[3]; yv[3] = yv[4]; yv[4] = yv[5]; yv[5] = yv[6]; yv[6] = yv[7]; yv[7] = yv[8];
-            yv[8] =   (xv[0] + xv[8]) + 8 * (xv[1] + xv[7]) + 28 * (xv[2] + xv[6])
-                         + 56 * (xv[3] + xv[5]) + 70 * xv[4]
-                         + ( -0.0008613684 * yv[0]) + ( -0.0122466702 * yv[1])
-                         + ( -0.0820901316 * yv[2]) + ( -0.3191759432 * yv[3])
-                         + ( -0.8694409155 * yv[4]) + ( -1.5326255633 * yv[5])
-                 + ( -2.0838133003 * yv[6]) + ( -1.5905664958 * yv[7]);
-    return yv[8];
+	xv[0] = xv[1]; xv[1] = xv[2]; xv[2] = xv[3]; xv[3] = xv[4]; xv[4] = xv[5]; xv[5] = xv[6]; xv[6] = xv[7]; xv[7] = xv[8];
+	xv[8] = nextInputValue / GAIN;
+	yv[0] = yv[1]; yv[1] = yv[2]; yv[2] = yv[3]; yv[3] = yv[4]; yv[4] = yv[5]; yv[5] = yv[6]; yv[6] = yv[7]; yv[7] = yv[8];
+	yv[8] =   (xv[0] + xv[8]) + 8 * (xv[1] + xv[7]) + 28 * (xv[2] + xv[6])
+				 + 56 * (xv[3] + xv[5]) + 70 * xv[4]
+				 + ( -0.0033008230 * yv[0]) + ( -0.0440409341 * yv[1])
+				 + ( -0.2663485333 * yv[2]) + ( -0.9570250765 * yv[3])
+				 + ( -2.2596729000 * yv[4]) + ( -3.6088345059 * yv[5])
+				 + ( -3.9148571397 * yv[6]) + ( -2.6527135283 * yv[7]);
+	return yv[8];
 }
-*/
+
 
 // the faster we go, the further we lean forward. the angle is calcualted here
 var leanAngles = []; // smooth out and add damping with simple averaging filter.
 leanAngles.length = 15;
-//var accelerationResponseAngles = [];
-//accelerationResponseAngles.length = 15;
 
 function getLeanPitch(velocity) {
 /*
-    // lean backwards when decelerating a lot. skid to a halt. working, but I don't like the effect - will use a reach pose later instead
+	// lean backwards when decelerating a lot. skid to a halt. working, but I don't like the effect - will use a reach pose later instead
 
-    var accelerationResponse = recentMotions[0].acceleration.z;
-    var accelerationResponseMax = 45; // max degrees hip pitch
+	var accelerationResponse = recentMotions[0].acceleration.z;
+	var accelerationResponseMax = 45; // max degrees hip pitch
 
-    if(velocity<FLYING_SPEED) accelerationResponse /= 10; // tweak here - 10 gives a big response, 50 very little
-    else accelerationResponse /= 2000;
-    if(accelerationResponse>accelerationResponseMax)
-        accelerationResponse = accelerationResponseMax;
-    else if(accelerationResponse<-accelerationResponseMax)
-        accelerationResponse = -accelerationResponseMax;
-    // apply yet another averaging filter...
-    accelerationResponseAngles.push(accelerationResponse);
-    accelerationResponseAngles.shift();
-    var finalAccelerationResponse = 0;
+	if(velocity<FLYING_SPEED) accelerationResponse /= 10; // tweak here - 10 gives a big response, 50 very little
+	else accelerationResponse /= 2000;
+	if(accelerationResponse>accelerationResponseMax)
+		accelerationResponse = accelerationResponseMax;
+	else if(accelerationResponse<-accelerationResponseMax)
+		accelerationResponse = -accelerationResponseMax;
+	// apply yet another averaging filter...
+	accelerationResponseAngles.push(accelerationResponse);
+	accelerationResponseAngles.shift();
+	var finalAccelerationResponse = 0;
     for(ea in accelerationResponseAngles) finalAccelerationResponse += accelerationResponseAngles[ea];
     finalAccelerationResponse /= accelerationResponseAngles.length;
 
     // calculate any skid for this frame and apply it
     var skidDistance = -0.01 * hipsToFeetDistance * Math.sin(degToRad(finalAccelerationResponse));
     if(Math.abs(skidDistance)>0.001 && INTERNAL_STATE===STANDING) { // show skids when stopping
-        var skidVector = localToGlobal({ x:0, y:0, z:skidDistance });
-        print('skidDistance '+skidDistance+' metres');
-        MyAvatar.position = Vec3.sum(MyAvatar.position, skidVector);
-    }
-    if(Math.abs(accelerationResponse)>0) print('accelerationResponse '+accelerationResponse.toFixed(3)+' recent acceleration '+recentMotions[0].acceleration.z.toFixed(3));
+		var skidVector = localToGlobal({ x:0, y:0, z:skidDistance });
+		print('skidDistance '+skidDistance+' metres');
+		MyAvatar.position = Vec3.sum(MyAvatar.position, skidVector);
+	}
+	if(Math.abs(accelerationResponse)>0) print('accelerationResponse '+accelerationResponse.toFixed(3)+' recent acceleration '+recentMotions[0].acceleration.z.toFixed(3));
 */
-    if(velocity>TERMINAL_VELOCITY) velocity=TERMINAL_VELOCITY;
-    var leanProgress = velocity / TERMINAL_VELOCITY;
-    var responseSharpness = 1.8;
-    if(principleDirection==DIRECTION_BACKWARDS) responseSharpness = 3.6; // lean back a bit extra when walking backwards
-    var leanProgressBezier = getBezier((1-leanProgress),{x:0,y:0},{x:0,y:responseSharpness},{x:0,y:1},{x:1,y:1}).y;
-    //var leanProgressButterworth = filterButterworth(leanProgressBezier);
+	if(velocity>TERMINAL_VELOCITY) velocity=TERMINAL_VELOCITY;
+	var leanProgress = velocity / TERMINAL_VELOCITY;
+	var responseSharpness = 1.8;
+	if(principleDirection==DIRECTION_BACKWARDS) responseSharpness = 3.6; // lean back a bit extra when walking backwards
+	var leanProgressBezier = getBezier((1-leanProgress),{x:0,y:0},{x:0,y:responseSharpness},{x:0,y:1},{x:1,y:1}).y;
+	//var leanProgressButterworth = filterButterworth(leanProgressBezier);
 
-    // simple averaging filter seems to give best results
+	// simple averaging filter seems to give best results
     leanAngles.push(leanProgressBezier);
     leanAngles.shift(); // FIFO
     var totalLeanAngles = 0;
     for(ea in leanAngles) totalLeanAngles += leanAngles[ea];
     var leanProgressAverageFiltered = totalLeanAngles / leanAngles.length;
 
-    // calculate final return value
-    var leanPitchFinal = 0;
-    if(principleDirection===DIRECTION_BACKWARDS) {
-        leanPitchFinal = -currentAnimation.settings.flyingHipsPitch * leanProgressAverageFiltered;// + finalAccelerationResponse;
-    } else {
-        leanPitchFinal = currentAnimation.settings.flyingHipsPitch * leanProgressAverageFiltered;// + finalAccelerationResponse;
-    }
+	// calculate final return value
+	var leanPitchFinal = 0;
+	if(principleDirection===DIRECTION_BACKWARDS) {
+		leanPitchFinal = -currentAnimation.settings.flyingHipsPitch * leanProgressAverageFiltered;// + finalAccelerationResponse;
+	} else {
+		leanPitchFinal = currentAnimation.settings.flyingHipsPitch * leanProgressAverageFiltered;// + finalAccelerationResponse;
+	}
     return leanPitchFinal;
 }
 
 // calculate the angle at which to bank into corners when turning
 var leanRollAngles = [];  // smooth out and add damping with simple averaging filter
-leanRollAngles.length = 15;
+leanRollAngles.length = 25;
+
 var angularVelocities = []; // keep a record of the last few so can filter out spurious values
 angularVelocities.length = 5;
 
 function getLeanRoll(deltaTime, velocity) {
 
-    // what's our current anglular velocity?
-    var angularVelocityMax = 70; // from observation
-    var currentOrientationVec3 = Quat.safeEulerAngles(MyAvatar.orientation);
+	// what's our current anglular velocity?
+	var angularVelocityMax = 70; // from observation
+	var currentOrientationVec3 = Quat.safeEulerAngles(MyAvatar.orientation);
     var lastOrientationVec3 = Quat.safeEulerAngles(lastOrientation);
     var deltaYaw = lastOrientationVec3.y-currentOrientationVec3.y;
     lastOrientation = MyAvatar.orientation;
@@ -1225,32 +1898,22 @@ function getLeanRoll(deltaTime, velocity) {
     if(angularVelocity>angularVelocityMax) angularVelocity = angularVelocityMax;
     if(angularVelocity<-angularVelocityMax) angularVelocity = -angularVelocityMax;
 
-    var angularVelocityAverage = 0;
-    for(var ea in angularVelocities) angularVelocityAverage += angularVelocities[ea];
-    angularVelocityAverage /= angularVelocities.length;
-
-    var deltaOmega = angularVelocityAverage - angularVelocity;
-
-    if(Math.abs(deltaOmega)>55) // considered erroneous (usually due to false report of deltaYaw = 0)
-        angularVelocity = angularVelocityAverage;
-
-    angularVelocities.push(angularVelocity);
-    angularVelocities.shift(); // FIFO
+    // filter the angular velocity for a nicer response and a bit of wobble (intentional overshoot / ringing)
+    angularVelocity = filterButterworth(angularVelocity);
 
     var turnSign = 1;
-    if(angularVelocity<0)
-        turnSign = -1;
+    if(angularVelocity<0) turnSign = -1;
     if(principleDirection===DIRECTION_BACKWARDS)
-        turnSign *= -1;
+    	turnSign *= -1;
 
-    // calculate the amount of roll based on angular and linear velocity
-    if(velocity>TERMINAL_VELOCITY) velocity=TERMINAL_VELOCITY;
-    var leanRollProgress = (velocity / TERMINAL_VELOCITY) * (Math.abs(angularVelocity) / angularVelocityMax);
+    // calculate the amount of roll based on both angular and linear velocities
+	if(velocity>TERMINAL_VELOCITY) velocity = TERMINAL_VELOCITY;
+	var leanRollProgress = (velocity / TERMINAL_VELOCITY) * (Math.abs(angularVelocity) / angularVelocityMax);
 
-    // apply our response curve
-    var leanRollProgressBezier = getBezier((1-leanRollProgress),{x:0,y:0},{x:0,y:2.5},{x:0,y:1},{x:1,y:1}).y;
+	// apply our response curve
+	var leanRollProgressBezier = getBezier((1-leanRollProgress),{x:0,y:0},{x:0,y:2.5},{x:0,y:1},{x:1,y:1}).y;
 
-    // simple averaging filter
+	// simple averaging filter
     leanRollAngles.push(turnSign * leanRollProgressBezier);
     leanRollAngles.shift(); // FIFO
     var totalLeanRollAngles = 0;
@@ -1263,145 +1926,213 @@ function getLeanRoll(deltaTime, velocity) {
 // set up the interface components, update the internal state and kick off any transitions
 function setInternalState(newInternalState) {
 
+	var debugShowStateChanges = false;
+
     switch(newInternalState) {
 
         case WALKING:
-            //print('WALKING');
+
+        	if(debugShowStateChanges) print('WALKING');
             if(!minimised) doStandardMenu();
             INTERNAL_STATE = WALKING;
-
-            // very first time only
-            if(strideLength===0) {
-                if(principleDirection===DIRECTION_BACKWARDS)
-                    strideLength = selectedWalk.calibration.strideLengthBackwards;
-                else
-                    strideLength = selectedWalk.calibration.strideLengthForwards;
-            }
-            // initiate the transition
-            if(currentTransition) {
-                delete currentTransition;
-                currentTransition = null;
-            }
-            currentTransition = new Transition(currentAnimation, selectedWalk, [], 0.1, {x:0.0,y:1.0}, {x:0.0,y:1.0}); // 'r' shaped Bezier response
-            currentAnimation = selectedWalk;
-            break;
+            return;
 
         case FLYING:
-            //print('FLYING');
+
+        	if(debugShowStateChanges) print('FLYING');
             if(!minimised) doStandardMenu();
             INTERNAL_STATE = FLYING;
-            // initiate the transition
-            if(currentTransition) {
-                delete currentTransition;
-                currentTransition = null;
-            }
-            currentTransition = new Transition(currentAnimation, selectedFly, [], 1.0, {x:0.5,y:0.0}, {x:0.5,y:1.0}); // 's' shaped Bezier response
-            currentAnimation = selectedFly;
-            break;
+            return;
 
         case SIDE_STEPPING:
-            //print('SIDE_STEPPING');
+
+        	if(debugShowStateChanges) print('SIDE_STEPPING');
             if(!minimised) doStandardMenu();
             INTERNAL_STATE = SIDE_STEPPING;
-            // current animation already selected by left / right keydown event
-            break;
+            return;
 
         case CONFIG_WALK_STYLES:
+
             INTERNAL_STATE = CONFIG_WALK_STYLES;
             currentAnimation = selectedWalk;
             if(!minimised) {
-                hidebuttonOverlays();
-                hideJointControls();
-                showFrontPanelButtons(false);
-                showWalkStyleButtons(true);
-                setBackground(controlsBackgroundWalkEditStyles);
-                setButtonOverlayVisible(onButton);
-                setButtonOverlayVisible(configWalkStylesButtonSelected);
-                setButtonOverlayVisible(configWalkTweaksButton);
-                setButtonOverlayVisible(configWalkJointsButton);
-                setButtonOverlayVisible(backButton);
-                setSliderThumbsVisible(false);
-            }
-            break;
+				hidebuttonOverlays();
+				hideJointControls();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(true);
+				setBackground(controlsBackgroundWalkEditStyles);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configWalkStylesButtonSelected);
+				setButtonOverlayVisible(configWalkTweaksButton);
+				setButtonOverlayVisible(configWalkJointsButton);
+				setButtonOverlayVisible(backButton);
+				setSliderThumbsVisible(false);
+			}
+            return;
 
         case CONFIG_WALK_TWEAKS:
+
             INTERNAL_STATE = CONFIG_WALK_TWEAKS;
             currentAnimation = selectedWalk;
             if(!minimised) {
-                hidebuttonOverlays();
-                hideJointControls();
-                showFrontPanelButtons(false);
-                showWalkStyleButtons(false);
-                setBackground(controlsBackgroundWalkEditTweaks);
-                setButtonOverlayVisible(onButton);
-                setButtonOverlayVisible(configWalkStylesButton);
-                setButtonOverlayVisible(configWalkTweaksButtonSelected);
-                setButtonOverlayVisible(configWalkJointsButton);
-                setButtonOverlayVisible(backButton);
-                initialiseWalkTweaks();
-            }
-            break;
+				hidebuttonOverlays();
+				hideJointControls();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditTweaks);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configWalkStylesButton);
+				setButtonOverlayVisible(configWalkTweaksButtonSelected);
+				setButtonOverlayVisible(configWalkJointsButton);
+				setButtonOverlayVisible(backButton);
+				initialiseWalkTweaks();
+			}
+            return;
 
         case CONFIG_WALK_JOINTS:
-            INTERNAL_STATE = CONFIG_WALK_JOINTS;
-            currentAnimation = selectedWalk;
-            if(!minimised) {
-                hidebuttonOverlays();
-                showFrontPanelButtons(false);
-                showWalkStyleButtons(false);
-                setBackground(controlsBackgroundWalkEditJoints);
-                setButtonOverlayVisible(onButton);
-                setButtonOverlayVisible(configWalkStylesButton);
-                setButtonOverlayVisible(configWalkTweaksButton);
-                setButtonOverlayVisible(configWalkJointsButtonSelected);
-                setButtonOverlayVisible(backButton);
-                initialiseJointsEditingPanel(selectedJointIndex);
-            }
-            break;
+
+        	INTERNAL_STATE = CONFIG_WALK_JOINTS;
+        	currentAnimation = selectedWalk;
+        	if(!minimised) {
+				hidebuttonOverlays();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditJoints);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configWalkStylesButton);
+				setButtonOverlayVisible(configWalkTweaksButton);
+				setButtonOverlayVisible(configWalkJointsButtonSelected);
+				setButtonOverlayVisible(backButton);
+				initialiseJointsEditingPanel(selectedJointIndex);
+			}
+            return;
 
         case CONFIG_STANDING:
+
             INTERNAL_STATE = CONFIG_STANDING;
             currentAnimation = selectedStand;
             if(!minimised) {
-                hidebuttonOverlays();
-                hideJointControls();
-                doStandardMenu();
-                showFrontPanelButtons(false);
-                showWalkStyleButtons(false);
-                setBackground(controlsBackgroundWalkEditJoints);
-                setButtonOverlayVisible(configStandButtonSelected);
-                initialiseJointsEditingPanel(selectedJointIndex);
-            }
-            break;
+				hidebuttonOverlays();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditJoints);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configSideStepRightButton);
+				setButtonOverlayVisible(configSideStepLeftButton);
+				setButtonOverlayVisible(configStandButtonSelected);
+				setButtonOverlayVisible(backButton);
+				initialiseJointsEditingPanel(selectedJointIndex);
+			}
+            return;
+
+        case CONFIG_SIDESTEP_LEFT:
+
+            INTERNAL_STATE = CONFIG_SIDESTEP_LEFT;
+            currentAnimation = selectedSideStepLeft;
+            if(!minimised) {
+				hidebuttonOverlays();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditJoints);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configSideStepRightButton);
+				setButtonOverlayVisible(configSideStepLeftButtonSelected);
+				setButtonOverlayVisible(configStandButton);
+				setButtonOverlayVisible(backButton);
+				initialiseJointsEditingPanel(selectedJointIndex);
+			}
+            return;
+
+        case CONFIG_SIDESTEP_RIGHT:
+
+            INTERNAL_STATE = CONFIG_SIDESTEP_RIGHT;
+            currentAnimation = selectedSideStepRight;
+            if(!minimised) {
+				hidebuttonOverlays();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditJoints);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configSideStepRightButtonSelected);
+				setButtonOverlayVisible(configSideStepLeftButton);
+				setButtonOverlayVisible(configStandButton);
+				setButtonOverlayVisible(backButton);
+				initialiseJointsEditingPanel(selectedJointIndex);
+			}
+            return;
 
         case CONFIG_FLYING:
+
             INTERNAL_STATE = CONFIG_FLYING;
             currentAnimation = selectedFly;
             if(!minimised) {
-                hidebuttonOverlays();
-                hideJointControls();
-                doStandardMenu();
-                showFrontPanelButtons(false);
-                showWalkStyleButtons(false);
-                setBackground(controlsBackgroundWalkEditJoints);
-                setButtonOverlayVisible(configFlyingButtonSelected);
-                initialiseJointsEditingPanel(selectedJointIndex);
-            }
-            break;
+				hidebuttonOverlays();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditJoints);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configFlyingUpButton);
+				setButtonOverlayVisible(configFlyingDownButton);
+				setButtonOverlayVisible(configFlyingButtonSelected);
+				setButtonOverlayVisible(backButton);
+				initialiseJointsEditingPanel(selectedJointIndex);
+			}
+            return;
+
+        case CONFIG_FLYING_UP:
+
+            INTERNAL_STATE = CONFIG_FLYING_UP;
+            currentAnimation = selectedFlyUp;
+            if(!minimised) {
+				hidebuttonOverlays();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditJoints);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configFlyingUpButtonSelected);
+				setButtonOverlayVisible(configFlyingDownButton);
+				setButtonOverlayVisible(configFlyingButton);
+				setButtonOverlayVisible(backButton);
+				initialiseJointsEditingPanel(selectedJointIndex);
+			}
+            return;
+
+        case CONFIG_FLYING_DOWN:
+
+            INTERNAL_STATE = CONFIG_FLYING_DOWN;
+            currentAnimation = selectedFlyDown;
+            if(!minimised) {
+				hidebuttonOverlays();
+				showFrontPanelButtons(false);
+				showWalkStyleButtons(false);
+				setBackground(controlsBackgroundWalkEditJoints);
+				setButtonOverlayVisible(onButton);
+				setButtonOverlayVisible(configFlyingUpButton);
+				setButtonOverlayVisible(configFlyingDownButtonSelected);
+				setButtonOverlayVisible(configFlyingButton);
+				setButtonOverlayVisible(backButton);
+				initialiseJointsEditingPanel(selectedJointIndex);
+			}
+            return;
 
         case STANDING:
         default:
-            //print('STANDING');
+
+        	if(debugShowStateChanges) print('STANDING');
             INTERNAL_STATE = STANDING;
             if(!minimised) doStandardMenu();
-            // initiate the transition
-            if(currentTransition) {
-                delete currentTransition;
-                currentTransition = null;
-            }
-            currentTransition = new Transition(currentAnimation, selectedStand, [], 0.4, {x:0.5,y:0.0}, {x:0.5,y:1.0}); // 's' shaped Bezier response
-            currentAnimation = selectedStand;
-            break;
+
+            // initialisation - runs at script startup only
+            if(strideLength===0) {
+
+				if(principleDirection===DIRECTION_BACKWARDS)
+					strideLength = selectedWalk.calibration.strideLengthBackwards;
+				else
+            		strideLength = selectedWalk.calibration.strideLengthForwards;
+
+				curlFingers();
+			}
+            return;
     }
 }
 
@@ -1413,191 +2144,516 @@ function setInternalState(newInternalState) {
 var standHints = 0;
 var walkHints = 0;
 var flyHints = 0;
-var requiredHints = 3; // tweakable - debounce state changes - how many times do we get a state change request in a row before we actually change state?
+var requiredHints = 2; // tweakable - debounce state changes - how many times do we get a state change request in a row before we actually change state? (used to be 4 or 5)
 var principleDirection = 0;
-var lastDirection = DIRECTION_FORWARDS;
 
-// keep track of recent motion - TODO: use to replace lastDirection var. Also, can use to replace hints system...
-var recentMotions = [];
-for(var i = 0 ; i < 6 ; i++) {
-    var blank = new RecentMotion({ x:0, y:0, z:0 }, { x:0, y:0, z:0 }, DIRECTION_FORWARDS );
-    recentMotions.push(blank);
+// helper function for stats output
+function directionAsString(directionEnum) {
+
+	switch(directionEnum) {
+		case DIRECTION_UP: return 'Up';
+		case DIRECTION_DOWN: return 'Down';
+		case DIRECTION_LEFT: return 'Left';
+		case DIRECTION_RIGHT: return 'Right';
+		case DIRECTION_FORWARDS: return 'Forwards';
+		case DIRECTION_BACKWARDS: return 'Backwards';
+		default: return 'Unknown';
+	}
+}
+// helper function for stats output
+function internalStateAsString(internalState) {
+
+	switch(internalState) {
+		case STANDING: return 'Standing';
+		case WALKING: return 'Walking';
+		case SIDE_STEPPING: return 'Side Stepping';
+		case FLYING: return 'Flying';
+		default: return 'Editing';
+	}
 }
 
 Script.update.connect(function(deltaTime) {
 
-    if(powerOn) {
+	if(powerOn) {
 
+		frameStartTime = new Date().getTime();
         cumulativeTime += deltaTime;
+        nFrames++;
+        var speed = 0;
 
-        // firstly test for user configuration states
+        // firstly check for editing modes, as these require no positioning calculations
+        var editing = false;
         switch(INTERNAL_STATE) {
 
             case CONFIG_WALK_STYLES:
-                currentAnimation = selectedWalk;
-                animateAvatar(deltaTime, 0, principleDirection);
-                return;
+	            currentAnimation = selectedWalk;
+                animateAvatar(deltaTime, speed, principleDirection);
+                editing = true;
+                break;
             case CONFIG_WALK_TWEAKS:
                 currentAnimation = selectedWalk;
-                animateAvatar(deltaTime, 0, DIRECTION_FORWARDS);
-                return;
+                animateAvatar(deltaTime, speed, DIRECTION_FORWARDS);
+                editing = true;
+                break;
             case CONFIG_WALK_JOINTS:
                 currentAnimation = selectedWalk;
-                animateAvatar(deltaTime, 0, DIRECTION_FORWARDS);
-                return;
+                animateAvatar(deltaTime, speed, DIRECTION_FORWARDS);
+                editing = true;
+                break;
             case CONFIG_STANDING:
                 currentAnimation = selectedStand;
-                animateAvatar(deltaTime, 0, DIRECTION_FORWARDS);
-                return;
+                animateAvatar(deltaTime, speed, DIRECTION_FORWARDS);
+                editing = true;
+                break;
+            case CONFIG_SIDESTEP_LEFT:
+                currentAnimation = selectedSideStepLeft;
+                animateAvatar(deltaTime, speed, DIRECTION_LEFT);
+                editing = true;
+                break;
+            case CONFIG_SIDESTEP_RIGHT:
+                currentAnimation = selectedSideStepRight;
+                animateAvatar(deltaTime, speed, DIRECTION_RIGHT);
+                editing = true;
+                break;
             case CONFIG_FLYING:
                 currentAnimation = selectedFly;
-                animateAvatar(deltaTime, 0, DIRECTION_FORWARDS);
-                return;
+                animateAvatar(deltaTime, speed, DIRECTION_FORWARDS);
+                editing = true;
+                break;
+            case CONFIG_FLYING_UP:
+                currentAnimation = selectedFlyUp;
+                animateAvatar(deltaTime, speed, DIRECTION_UP);
+                editing = true;
+                break;
+            case CONFIG_FLYING_DOWN:
+                currentAnimation = selectedFlyDown;
+                animateAvatar(deltaTime, speed, DIRECTION_DOWN);
+                editing = true;
+                break;
             default:
                 break;
         }
 
-        // calcualte (local) change in position and velocity
-        var velocityVector = MyAvatar.getVelocity();
-        var velocity = Vec3.length(velocityVector);
+		// we have to declare these vars here ( outside 'if(!editing)' ), so they are still in scope
+		// when we record the frame's data and when we do the stats update at the end
+		var deltaX = 0;
+		var deltaY = 0;
+		var deltaZ = 0;
+		var acceleration = { x:0, y:0, z:0 };
+		var accelerationJS = MyAvatar.getAcceleration();
 
-        // determine the candidate animation to play
-        var actionToTake = 0;
-        if( velocity < 0.5) {
-            actionToTake = STANDING;
-            standHints++;
-        }
-        else if(velocity<FLYING_SPEED) {
-            actionToTake = WALKING;
-            walkHints++;
-        }
-        else if(velocity>=FLYING_SPEED) {
-            actionToTake = FLYING;
-            flyHints++;
-        }
+		// calculate overriding (local) direction of translation for use later when decide which animation should be played
+		var inverseRotation = Quat.inverse(MyAvatar.orientation);
+		var localVelocity = Vec3.multiplyQbyV(inverseRotation, MyAvatar.getVelocity());
 
-        // calculate overriding (local) direction of translation for use later when decide which animation should be played
-        var localVelocity = localToGlobal(velocityVector);
-        var deltaX = localVelocity.x;
-        var deltaY = -localVelocity.y;
-        var deltaZ = -localVelocity.z;
+		if(!editing) {
 
-        // TODO: find out why there is a reported high up / down velocity as we near walking -> standing...
-        var directionChangeThreshold = 0.3; // this little hack makes it a bit better, but at the cost of delayed updated chagne in direction etc :-(
-        if(velocity<directionChangeThreshold)
-                principleDirection = lastDirection;
-        else {
-            // who's the biggest out of the x, y and z components taken from the difference vector?
-            if(Math.abs(deltaX)>Math.abs(deltaY)
-             &&Math.abs(deltaX)>Math.abs(deltaZ)) {
-                if(deltaX<0) {
-                    principleDirection = DIRECTION_RIGHT;//print('velocity = '+velocity + ' DIRECTION_RIGHT: deltaX '+deltaX+'  deltaY '+deltaY+'  deltaZ '+deltaZ);
-                } else {
-                    principleDirection = DIRECTION_LEFT;//print('velocity = '+velocity + ' DIRECTION_LEFT: deltaX '+deltaX+'  deltaY '+deltaY+'  deltaZ '+deltaZ);
-                }
-            }
-            else if(Math.abs(deltaY)>Math.abs(deltaX)
-                  &&Math.abs(deltaY)>Math.abs(deltaZ)) {
-                if(deltaY>0) {
-                    principleDirection = DIRECTION_DOWN;//print('velocity = '+velocity + ' DIRECTION_DOWN: deltaX '+deltaX+'  deltaY '+deltaY+'  deltaZ '+deltaZ);
-                }
-                else {
-                    principleDirection = DIRECTION_UP;//print('velocity = '+velocity + ' DIRECTION_UP: deltaX '+deltaX+'  deltaY '+deltaY+'  deltaZ '+deltaZ);
-                }
-            }
-            else if(Math.abs(deltaZ)>Math.abs(deltaX)
-                  &&Math.abs(deltaZ)>Math.abs(deltaY)) {
-                if(deltaZ>0) {
-                    principleDirection = DIRECTION_BACKWARDS;//print('velocity = '+velocity + ' DIRECTION_BACKWARDS: deltaX '+deltaX+'  deltaY '+deltaY+'  deltaZ '+deltaZ);
-                } else {
-                    principleDirection = DIRECTION_FORWARDS;//print('velocity = '+velocity + ' DIRECTION_FORWARDS: deltaX '+deltaX+'  deltaY '+deltaY+'  deltaZ '+deltaZ);
-                }
-            }
-        }
-        lastDirection = principleDirection;
+			// the first thing to do is find out how fast we're going,
+			// what our acceleration is and which direction we're principly moving in
 
-        // log this frame's motion variables for later use
-        var accelerationX = ( localVelocity.x - recentMotions[0].velocity.x ) / deltaTime;
-        var accelerationY = ( localVelocity.y - recentMotions[0].velocity.y ) / deltaTime;
-        var accelerationZ = ( localVelocity.z - recentMotions[0].velocity.z ) / deltaTime;
+			// calcualte (local) change in velocity
+			var velocity = MyAvatar.getVelocity();
+			speed = Vec3.length(velocity);
 
-        var thisMotion = new RecentMotion(localVelocity, { x:accelerationX, y:accelerationY, z:accelerationZ }, principleDirection );
-        recentMotions.push(thisMotion);
-        recentMotions.shift();
+			// determine the candidate animation to play
+			var actionToTake = 0;
+			if( speed < 0.5) {
+				actionToTake = STANDING;
+				standHints++;
+			}
+			else if( speed < FLYING_SPEED ) {
+				actionToTake = WALKING;
+				walkHints++;
+			}
+			else if( speed >= FLYING_SPEED ) {
+				actionToTake = FLYING;
+				flyHints++;
+			}
 
-        // since we only sidestep from standing, it's a quick decision on this one
-        if(INTERNAL_STATE===SIDE_STEPPING) {
-            if(velocity===0) {
-                actionToTake = STANDING;
-                standHints = requiredHints + 1;
-                //print('stopping sidestep');
-            }
-            else if(principleDirection===DIRECTION_LEFT ||
-                    principleDirection===DIRECTION_RIGHT) {
-                animateAvatar(deltaTime, velocity, principleDirection);
-                return;
-            }
-        }
+			deltaX = localVelocity.x;
+			deltaY = localVelocity.y;
+			deltaZ = -localVelocity.z;
 
-        // select appropriate animation
-        switch(actionToTake) {
+			// determine the principle direction
+			if(Math.abs(deltaX)>Math.abs(deltaY)
+			 &&Math.abs(deltaX)>Math.abs(deltaZ)) {
+				if(deltaX<0) {
+					principleDirection = DIRECTION_RIGHT;
+				} else {
+					principleDirection = DIRECTION_LEFT;
+				}
+			}
+			else if(Math.abs(deltaY)>Math.abs(deltaX)
+				  &&Math.abs(deltaY)>Math.abs(deltaZ)) {
+				if(deltaY>0) {
+					principleDirection = DIRECTION_UP;
+				}
+				else {
+					principleDirection = DIRECTION_DOWN;
+				}
+			}
+			else if(Math.abs(deltaZ)>Math.abs(deltaX)
+				  &&Math.abs(deltaZ)>Math.abs(deltaY)) {
+				if(deltaZ>0) {
+					principleDirection = DIRECTION_FORWARDS;
+				} else {
+					principleDirection = DIRECTION_BACKWARDS;
+				}
+			}
 
-            case STANDING:
-                if( standHints > requiredHints || INTERNAL_STATE===STANDING) { // wait for a few consecutive hints (17mS each)
+			// NB: this section will change significantly once we are ground plane aware
+			//     it will change even more once we have uneven surfaces to deal with
+			//     but for now, we have to deal with states like 'standing in the air'
 
-                    standHints = 0;
-                    walkHints = 0;
-                    flyHints = 0;
-                    if(INTERNAL_STATE!==STANDING) setInternalState(STANDING);
-                    currentAnimation = selectedStand;
-                    animateAvatar(1,0,principleDirection);
-                }
-                return;
+			// maybe at walking speed, but sideways?
+			if( actionToTake === WALKING &&
+			  ( principleDirection === DIRECTION_LEFT ||
+				principleDirection === DIRECTION_RIGHT )) {
 
-            case WALKING:
-                if( walkHints > requiredHints || INTERNAL_STATE===WALKING) { // wait for few consecutive hints (17mS each)
+					actionToTake = SIDE_STEPPING;
+			}
 
-                    standHints = 0;
-                    walkHints = 0;
-                    flyHints = 0;
-                    if(INTERNAL_STATE!==WALKING) {
-                        setInternalState(WALKING);
-                    }
+			// maybe at walking speed, but flying up?
+			if( actionToTake === WALKING &&
+			  ( principleDirection === DIRECTION_UP )) {
 
-                    // change animation for flying directly up or down. TODO - check RecentMotions, if is a change then put a transition on it
-                    if(principleDirection===DIRECTION_UP) {
-                        currentAnimation = selectedFlyUp;
-                    }
-                    else if(principleDirection===DIRECTION_DOWN) {
-                        currentAnimation = selectedFlyDown;
-                    }
-                    else {
-                        currentAnimation = selectedWalk;
-                    }
-                    animateAvatar(deltaTime, velocity, principleDirection);
-                }
-                return;
+					actionToTake = FLYING;
+					standHints--;
+					flyHints++;
+			}
 
-            case FLYING:
-                if( flyHints > requiredHints - 1  || INTERNAL_STATE===FLYING ) { // wait for a few consecutive hints (17mS each)
+			// maybe at walking speed, but flying down?
+			if( actionToTake === WALKING &&
+			  ( principleDirection === DIRECTION_DOWN )) {
 
-                    standHints = 0;
-                    walkHints = 0;
-                    flyHints = 0;
-                    if(INTERNAL_STATE!==FLYING) setInternalState(FLYING);
+					actionToTake = FLYING;
+					standHints--;
+					flyHints++;
+			}
 
-                    // change animation for flying directly up or down. TODO - check RecentMotions, if is a change then put a transition on it
-                    if(principleDirection===DIRECTION_UP) {
-                        currentAnimation = selectedFlyUp;
-                    }
-                    else if(principleDirection===DIRECTION_DOWN) {
-                        currentAnimation = selectedFlyDown;
-                    }
-                    else currentAnimation = selectedFly;
-                    animateAvatar(deltaTime, velocity, principleDirection);
-                }
-                return;
-        }
+			// log this frame's motion for later reference
+			var accelerationX = ( framesHistory.recentMotions[0].velocity.x - localVelocity.x ) / deltaTime;
+			var accelerationY = ( localVelocity.y - framesHistory.recentMotions[0].velocity.y ) / deltaTime;
+			var accelerationZ = ( framesHistory.recentMotions[0].velocity.z - localVelocity.z ) / deltaTime;
+			acceleration = {x:accelerationX, y:accelerationY, z:accelerationZ};
+
+
+			// select appropriate animation and initiate Transition if required
+			switch(actionToTake) {
+
+				case STANDING:
+
+					if( standHints > requiredHints || INTERNAL_STATE===STANDING) { // wait for a few consecutive hints (17mS each)
+
+						standHints = 0;
+						walkHints = 0;
+						flyHints = 0;
+
+						// do we need to change state?
+						if( INTERNAL_STATE!==STANDING ) {
+
+							// initiate the transition
+							if(currentTransition) {
+								delete currentTransition;
+								currentTransition = null;
+							}
+
+							switch(currentAnimation) {
+
+								case selectedWalk:
+									// Walking to Standing
+									var timeWalking = new Date().getTime() - framesHistory.lastWalkStartTime;
+									//print('You were walking for '+timeWalking+' mS');
+
+									var bezierCoeffsOne = {x:0.0, y:1.0};
+									var bezierCoeffsTwo = {x:0.0, y:1.0};
+									var transitionTime = 0.4;
+
+									// very different curves for incremental steps
+									if( timeWalking < 550 ) {
+										bezierCoeffsOne = {x:0.63, y:0.17};
+										bezierCoeffsTwo = {x:0.77, y:0.3};
+										transitionTime = 0.75;
+									}
+									currentTransition = new Transition( currentAnimation, selectedStand, [], transitionTime, bezierCoeffsOne, bezierCoeffsTwo );
+									break;
+
+
+								case selectedSideStepLeft:
+								case selectedSideStepRight:
+
+									//currentTransition = new Transition(currentAnimation, selectedWalk, [], 0.3, {x:0.5,y:0.08}, {x:0.05,y:0.75});
+									break;
+
+								default:
+
+									currentTransition = new Transition(currentAnimation, selectedStand, [], 0.3, {x:0.5,y:0.08}, {x:0.28,y:1});
+									break;
+							}
+
+							setInternalState(STANDING);
+							currentAnimation = selectedStand;
+
+						}
+						animateAvatar(1,0,principleDirection);
+					}
+					break;
+
+				case WALKING:
+				case SIDE_STEPPING:
+					if( walkHints > requiredHints ||
+						INTERNAL_STATE===WALKING ||
+						INTERNAL_STATE===SIDE_STEPPING ) { // wait for few consecutive hints (17mS each)
+
+						standHints = 0;
+						walkHints = 0;
+						flyHints = 0;
+
+						if( actionToTake === WALKING && INTERNAL_STATE !== WALKING) {
+
+							// initiate the transition
+							if(currentTransition) {
+								delete currentTransition;
+								currentTransition = null;
+							}
+
+							// set the appropriate start position for the walk wheel
+							if( principleDirection === DIRECTION_BACKWARDS ) {
+
+								walkWheelPosition = selectedWalk.settings.startAngleBackwards;
+
+							} else {
+
+								walkWheelPosition = selectedWalk.settings.startAngleForwards;
+							}
+
+							switch(currentAnimation) {
+
+								case selectedStand:
+									// Standing to Walking
+									currentTransition = new Transition(currentAnimation, selectedWalk, [], 0.25, {x:0.5,y:0.08}, {x:0.05,y:0.75});
+									break;
+
+								case selectedSideStepLeft:
+								case selectedSideStepRight:
+
+									break;
+
+								default:
+
+									currentTransition = new Transition(currentAnimation, selectedWalk, [], 0.3, {x:0.5,y:0.08}, {x:0.05,y:0.75});
+									break;
+							}
+							framesHistory.lastWalkStartTime = new Date().getTime();
+							setInternalState(WALKING);
+							currentAnimation = selectedWalk;
+						}
+						else if(actionToTake===SIDE_STEPPING) {
+
+							var selectedSideStep = selectedSideStepRight;
+							if( principleDirection === DIRECTION_LEFT ) {
+
+								selectedSideStep = selectedSideStepLeft;
+
+							} else {
+
+								selectedSideStep = selectedSideStepRight;
+							}
+
+							if( INTERNAL_STATE !== SIDE_STEPPING ) {
+
+								if( principleDirection === DIRECTION_LEFT ) {
+
+									walkWheelPosition = sideStepCycleStartLeft;//selectedSideStep.calibration.sideStepCycleStartLeft;
+
+								} else {
+
+									walkWheelPosition = sideStepCycleStartRight;//selectedSideStep.calibration.sideStepCycleStartRight;
+								}
+								switch(currentAnimation) {
+
+									case selectedStand:
+
+										//currentTransition = new Transition(currentAnimation, selectedSideStep, [], 0.8, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+
+									default:
+
+										//currentTransition = new Transition(currentAnimation, selectedSideStep, [], 0.8, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+								}
+								setInternalState(SIDE_STEPPING);
+							}
+
+							currentAnimation = selectedSideStep;
+						}
+						animateAvatar( deltaTime, speed, principleDirection );
+					}
+					break;
+
+				case FLYING:
+
+					if( flyHints > requiredHints - 1  || INTERNAL_STATE===FLYING ) { // wait for a few consecutive hints (17mS each)
+
+						standHints = 0;
+						walkHints = 0;
+						flyHints = 0;
+
+						if(INTERNAL_STATE!==FLYING) setInternalState(FLYING);
+
+						// change animation for flying directly up or down. TODO - check RecentMotions, if is a change then put a transition on it
+						if(principleDirection===DIRECTION_UP) {
+
+							if(currentAnimation !== selectedFlyUp) {
+
+								// initiate a Transition
+								if(currentTransition && currentTransition.nextAnimation!==selectedFlyUp) {
+									delete currentTransition;
+									currentTransition = null;
+								}
+								switch(currentAnimation) {
+
+									case selectedStand:
+
+										currentTransition = new Transition(currentAnimation, selectedFlyUp, [], 0.35, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+
+									case selectedSideStepLeft:
+									case selectedSideStepRight:
+
+										break;
+
+									default:
+
+										currentTransition = new Transition(currentAnimation, selectedFlyUp, [], 0.35, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+								}
+								currentAnimation = selectedFlyUp;
+							}
+
+						} else if(principleDirection==DIRECTION_DOWN) {
+
+							if(currentAnimation !== selectedFlyDown) { // TODO: as the locomotion gets cleaner (i.e. less false reports from Interface) this value can be reduced
+
+								// initiate a Transition
+								if(currentTransition && currentTransition.nextAnimation!==selectedFlyDown) {
+									delete currentTransition;
+									currentTransition = null;
+								}
+								switch(currentAnimation) {
+
+									case selectedStand:
+
+										currentTransition = new Transition(currentAnimation, selectedFlyDown, [], 0.35, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+
+									case selectedSideStepLeft:
+									case selectedSideStepRight:
+
+										break;
+
+									default:
+
+										currentTransition = new Transition(currentAnimation, selectedFlyDown, [], 0.35, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+								}
+								currentAnimation = selectedFlyDown;
+							}
+
+						} else {
+
+							if(currentAnimation !== selectedFly) { // TODO: as the locomotion gets cleaner (i.e. less false reports from Interface) this value can be reduced
+
+								// initiate a Transition
+								if(currentTransition && currentTransition.nextAnimation!==selectedFly) {
+									delete currentTransition;
+									currentTransition = null;
+								}
+								switch(currentAnimation) {
+
+									case selectedStand:
+
+										currentTransition = new Transition(currentAnimation, selectedFly, [], 0.35, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+
+									case selectedSideStepLeft:
+									case selectedSideStepRight:
+
+										break;
+
+									default:
+
+										currentTransition = new Transition(currentAnimation, selectedFly, [], 0.35, {x:0.5,y:0.08}, {x:0.28,y:1});
+										break;
+								}
+								currentAnimation = selectedFly;
+							}
+						}
+						animateAvatar(deltaTime, speed, principleDirection);
+					}
+					break;
+
+			} // end switch(actionToTake)
+
+		} // end if(!editing)
+
+
+		// record the frame's stats for later reference
+        var thisMotion = new RecentMotion(localVelocity, acceleration, principleDirection, INTERNAL_STATE);
+		framesHistory.recentMotions.push(thisMotion);
+		framesHistory.recentMotions.shift();
+
+
+		// before we go, populate the stats overlay
+		if( statsOn ) {
+
+			// quick test for the frame execution time measurement
+			// lots of console logging messes up execution times pretty well!
+			//for(var doh = 0 ; doh < 10 ; doh++) {
+			//	//var fake = doh * doh * doh;
+			//	print('faking bad coding...'+doh);
+			//}
+
+			var cumulativeTimeMS = Math.floor(cumulativeTime*1000);
+			var deltaTimeMS = deltaTime * 1000;
+			var frameExecutionTime = new Date().getTime() - frameStartTime;
+			if(frameExecutionTime>frameExecutionTimeMax) frameExecutionTimeMax = frameExecutionTime;
+
+			var angluarVelocity = Vec3.length(MyAvatar.getAngularVelocity());
+
+			var debugInfo = '\n \n \n \n                   Stats\n--------------------------------------\n \n \n'
+						  + '\nFrame number: '+nFrames
+						  + '\nFrame time: '+deltaTimeMS.toFixed(2)
+						  + ' mS\nRender time: '+frameExecutionTime.toFixed(0)
+						  + ' mS\nLocalised speed: '+speed.toFixed(3)
+						  + ' m/s\nCumulative Time '+cumulativeTimeMS.toFixed(0)
+						  + ' mS\nState: '+internalStateAsString(INTERNAL_STATE)
+						  + ' \nDirection: '+directionAsString(principleDirection)
+						  + ' \nAngular Velocity: ' + angluarVelocity.toFixed(3)
+						  + ' rad/s';
+			Overlays.editOverlay(debugStats, {text: debugInfo});
+
+			// update these every 250 mS (assuming 60 fps)
+			if( nFrames % 15 === 0 ) {
+				var debugInfo = '           Periodic Stats\n--------------------------------------\n \n \n'
+							  + ' \n \nRender time peak hold: '+frameExecutionTimeMax.toFixed(0)
+							  + ' mS\n \n \n(L) MyAvatar.getVelocity()'
+							  + ' \n \nlocalVelocityX: '+deltaX.toFixed(1)
+							  + ' m/s\nlocalVelocityY: '+deltaY.toFixed(1)
+							  + ' m/s\nlocalVelocityZ: '+deltaZ.toFixed(1)
+							  + ' m/s\n \n(G) MyAvatar.getAcceleration()'
+							  + ' \n\nAcceleration X: '+accelerationJS.x.toFixed(1)
+							  + ' m/s/s\nAcceleration Y: '+accelerationJS.y.toFixed(1)
+							  + ' m/s/s\nAcceleration Z: '+accelerationJS.z.toFixed(1)
+							  + ' m/s/s\n \n(L) Acceleration using\nMyAvatar.getVelocity()'
+							  + ' \n \nAcceleration X: '+acceleration.x.toFixed(1)
+							  + ' m/s/s\nAcceleration Y: '+acceleration.y.toFixed(1)
+							  + ' m/s/s\nAcceleration Z: '+acceleration.z.toFixed(1)
+						      + ' m/s/s';
+				Overlays.editOverlay(debugStatsPeriodic, {text: debugInfo});
+				frameExecutionTimeMax = 0;
+			}
+		}
     }
 });
 
@@ -1607,7 +2663,7 @@ Script.update.connect(function(deltaTime) {
 //  controller dimensions
 var backgroundWidth = 350;
 var backgroundHeight = 700;
-var backgroundX = Window.innerWidth-backgroundWidth-50;
+var backgroundX = Window.innerWidth-backgroundWidth-58;
 var backgroundY = Window.innerHeight/2 - backgroundHeight/2;
 var minSliderX = backgroundX + 30;
 var maxSliderX = backgroundX + 295;
@@ -1675,14 +2731,18 @@ var controlsBackgroundFlyingEdit = Overlays.addOverlay("image", {
 backgroundOverlays.push(controlsBackgroundFlyingEdit);
 
 
+
+
 // minimised tab - not put in array, as is a one off
 var controlsMinimisedTab = Overlays.addOverlay("image", {
-                    bounds: { x: Window.innerWidth - 35, y: Window.innerHeight/2 - 175, width: 36, height: 351 },
-                    imageURL: pathToOverlays+"ddao-tab.png",
-                    color: { red: 255, green: 255, blue: 255},
-                    alpha: 1,
-                    visible: false
-                });
+					x: Window.innerWidth-58, y: Window.innerHeight -145, width: 50, height: 50,
+					//subImage: { x: 0, y: 50, width: 50, height: 50 },
+					imageURL: pathToOverlays + 'ddao-minimise-tab.png',
+					visible: minimised,
+					alpha: 0.9
+					});
+
+
 
 // load character joint selection control images
 var hipsJointControl = Overlays.addOverlay("image", {
@@ -1927,6 +2987,7 @@ var configStandButtonSelected = Overlays.addOverlay("image", {
                     visible: false
                 });
 buttonOverlays.push(configStandButtonSelected);
+
 var configFlyingButton = Overlays.addOverlay("image", {
                     bounds: { x: backgroundX+209, y: backgroundY+buttonsY, width: 60, height: 47 },
                     imageURL: pathToOverlays+"ddao-edit-fly-button.png",
@@ -1943,6 +3004,41 @@ var configFlyingButtonSelected = Overlays.addOverlay("image", {
                     visible: false
                 });
 buttonOverlays.push(configFlyingButtonSelected);
+
+var configFlyingUpButton = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+83, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-fly-up-button.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configFlyingUpButton);
+var configFlyingUpButtonSelected = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+83, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-fly-up-button-selected.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configFlyingUpButtonSelected);
+
+var configFlyingDownButton = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+146, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-fly-down-button.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configFlyingDownButton);
+var configFlyingDownButtonSelected = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+146, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-fly-down-button-selected.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configFlyingDownButtonSelected);
+
 var hideButton = Overlays.addOverlay("image", {
                     bounds: { x: backgroundX+272, y: backgroundY+buttonsY, width: 60, height: 47 },
                     imageURL: pathToOverlays+"ddao-hide-button.png",
@@ -1991,6 +3087,43 @@ var configWalkTweaksButtonSelected = Overlays.addOverlay("image", {
                     visible: false
                 });
 buttonOverlays.push(configWalkTweaksButtonSelected);
+
+
+
+var configSideStepLeftButton = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+83, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-sidestep-left-button.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configSideStepLeftButton);
+var configSideStepLeftButtonSelected = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+83, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-sidestep-left-button-selected.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configSideStepLeftButtonSelected);
+
+var configSideStepRightButton = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+209, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-sidestep-right-button.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configSideStepRightButton);
+var configSideStepRightButtonSelected = Overlays.addOverlay("image", {
+                    bounds: { x: backgroundX+209, y: backgroundY+buttonsY, width: 60, height: 47 },
+                    imageURL: pathToOverlays+"ddao-edit-sidestep-right-button-selected.png",
+                    color: { red: 255, green: 255, blue: 255},
+                    alpha: 1,
+                    visible: false
+                });
+buttonOverlays.push(configSideStepRightButtonSelected);
+
 var configWalkJointsButton = Overlays.addOverlay("image", {
                     bounds: { x: backgroundX+209, y: backgroundY+buttonsY, width: 60, height: 47 },
                     imageURL: pathToOverlays+"ddao-bones-button.png",
@@ -2007,6 +3140,7 @@ var configWalkJointsButtonSelected = Overlays.addOverlay("image", {
                     visible: false
                 });
 buttonOverlays.push(configWalkJointsButtonSelected);
+
 var backButton = Overlays.addOverlay("image", {
                     bounds: { x: backgroundX+272, y: backgroundY+buttonsY, width: 60, height: 47 },
                     imageURL: pathToOverlays+"ddao-back-button.png",
@@ -2279,7 +3413,7 @@ var walkWheelZLine = Overlays.addOverlay("line3d", {
                     color: { red: 0, green: 255, blue: 255},
                     alpha: 1,
                     lineWidth: 5,
-                    visible: false,
+                    visible: statsOn,
                     anchor: "MyAvatar"
                 });
 var walkWheelYLine = Overlays.addOverlay("line3d", {
@@ -2288,22 +3422,44 @@ var walkWheelYLine = Overlays.addOverlay("line3d", {
                     color: { red: 255, green: 0, blue: 255},
                     alpha: 1,
                     lineWidth: 5,
-                    visible: false,
+                    visible: statsOn,
                     anchor: "MyAvatar"
                 });
-
-var debugText = Overlays.addOverlay("text", {
-                    x: Window.innerWidth/2 + 200,
-                    y: Window.innerHeight/2 - 300,
+var debugStats = Overlays.addOverlay("text", {
+                    x: backgroundX-199, y: backgroundY,
                     width: 200,
-                    height: 130,
-                    color: { red: 255, green: 255, blue: 255},
-                    textColor: { red: 255, green: 255, blue: 255},
+                    height: 180,
+                    color: { red: 204, green: 204, blue: 204},
+                    topMargin: 10,
+                    leftMargin: 15,
+                    visible: statsOn,
+                    backgroundColor: { red: 34, green: 34, blue: 34},
+                    alpha: 1.0,
+                    text: "Debug Stats\n\n\nNothing to report yet."
+                });
+var debugStatsPeriodic = Overlays.addOverlay("text", {
+                    x: backgroundX-199, y: backgroundY+179,
+                    width: 200,
+                    height: 392,
+                    color: { red: 204, green: 204, blue: 204},
                     topMargin: 5,
-                    leftMargin: 5,
-                    visible: false,
-                    backgroundColor: { red: 255, green: 255, blue: 255},
-                    text: "Debug area\n\n\nNothing to report yet.\n\n\nPlease exit edit mode\nand start walking\nto see the walkwheel."
+                    leftMargin: 15,
+                    visible: statsOn,
+                    backgroundColor: { red: 34, green: 34, blue: 34},
+                    alpha: 1.0,
+                    text: "Debug Stats\n\n\nNothing to report yet."
+                });
+var walkWheelStats = Overlays.addOverlay("text", {
+                    x: backgroundX-199, y: backgroundY+510,
+                    width: 200,
+                    height: 190,
+                    color: { red: 204, green: 204, blue: 204},
+                    topMargin: 5,
+                    leftMargin: 15,
+                    visible: statsOn,
+                    backgroundColor: { red: 34, green: 34, blue: 34},
+                    alpha: 1.0,
+                    text: "WalkWheel Stats\n\n\nNothing to report yet.\n\n\nPlease start walking\nto see the walkwheel."
                 });
 
 // various show / hide GUI element functions
@@ -2323,35 +3479,35 @@ function doStandardMenu() {
 }
 function showFrontPanelButtons(showButtons) {
 
-    if(avatarGender===FEMALE) {
-        Overlays.editOverlay(femaleBigButtonSelected, { visible: showButtons } );
-        Overlays.editOverlay(femaleBigButton, { visible: false } );
-        Overlays.editOverlay(maleBigButtonSelected, { visible: false } );
-        Overlays.editOverlay(maleBigButton, { visible: showButtons } );
-    } else {
-        Overlays.editOverlay(femaleBigButtonSelected, { visible: false } );
-        Overlays.editOverlay(femaleBigButton, { visible: showButtons } );
-        Overlays.editOverlay(maleBigButtonSelected, { visible: showButtons } );
-        Overlays.editOverlay(maleBigButton, { visible: false } );
-    }
-    if(armsFree) {
-        Overlays.editOverlay(armsFreeBigButtonSelected, { visible: showButtons } );
-        Overlays.editOverlay(armsFreeBigButton, { visible: false } );
-    } else {
-        Overlays.editOverlay(armsFreeBigButtonSelected, { visible: false } );
-        Overlays.editOverlay(armsFreeBigButton, { visible: showButtons } );
-    }
-    if(playFootStepSounds) {
-        Overlays.editOverlay(footstepsBigButtonSelected, { visible: showButtons } );
-        Overlays.editOverlay(footstepsBigButton, { visible: false } );
-    } else {
-        Overlays.editOverlay(footstepsBigButtonSelected, { visible: false } );
-        Overlays.editOverlay(footstepsBigButton, { visible: showButtons } );
-    }
+	if(avatarGender===FEMALE) {
+		Overlays.editOverlay(femaleBigButtonSelected, { visible: showButtons } );
+		Overlays.editOverlay(femaleBigButton, { visible: false } );
+		Overlays.editOverlay(maleBigButtonSelected, { visible: false } );
+		Overlays.editOverlay(maleBigButton, { visible: showButtons } );
+	} else {
+		Overlays.editOverlay(femaleBigButtonSelected, { visible: false } );
+		Overlays.editOverlay(femaleBigButton, { visible: showButtons } );
+		Overlays.editOverlay(maleBigButtonSelected, { visible: showButtons } );
+		Overlays.editOverlay(maleBigButton, { visible: false } );
+	}
+	if(armsFree) {
+		Overlays.editOverlay(armsFreeBigButtonSelected, { visible: showButtons } );
+		Overlays.editOverlay(armsFreeBigButton, { visible: false } );
+	} else {
+		Overlays.editOverlay(armsFreeBigButtonSelected, { visible: false } );
+		Overlays.editOverlay(armsFreeBigButton, { visible: showButtons } );
+	}
+	if(playFootStepSounds) {
+		Overlays.editOverlay(footstepsBigButtonSelected, { visible: showButtons } );
+		Overlays.editOverlay(footstepsBigButton, { visible: false } );
+	} else {
+		Overlays.editOverlay(footstepsBigButtonSelected, { visible: false } );
+		Overlays.editOverlay(footstepsBigButton, { visible: showButtons } );
+	}
 }
 function minimiseDialog() {
 
-    if(minimised) {
+	if(minimised) {
         setBackground();
         hidebuttonOverlays();
         setSliderThumbsVisible(false);
@@ -2445,15 +3601,15 @@ function initialiseJointsEditingPanel(propertyIndex) {
     var i = 0;
     var yLocation = backgroundY+359;
 
-    // pitch your role
+	// pitch your role
     var sliderXPos = currentAnimation.joints[selectedJointIndex].pitch
-            / sliderRanges.joints[selectedJointIndex].pitchRange * sliderRangeX;
+    		/ sliderRanges.joints[selectedJointIndex].pitchRange * sliderRangeX;
     Overlays.editOverlay(sliderThumbOverlays[i], { x: minSliderX + sliderXPos, y: yLocation+=30, visible: true });
     sliderXPos = currentAnimation.joints[selectedJointIndex].yaw
-            / sliderRanges.joints[selectedJointIndex].yawRange * sliderRangeX;
+    		/ sliderRanges.joints[selectedJointIndex].yawRange * sliderRangeX;
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=30, visible: true });
     sliderXPos = currentAnimation.joints[selectedJointIndex].roll
-            / sliderRanges.joints[selectedJointIndex].rollRange * sliderRangeX;
+    		/ sliderRanges.joints[selectedJointIndex].rollRange * sliderRangeX;
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=30, visible: true });
 
     // set phases (full range, -180 to 180)
@@ -2466,13 +3622,13 @@ function initialiseJointsEditingPanel(propertyIndex) {
 
     // offset ranges are also -ve thr' zero to +ve, so have to offset
     sliderXPos = (((sliderRanges.joints[selectedJointIndex].pitchOffsetRange+currentAnimation.joints[selectedJointIndex].pitchOffset)/2)
-                /sliderRanges.joints[selectedJointIndex].pitchOffsetRange) * sliderRangeX;
+    			/sliderRanges.joints[selectedJointIndex].pitchOffsetRange) * sliderRangeX;
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=30, visible: true });
     sliderXPos = (((sliderRanges.joints[selectedJointIndex].yawOffsetRange+currentAnimation.joints[selectedJointIndex].yawOffset)/2)
-                /sliderRanges.joints[selectedJointIndex].yawOffsetRange) * sliderRangeX;
+    			/sliderRanges.joints[selectedJointIndex].yawOffsetRange) * sliderRangeX;
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=30, visible: true });
     sliderXPos = (((sliderRanges.joints[selectedJointIndex].rollOffsetRange+currentAnimation.joints[selectedJointIndex].rollOffset)/2)
-                /sliderRanges.joints[selectedJointIndex].rollOffsetRange) * sliderRangeX;
+    			/sliderRanges.joints[selectedJointIndex].rollOffsetRange) * sliderRangeX;
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=30, visible: true });
 }
 
@@ -2484,7 +3640,7 @@ function initialiseWalkTweaks() {
 
     var sliderXPos = currentAnimation.settings.baseFrequency / MAX_WALK_SPEED * sliderRangeX;   // walk speed
     Overlays.editOverlay(sliderThumbOverlays[i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
-    sliderXPos = currentAnimation.settings.takeFlightVelocity / 300 * sliderRangeX;             // start flying speed
+    sliderXPos = 0 * sliderRangeX;             // start flying speed - depricated
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
     sliderXPos = currentAnimation.joints[0].sway / sliderRanges.joints[0].swayRange * sliderRangeX;     // Hips sway
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
@@ -2492,67 +3648,69 @@ function initialiseWalkTweaks() {
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
     sliderXPos = currentAnimation.joints[0].thrust / sliderRanges.joints[0].thrustRange * sliderRangeX; // Hips thrust
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
-    sliderXPos = (0.5+(currentAnimation.adjusters.legsSeparation.strength/2)) * sliderRangeX;   // legs separation
+    sliderXPos = (((sliderRanges.joints[1].rollOffsetRange+currentAnimation.joints[1].rollOffset)/2) // legs separation - is upper legs roll offset
+    				/ sliderRanges.joints[1].rollOffsetRange) * sliderRangeX;
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
-    sliderXPos = currentAnimation.adjusters.stride.strength * sliderRangeX;                     // stride
+    sliderXPos = currentAnimation.joints[1].pitch / sliderRanges.joints[1].pitchRange * sliderRangeX; // stride - is upper legs pitch
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
-    sliderXPos = currentAnimation.joints[9].yaw / sliderRanges.joints[9].yawRange * sliderRangeX; // arms swing - is just upper arms yaw
+    sliderXPos = currentAnimation.joints[9].yaw / sliderRanges.joints[9].yawRange * sliderRangeX; // arms swing - is upper arms yaw
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
-    sliderXPos = (((sliderRanges.joints[9].pitchOffsetRange-currentAnimation.joints[9].pitchOffset)/2)/sliderRanges.joints[9].pitchOffsetRange) * sliderRangeX; // arms out - is just upper arms pitch offset
+    sliderXPos = (((sliderRanges.joints[9].pitchOffsetRange-currentAnimation.joints[9].pitchOffset)/2)
+    				/ sliderRanges.joints[9].pitchOffsetRange) * sliderRangeX; // arms out - is upper arms pitch offset
     Overlays.editOverlay(sliderThumbOverlays[++i], { x: minSliderX + sliderXPos, y: yLocation+=60, visible: true });
 }
 
 function showWalkStyleButtons(showButtons) {
 
-    // set all big buttons to hidden, but skip the first 8, as are for the front panel
-    for(var i = 8 ; i < bigButtonOverlays.length ; i++) {
-        Overlays.editOverlay(bigButtonOverlays[i], { visible: false });
-    }
+	// set all big buttons to hidden, but skip the first 8, as are for the front panel
+	for(var i = 8 ; i < bigButtonOverlays.length ; i++) {
+		Overlays.editOverlay(bigButtonOverlays[i], { visible: false });
+	}
 
-    if(!showButtons) return;
+	if(!showButtons) return;
 
-    // set all the non-selected ones to showing
-    for(var i = 8 ; i < bigButtonOverlays.length ; i+=2) {
-        Overlays.editOverlay(bigButtonOverlays[i], { visible: showButtons });
-    }
+	// set all the non-selected ones to showing
+	for(var i = 8 ; i < bigButtonOverlays.length ; i+=2) {
+		Overlays.editOverlay(bigButtonOverlays[i], { visible: showButtons });
+	}
 
-    // set the currently selected one
-    if(selectedWalk === femaleSexyWalk || selectedWalk === maleSexyWalk) {
-        Overlays.editOverlay(sexyWalkBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(sexyWalkBigButton, {visible: false});
-    }
-    else if(selectedWalk === femaleStrutWalk || selectedWalk === maleStrutWalk) {
-        Overlays.editOverlay(strutWalkBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(strutWalkBigButton, {visible: false});
-    }
-    else if(selectedWalk === femalePowerWalk || selectedWalk === malePowerWalk) {
-        Overlays.editOverlay(powerWalkBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(powerWalkBigButton, {visible: false});
-    }
-    else if(selectedWalk === femaleShuffle || selectedWalk === maleShuffle) {
-        Overlays.editOverlay(shuffleBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(shuffleBigButton, {visible: false});
-    }
-    else if(selectedWalk === femaleRun || selectedWalk === maleRun) {
-        Overlays.editOverlay(runBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(runBigButton, {visible: false});
-    }
-    else if(selectedWalk === femaleRandomWalk || selectedWalk === maleRandomWalk) {
-        Overlays.editOverlay(randomWalkBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(randomWalkBigButton, {visible: false});
-    }
-    else if(selectedWalk === femaleToughWalk || selectedWalk === maleToughWalk) {
-        Overlays.editOverlay(toughWalkBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(toughWalkBigButton, {visible: false});
-    }
-    else if(selectedWalk === femaleCoolWalk || selectedWalk === maleCoolWalk) {
-        Overlays.editOverlay(coolWalkBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(coolWalkBigButton, {visible: false});
-    }
-    else if(selectedWalk === femaleElderlyWalk || selectedWalk === maleElderlyWalk) {
-        Overlays.editOverlay(elderlyWalkBigButtonSelected, { visible: showButtons });
-        Overlays.editOverlay(elderlyWalkBigButton, {visible: false});
-    }
+	// set the currently selected one
+	if(selectedWalk === femaleSexyWalk || selectedWalk === maleSexyWalk) {
+		Overlays.editOverlay(sexyWalkBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(sexyWalkBigButton, {visible: false});
+	}
+	else if(selectedWalk === femaleStrutWalk || selectedWalk === maleStrutWalk) {
+		Overlays.editOverlay(strutWalkBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(strutWalkBigButton, {visible: false});
+	}
+	else if(selectedWalk === femalePowerWalk || selectedWalk === malePowerWalk) {
+		Overlays.editOverlay(powerWalkBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(powerWalkBigButton, {visible: false});
+	}
+	else if(selectedWalk === femaleShuffle || selectedWalk === maleShuffle) {
+		Overlays.editOverlay(shuffleBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(shuffleBigButton, {visible: false});
+	}
+	else if(selectedWalk === femaleRun || selectedWalk === maleRun) {
+		Overlays.editOverlay(runBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(runBigButton, {visible: false});
+	}
+	else if(selectedWalk === femaleRandomWalk || selectedWalk === maleRandomWalk) {
+		Overlays.editOverlay(randomWalkBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(randomWalkBigButton, {visible: false});
+	}
+	else if(selectedWalk === femaleToughWalk || selectedWalk === maleToughWalk) {
+		Overlays.editOverlay(toughWalkBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(toughWalkBigButton, {visible: false});
+	}
+	else if(selectedWalk === femaleCoolWalk || selectedWalk === maleCoolWalk) {
+		Overlays.editOverlay(coolWalkBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(coolWalkBigButton, {visible: false});
+	}
+	else if(selectedWalk === femaleElderlyWalk || selectedWalk === maleElderlyWalk) {
+		Overlays.editOverlay(elderlyWalkBigButtonSelected, { visible: showButtons });
+		Overlays.editOverlay(elderlyWalkBigButton, {visible: false});
+	}
 }
 
 // mouse event handlers
@@ -2565,7 +3723,6 @@ var movingSliderSix = false;
 var movingSliderSeven = false;
 var movingSliderEight = false;
 var movingSliderNine = false;
-
 
 function mousePressEvent(event) {
 
@@ -2588,137 +3745,141 @@ function mousePressEvent(event) {
             // TODO: add visual user feedback for tab click
             return;
 
-        case footstepsBigButton:
-            playFootStepSounds = true;
-            Overlays.editOverlay(footstepsBigButtonSelected, { visible: true } );
-            Overlays.editOverlay(footstepsBigButton, { visible: false } );
-            return;
+		case footstepsBigButton:
+			playFootStepSounds = true;
+			Overlays.editOverlay(footstepsBigButtonSelected, { visible: true } );
+			Overlays.editOverlay(footstepsBigButton, { visible: false } );
+			return;
 
-        case footstepsBigButtonSelected:
-            playFootStepSounds = false;
-            Overlays.editOverlay(footstepsBigButton, { visible: true } );
-            Overlays.editOverlay(footstepsBigButtonSelected, { visible: false } );
-            return;
+		case footstepsBigButtonSelected:
+			playFootStepSounds = false;
+			Overlays.editOverlay(footstepsBigButton, { visible: true } );
+			Overlays.editOverlay(footstepsBigButtonSelected, { visible: false } );
+			return;
 
-        case femaleBigButton:
-        case maleBigButtonSelected:
-            avatarGender = FEMALE;
-            selectedWalk = femaleStrutWalk;
-            selectedStand = femaleStandOne;
-            selectedFlyUp  = femaleFlyingUp;
-            selectedFly = femaleFlying;
-            selectedFlyDown = femaleFlyingDown;
-            Overlays.editOverlay(femaleBigButtonSelected, { visible: true } );
-            Overlays.editOverlay(femaleBigButton, { visible: false } );
-            Overlays.editOverlay(maleBigButton, { visible: true } );
-            Overlays.editOverlay(maleBigButtonSelected, { visible: false } );
-            return;
+		case femaleBigButton:
+		case maleBigButtonSelected:
+			avatarGender = FEMALE;
+			selectedWalk = femaleStrutWalk;
+			selectedStand = femaleStandOne;
+			selectedFlyUp  = femaleFlyingUp;
+			selectedFly = femaleFlying;
+			selectedFlyDown = femaleFlyingDown;
+			selectedSideStepLeft = femaleSideStepLeft;
+			selectedSideStepRight = femaleSideStepRight;
+			Overlays.editOverlay(femaleBigButtonSelected, { visible: true } );
+			Overlays.editOverlay(femaleBigButton, { visible: false } );
+			Overlays.editOverlay(maleBigButton, { visible: true } );
+			Overlays.editOverlay(maleBigButtonSelected, { visible: false } );
+			return;
 
-        case armsFreeBigButton:
-            armsFree = true;
-            Overlays.editOverlay(armsFreeBigButtonSelected, { visible: true } );
-            Overlays.editOverlay(armsFreeBigButton, { visible: false } );
-            //Script.runningStateChanged(); // attempt to kick in Hydra support - fail
-            return;
+		case armsFreeBigButton:
+			armsFree = true;
+			Overlays.editOverlay(armsFreeBigButtonSelected, { visible: true } );
+			Overlays.editOverlay(armsFreeBigButton, { visible: false } );
+			return;
 
-        case armsFreeBigButtonSelected:
-            armsFree = false;
-            Overlays.editOverlay(armsFreeBigButtonSelected, { visible: false } );
-            Overlays.editOverlay(armsFreeBigButton, { visible: true } );
-            //Script.runningStateChanged(); // attempt to kick in Hydra support - fail
-            return;
+		case armsFreeBigButtonSelected:
+			armsFree = false;
+			Overlays.editOverlay(armsFreeBigButtonSelected, { visible: false } );
+			Overlays.editOverlay(armsFreeBigButton, { visible: true } );
+			return;
 
-        case maleBigButton:
-        case femaleBigButtonSelected:
-            avatarGender = MALE;
-            selectedWalk = maleStrutWalk;
-            selectedStand = maleStandOne;
-            selectedFlyUp  = maleFlyingUp;
-            selectedFly = maleFlying;
-            selectedFlyDown = maleFlyingDown;
-            Overlays.editOverlay(femaleBigButton, { visible: true } );
-            Overlays.editOverlay(femaleBigButtonSelected, { visible: false } );
-            Overlays.editOverlay(maleBigButtonSelected, { visible: true } );
-            Overlays.editOverlay(maleBigButton, { visible: false } );
-            return;
+		case maleBigButton:
+		case femaleBigButtonSelected:
+			avatarGender = MALE;
+			selectedWalk = maleStrutWalk;
+			selectedStand = maleStandOne;
+			selectedFlyUp  = maleFlyingUp;
+			selectedFly = maleFlying;
+			selectedFlyDown = maleFlyingDown;
+			selectedSideStepLeft = maleSideStepLeft;
+			selectedSideStepRight = maleSideStepRight;
+			Overlays.editOverlay(femaleBigButton, { visible: true } );
+			Overlays.editOverlay(femaleBigButtonSelected, { visible: false } );
+			Overlays.editOverlay(maleBigButtonSelected, { visible: true } );
+			Overlays.editOverlay(maleBigButton, { visible: false } );
+			return;
 
-        case sexyWalkBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleSexyWalk;
-            else selectedWalk = maleSexyWalk;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
 
-        case strutWalkBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleStrutWalk;
-            else selectedWalk = maleStrutWalk;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+		case strutWalkBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleStrutWalk;
+			else selectedWalk = maleStrutWalk;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case powerWalkBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femalePowerWalk;
-            else selectedWalk = malePowerWalk;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+/*		case sexyWalkBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleSexyWalk;
+			else selectedWalk = maleSexyWalk;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case shuffleBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleShuffle;
-            else selectedWalk = maleShuffle;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+		case powerWalkBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femalePowerWalk;
+			else selectedWalk = malePowerWalk;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case runBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleRun;
-            else selectedWalk = maleRun;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+		case shuffleBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleShuffle;
+			else selectedWalk = maleShuffle;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case randomWalkBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleRandomWalk;
-            else selectedWalk = maleRandomWalk;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+		case runBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleRun;
+			else selectedWalk = maleRun;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case toughWalkBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleToughWalk;
-            else selectedWalk = maleToughWalk;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+		case randomWalkBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleRandomWalk;
+			else selectedWalk = maleRandomWalk;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case coolWalkBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleCoolWalk;
-            else selectedWalk = maleCoolWalk;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+		case toughWalkBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleToughWalk;
+			else selectedWalk = maleToughWalk;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case elderlyWalkBigButton:
-            if(avatarGender===FEMALE) selectedWalk = femaleElderlyWalk;
-            else selectedWalk = maleElderlyWalk;
-            currentAnimation = selectedWalk;
-            showWalkStyleButtons(true);
-            break;
+		case coolWalkBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleCoolWalk;
+			else selectedWalk = maleCoolWalk;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
 
-        case sexyWalkBigButtonSelected:
-        case strutWalkBigButtonSelected:
-        case powerWalkBigButtonSelected:
-        case shuffleBigButtonSelected:
-        case runBigButtonSelected:
-        case randomWalkBigButtonSelected:
-        case toughWalkBigButtonSelected:
-        case coolWalkBigButtonSelected:
-        case elderlyWalkBigButtonSelected:
-            // toggle forwards / backwards walk display
-            if(principleDirection===DIRECTION_FORWARDS) {
-                principleDirection=DIRECTION_BACKWARDS;
-            } else principleDirection=DIRECTION_FORWARDS;
-            break;
+		case elderlyWalkBigButton:
+			if(avatarGender===FEMALE) selectedWalk = femaleElderlyWalk;
+			else selectedWalk = maleElderlyWalk;
+			currentAnimation = selectedWalk;
+			showWalkStyleButtons(true);
+			return;
+
+		case sexyWalkBigButtonSelected:
+		case elderlyWalkBigButtonSelected:
+		case powerWalkBigButtonSelected:
+		case shuffleBigButtonSelected:
+		case runBigButtonSelected:
+		case randomWalkBigButtonSelected:
+		case toughWalkBigButtonSelected:
+		case coolWalkBigButtonSelected:*/
+		case strutWalkBigButtonSelected:
+
+			// toggle forwards / backwards walk display
+			if(principleDirection===DIRECTION_FORWARDS) {
+				principleDirection=DIRECTION_BACKWARDS;
+			} else principleDirection=DIRECTION_FORWARDS;
+			return;
 
         case sliderOne:
             movingSliderOne = true;
@@ -2757,11 +3918,15 @@ function mousePressEvent(event) {
             return;
     }
 
-    if(INTERNAL_STATE===CONFIG_WALK_JOINTS ||
-       INTERNAL_STATE===CONFIG_STANDING ||
-       INTERNAL_STATE===CONFIG_FLYING) {
+    if( INTERNAL_STATE===CONFIG_WALK_JOINTS ||
+	    INTERNAL_STATE===CONFIG_STANDING ||
+	    INTERNAL_STATE===CONFIG_FLYING ||
+	    INTERNAL_STATE===CONFIG_FLYING_UP ||
+	    INTERNAL_STATE===CONFIG_FLYING_DOWN  ||
+	    INTERNAL_STATE===CONFIG_SIDESTEP_LEFT ||
+	    INTERNAL_STATE===CONFIG_SIDESTEP_RIGHT ) {
 
-        // check for new joint selection and update display accordingly
+		// check for new joint selection and update display accordingly
         var clickX = event.x - backgroundX - 75;
         var clickY = event.y - backgroundY - 92;
 
@@ -2827,9 +3992,13 @@ function mouseMoveEvent(event) {
     // only need deal with slider changes
     if(powerOn) {
 
-        if(INTERNAL_STATE===CONFIG_WALK_JOINTS ||
-           INTERNAL_STATE===CONFIG_STANDING ||
-           INTERNAL_STATE===CONFIG_FLYING) {
+        if( INTERNAL_STATE===CONFIG_WALK_JOINTS ||
+            INTERNAL_STATE===CONFIG_STANDING ||
+            INTERNAL_STATE===CONFIG_FLYING ||
+            INTERNAL_STATE===CONFIG_FLYING_UP ||
+            INTERNAL_STATE===CONFIG_FLYING_DOWN ||
+            INTERNAL_STATE===CONFIG_SIDESTEP_LEFT ||
+            INTERNAL_STATE===CONFIG_SIDESTEP_RIGHT ) {
 
             var thumbClickOffsetX = event.x - minSliderX;
             var thumbPositionNormalised = thumbClickOffsetX / sliderRangeX;
@@ -2895,7 +4064,7 @@ function mouseMoveEvent(event) {
             }
             else if(movingSliderTwo) {  // take flight speed
                 Overlays.editOverlay(sliderTwo, { x: sliderX + minSliderX} );
-                currentAnimation.settings.takeFlightVelocity = thumbPositionNormalised * 300;
+                //currentAnimation.settings.takeFlightVelocity = thumbPositionNormalised * 300;
             }
             else if(movingSliderThree) { // hips sway
                 Overlays.editOverlay(sliderThree, { x: sliderX + minSliderX} );
@@ -2906,16 +4075,16 @@ function mouseMoveEvent(event) {
                 currentAnimation.joints[0].bob = thumbPositionNormalised * sliderRanges.joints[0].bobRange;
             }
             else if(movingSliderFive) { // hips thrust
-                Overlays.editOverlay(sliderFive, { x: sliderX + minSliderX} );
+				Overlays.editOverlay(sliderFive, { x: sliderX + minSliderX} );
                 currentAnimation.joints[0].thrust = thumbPositionNormalised * sliderRanges.joints[0].thrustRange;
             }
             else if(movingSliderSix) { // legs separation
                 Overlays.editOverlay(sliderSix, { x: sliderX + minSliderX} );
-                currentAnimation.adjusters.legsSeparation.strength = (thumbPositionNormalised-0.5)/2;
+                currentAnimation.joints[1].rollOffset = (thumbPositionNormalised-0.5) * 2 * sliderRanges.joints[1].rollOffsetRange;
             }
             else if(movingSliderSeven) { // stride
                 Overlays.editOverlay(sliderSeven, { x: sliderX + minSliderX} );
-                currentAnimation.adjusters.stride.strength = thumbPositionNormalised;
+                currentAnimation.joints[1].pitch = thumbPositionNormalised * sliderRanges.joints[1].pitchRange;
             }
             else if(movingSliderEight) { // arms swing = upper arms yaw
                 Overlays.editOverlay(sliderEight, { x: sliderX + minSliderX} );
@@ -2962,11 +4131,16 @@ function mouseReleaseEvent(event) {
         else if(movingSliderEight) movingSliderEight = false;
         else if(movingSliderNine) movingSliderNine = false;
         else {
+
             switch(clickedOverlay) {
 
                 case configWalkButtonSelected:
                 case configStandButtonSelected:
+                case configSideStepLeftButtonSelected:
+                case configSideStepRightButtonSelected:
                 case configFlyingButtonSelected:
+                case configFlyingUpButtonSelected:
+                case configFlyingDownButtonSelected:
                 case configWalkStylesButtonSelected:
                 case configWalkTweaksButtonSelected:
                 case configWalkJointsButtonSelected:
@@ -3008,8 +4182,24 @@ function mouseReleaseEvent(event) {
                     setInternalState(CONFIG_STANDING);
                     break;
 
+                case configSideStepLeftButton:
+                    setInternalState(CONFIG_SIDESTEP_LEFT);
+                    break;
+
+                case configSideStepRightButton:
+                    setInternalState(CONFIG_SIDESTEP_RIGHT);
+                    break;
+
                 case configFlyingButton:
                     setInternalState(CONFIG_FLYING);
+                    break;
+
+                case configFlyingUpButton:
+                    setInternalState(CONFIG_FLYING_UP);
+                    break;
+
+                case configFlyingDownButton:
+                    setInternalState(CONFIG_FLYING_DOWN);
                     break;
             }
         }
@@ -3048,90 +4238,72 @@ Script.scriptEnding.connect(function() {
     // remove the walk wheel overlays
     Overlays.deleteOverlay(walkWheelYLine);
     Overlays.deleteOverlay(walkWheelZLine);
-    Overlays.deleteOverlay(debugText);
+    Overlays.deleteOverlay(walkWheelStats);
+
+    // remove the debug stats overlays
+    Overlays.deleteOverlay(debugStats);
+    Overlays.deleteOverlay(debugStatsPeriodic);
 });
 
 var sideStep = 0.002; // i.e. 2mm increments whilst sidestepping - JS movement keys don't work well :-(
 function keyPressEvent(event) {
 
-    if (event.text == "q") {
-        // export currentAnimation as json string when q key is pressed.
-        // reformat result at http://www.freeformatter.com/json-formatter.html
+	if (event.text == "q") {
+		// export currentAnimation as json string when q key is pressed.
+		// reformat result at http://www.freeformatter.com/json-formatter.html
         print('\n');
         print('walk.js dumping animation: '+currentAnimation.name+'\n');
         print('\n');
         print(JSON.stringify(currentAnimation), null, '\t');
     }
-    else if (event.text == ",") {
-        // here we will sidestep as long as we're not under any other motion
-        if(INTERNAL_STATE===STANDING ||
-           INTERNAL_STATE===SIDE_STEPPING) {
-            translateHips( { x:-sideStep, y:0, z:0 });
-            currentAnimation = selectedSideStepLeft;
-            principleDirection = DIRECTION_LEFT;
-            if(INTERNAL_STATE!==SIDE_STEPPING)
-                setInternalState(SIDE_STEPPING);
-        }
-    }
-    else if (event.text == ".") {
-        // here we will sidestep as long as we're not under any other motion
-        if(INTERNAL_STATE===STANDING ||
-           INTERNAL_STATE===SIDE_STEPPING) {
-            translateHips( { x:sideStep, y:0, z:0 });
-            currentAnimation = selectedSideStepRight;
-            principleDirection = DIRECTION_RIGHT;
-            if(INTERNAL_STATE!==SIDE_STEPPING)
-                setInternalState(SIDE_STEPPING);
-        }
+	// advanced editing
+    else if (event.text == "r") {
+		// zero out everything
+        //for(var i= 0 ; i < currentAnimation.joints.length ; i++) {
+		//	currentAnimation.joints[i].pitch = 0;
+		//	currentAnimation.joints[i].yaw = 0;
+		//	currentAnimation.joints[i].roll = 0;
+		//	currentAnimation.joints[i].pitchPhase = 0;
+		//	currentAnimation.joints[i].yawPhase = 0;
+		//	currentAnimation.joints[i].rollPhase = 0;
+		//	currentAnimation.joints[i].pitchOffset = 0;
+		//	currentAnimation.joints[i].yawOffset = 0;
+		//	currentAnimation.joints[i].rollOffset = 0;
+		//	if(i===0) {
+		//		currentAnimation.joints[i].thrust = 0;
+		//		currentAnimation.joints[i].sway = 0;
+		//		currentAnimation.joints[i].bob = 0;
+		//	}
+			print('...');
+        //}
     }
     else if (event.text == "t") {
         statsOn = !statsOn;
-        if(statsOn) {
-            print('wheel stats on (t to turn off again)');
-            Overlays.editOverlay(debugText, {visible: true});
-            Overlays.editOverlay(walkWheelYLine, {visible: true});
-            Overlays.editOverlay(walkWheelZLine, {visible: true});
-        } else {
-            print('wheel stats off (t to turn on again)');
-            Overlays.editOverlay(debugText, {visible: false});
-            Overlays.editOverlay(walkWheelYLine, {visible: false});
-            Overlays.editOverlay(walkWheelZLine, {visible: false});
-        }
+		Overlays.editOverlay(debugStats,         {visible: statsOn});
+		Overlays.editOverlay(debugStatsPeriodic, {visible: statsOn});
+		Overlays.editOverlay(walkWheelStats,     {visible: statsOn});
+		Overlays.editOverlay(walkWheelYLine,     {visible: statsOn});
+		Overlays.editOverlay(walkWheelZLine,     {visible: statsOn});
     }
     // this is a dev tool for tweaking individual values. edit and use freely
     else if (event.text == "[") {
-        var jointNum = 0;
-        var anim = femaleSideStep;
-        var sway = anim.joints[jointNum].sway;
-        sway-=0.01;
-        anim.joints[jointNum].sway = sway;
-        print(anim.name+' sway is now '+anim.joints[jointNum].sway+' for the '+anim.joints[jointNum].name+' joint');
+		var jointNum = 0;
+		var anim = currentAnimation;
+        var frequency = currentAnimation.settings.baseFrequency;
+        frequency-=5;
+        currentAnimation.settings.baseFrequency = frequency;
+        //print(anim.name+' thrustPhase is now '+anim.joints[jointNum].thrustPhase+' for the '+anim.joints[jointNum].name+' joint');
     }
     else if (event.text == "]") {
-        var jointNum = 0;
-        var anim = femaleSideStep;
-        var sway = anim.joints[jointNum].sway;
-        sway+=0.01;
-        anim.joints[jointNum].sway = sway;
-        print(anim.name+' sway is now '+anim.joints[jointNum].sway+' for the '+anim.joints[jointNum].name+' joint');
-    }
-}
-
-function keyReleaseEvent(event) {
-
-    if (event.text == "," ||
-        event.text == ".") {
-        // if we're sidestepping, stop
-        if(INTERNAL_STATE===STANDING ||
-           INTERNAL_STATE===SIDE_STEPPING) { // cannot use - gets called constantly when key is held down :-(
-            //selectedAnimation = selectedStand;
-            //principleDirection = DIRECTION_FORWARDS;
-            //setInternalState(STANDING);
-        }
+		var jointNum = 0;
+		var anim = currentAnimation;
+        var frequency = currentAnimation.settings.baseFrequency;
+        frequency+=5;
+        currentAnimation.settings.baseFrequency = frequency;
+        //print(anim.name+' bobPhase is now '+anim.joints[jointNum].thrustPhase+' for the '+anim.joints[jointNum].name+' joint');
     }
 }
 Controller.keyPressEvent.connect(keyPressEvent);
-Controller.keyPressEvent.connect(keyReleaseEvent);
 
 
 
@@ -3149,17 +4321,14 @@ print(jointMappings + "\n# walk.js avatar joint list end");
 
 // clear the joint data so can calculate hips to feet distance
 for(var i = 0 ; i < 5 ; i++) {
-    //MyAvatar.setJointData(i, Quat.fromPitchYawRollDegrees(0,0,0));
-    MyAvatar.clearJointData(jointList[i]);
+    MyAvatar.setJointData(i, Quat.fromPitchYawRollDegrees(0,0,0));
+    //MyAvatar.clearJointData(jointList[i]);
 }
-// for calibration
+// used to position the visual representation of the walkwheel only
 var hipsToFeetDistance = MyAvatar.getJointPosition("Hips").y - MyAvatar.getJointPosition("RightFoot").y;
 print('\nwalk.js: Hips to feet: '+hipsToFeetDistance);
 
 
-////////////////////////////////////////////////////////////
-// begin by setting the INTERNALE_STATE to state STANDING //
-////////////////////////////////////////////////////////////
-
-//curlFingers();
+// This script is designed around the Finite State Machine (FSM)
+// model, so to start things up we just select the STANDING state.
 setInternalState(STANDING);

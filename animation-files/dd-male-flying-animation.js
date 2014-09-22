@@ -17,23 +17,10 @@ MaleFlying = function() {
 {
    "name":"MaleFlying",
    "settings":{
-      "baseFrequency":75.89433962264151,
+      "baseFrequency":75,
       "flyingHipsPitch":60,
       "takeFlightVelocity":40,
       "maxBankingAngle":40
-   },
-   "adjusters":{
-      "legsSeparation":{
-         "strength":-0.03679245283018867,
-         "separationAngle":50
-      },
-      "stride":{
-         "strength":0,
-         "upperLegsPitch":30,
-         "lowerLegsPitch":15,
-         "upperLegsPitchOffset":0.2,
-         "lowerLegsPitchOffset":1.5
-      }
    },
    "joints":[
       {
@@ -67,7 +54,7 @@ MaleFlying = function() {
          "rollPhase":0,
          "pitchOffset":0.2264150943396226,
          "yawOffset":-0.5283018867924527,
-         "rollOffset":4.603773584905659
+         "rollOffset":-3.849056603773584
       },
       {
          "name":"lowerLegs",
@@ -79,7 +66,7 @@ MaleFlying = function() {
          "rollPhase":0,
          "pitchOffset":0,
          "yawOffset":0,
-         "rollOffset":0
+         "rollOffset":3.849056603773584
       },
       {
          "name":"feet",
@@ -89,7 +76,7 @@ MaleFlying = function() {
          "pitchPhase":0,
          "yawPhase":0,
          "rollPhase":0,
-         "pitchOffset":-28.754716981132077,
+         "pitchOffset":-31.471698113207548,
          "yawOffset":0,
          "rollOffset":0
       },
@@ -162,8 +149,8 @@ MaleFlying = function() {
          "yawPhase":0,
          "rollPhase":0,
          "pitchOffset":60.79245283018869,
-         "yawOffset":9.169811320754715,
-         "rollOffset":0
+         "yawOffset":14.264150943396224,
+         "rollOffset":-8.830188679245282
       },
       {
          "name":"lowerArms",
@@ -173,9 +160,9 @@ MaleFlying = function() {
          "pitchPhase":0,
          "yawPhase":0,
          "rollPhase":0,
-         "pitchOffset":0,
-         "yawOffset":0,
-         "rollOffset":0
+         "pitchOffset":8.830188679245282,
+         "yawOffset":7.4716981132075455,
+         "rollOffset":2.0377358490566033
       },
       {
          "name":"hands",
@@ -202,7 +189,6 @@ MaleFlying = function() {
          "rollOffset":0
       }
    ]
-}
-;
+};
     this.loadAnimation = function(){return this.animation;};
 };
