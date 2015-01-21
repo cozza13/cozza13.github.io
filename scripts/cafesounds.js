@@ -9,7 +9,7 @@
 //  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
 //
 
-var soundURL = "https://http://cozza13.github.io/sounds/cafe.wav";
+var soundURL = "https://http://cozza13.github.io/sounds/cafesounds.wav";
 var position = { x: 10392.8, y: 186.221, z: 2137.83};
 
 var audioOptions = {
