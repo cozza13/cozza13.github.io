@@ -9,7 +9,7 @@
 //  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
 //
 
-var soundURL = "https://hifi-public.s3.amazonaws.com/ryan/demo/0619_Fireplace__Tree_B.wav";
+var soundURL = "https://s3.amazonaws.com/hifi-public/cozza13/cafesounds.wav";
 var position = { x: 10392.8, y: 186.221, z: 2137.83};
 
 var audioOptions = {
