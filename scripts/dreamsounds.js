@@ -9,7 +9,7 @@
 //  See the accompanying file LICENSE or http://www.apache.org/licenses/LICENSE-2.0.html
 //
 
-var soundURL = "https://s3.amazonaws.com/hifi-public/cozza13/topgun.wav";
+var soundURL = "https://s3.amazonaws.com/hifi-public/cozza13/topgun2.wav";
 var position = { x: 5968.83, y: 197.227, z: 5690.06};
 
 var audioOptions = {
