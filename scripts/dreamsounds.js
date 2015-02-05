@@ -10,7 +10,7 @@
 //
 
 var soundURL = "https://s3.amazonaws.com/hifi-public/cozza13/topgun.wav";
-var position = { x: 10392.8, y: 186.221, z: 2137.83};
+var position = { x: 5968.83, y: 197.227, z: 5690.06};
 
 var audioOptions = {
     position: position,
