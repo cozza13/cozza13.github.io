@@ -1,0 +1,165 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <style>
+
+
+.bg {
+    /* The image used */
+    background-image: url("img/person.png");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+</style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+        <script src="//www.botrecruiter.com/resources/js/botconfig.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <style>
+            body, html{
+                  height: 100%;
+                margin: 0;
+                min-height: 100%;
+                font-family: Arial, Helvetica, sans-serif !important;
+            }
+            .button {
+                position: absolute;
+               
+            
+            }
+            .button a {
+                text-decoration: none;
+                color: #FFFFFF;
+                font-size: 135%;
+                position: relative;
+            }
+            .close-button{
+                display: none;
+                position: fixed;
+                font-size: 30px;
+                cursor: pointer;
+            }
+            #supportchatwidget{
+                display: none;
+            }
+            #widget-close .right{
+                display: none;
+            }
+            #widget, #widget-close{
+                transition: none !important;
+                animation: unset !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="button"><a href="#"><img src="img/call_lists.png" alt="HTML tutorial" style="width:130px;height:100px;"></a></div>
+        
+        <div class="close-button">&#10006;</div>
+    </body>
+    <script>
+
+    //tracking mouse position
+    var cursorX;
+    var cursorY;
+    document.onmousemove = function(e){
+        cursorX = e.pageX;
+        cursorY = e.pageY;
+    }
+    
+    $(document).ready(function() {
+        $('.button').draggable();
+
+        //if draggable button clicked
+        $('.button').click(function(){
+            //looking for chat box
+            if ($('#widget-close').length > 0){                
+
+                //setting widget position
+                $('.close-button').css('left', cursorX + $('#widget').width() + 5).css('top', cursorY - 30);
+                $('#widget-close').css('left', cursorX).css('top', cursorY);
+                $('#widget').css('left', cursorX).css('top', cursorY + 46);
+                $('#widget-open').css('left', cursorX).css('top', cursorY + 446);
+
+                //showing box container
+                $('#supportchatwidget').show();
+                $('.close-button').show();                
+            }
+        });
+
+        //if close icon clicked
+        $('.close-button').click(function(){
+            $('#supportchatwidget').hide();
+            $('.close-button').hide();
+        });
+    });
+    
+    //chat initialization
+    window.tcAsyncInit = function(e) {
+        function o() {
+        return t() + Math.floor(2e3 * Math.random()) + "-" + Math.floor(2e3 * Math.random()) + "-" + Math.floor(2e3 * Math.random())
+        }
+
+        function t() {
+        for (var e = "", o = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", t = 0; 1 > t; t++) e += o.charAt(Math.floor(Math.random() * o.length));
+        return e
+        }
+
+        function n(e, o, t) {
+        var n = "";
+        if (t) {
+            var i = new Date;
+            i.setTime(i.getTime() + 24 * t * 60 * 60 * 1e3), n = "; expires=" + i.toUTCString()
+        }
+        document.cookie = e + "=" + o + n + "; path=/"
+        }
+
+        function i(e) {
+        for (var o = e + "=", t = document.cookie.split(";"), n = 0; n < t.length; n++) {
+            for (var i = t[n];
+            " " == i.charAt(0);) i = i.substring(1, i.length);
+            if (0 == i.indexOf(o)) return i.substring(o.length, i.length)
+        }
+        return null
+        }
+        var r = "moduleid:8725",
+        a = i("uid");
+        a && a.length && -1 != a.indexOf("-" + r) ? console.log("found userid") : (console.log("CREATING USERID"), a = o() + "-" + r, n("uid", a, 7));
+        var l = {
+            roomid: a,
+            sender: {
+            id: a,
+            name: "Me"
+            },
+            recipient: {
+            id: a,
+            name: "Bot"
+            },
+            message: {
+            text: "Hello",
+            type: "text"
+            }
+        },
+        d = BOTCONFIG.BOTWIDGETSETTING;
+        d.userObj = l, e.init(d), /Android|webOS|iPhone|iPad|iPod|BlackBerry|BB|PlayBook|IEMobile|Windows Phone|Kindle|Silk|Opera Mini/i.test(navigator.userAgent) ? console.log("Its a mobile device. Do not open the widget!!!") : setTimeout(function() {
+        e.toggleWidget(!0)
+        }, 3e3)
+        tc.funcs.toggleWidget(true);
+    };
+
+    </script>
+    <script id="gs-sdk" src="new_widgetsdk.js" key="22435fec-a817-4150-b510-f349052384ac" callback="tcAsyncInit"></script>
+    <div class="bg"></div>
+</html>
