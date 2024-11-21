@@ -33,6 +33,17 @@
         .journey-card {
             border-left: 4px solid var(--coke-red);
         }
+           /* Hide Chatbase branding */
+        [powered-by="chatbase"] {
+            display: none !important;
+        }
+        
+        /* Alternative selectors in case the above doesn't work */
+        .chatbase-powered-by,
+        .powered-by-chatbase,
+        [class*="powered-by"] {
+            display: none !important;
+        }
     </style>
   <script>
 window.embeddedChatbotConfig = {
