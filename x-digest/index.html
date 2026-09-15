@@ -1,331 +1,156 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>X morning digest — Mon Sep 14, 2026</title>
-<style>
-
-  :root {
-    color-scheme: light dark;
-    --bg: #0f1115;
-    --card: #1a1d24;
-    --text: #f2f3f5;
-    --muted: #9aa3b2;
-    --accent: #7aa2ff;
-    --cancer: #ff7a8a;
-    --ai: #7ad4ff;
-    --keto: #8dffb0;
-    --general: #ffd27a;
-    --border: #2a303c;
-    --need: #c9d1dc;
-  }
-  @media (prefers-color-scheme: light) {
-    :root {
-      --bg: #f6f7f9;
-      --card: #ffffff;
-      --text: #141820;
-      --muted: #5c6678;
-      --accent: #2f5bdb;
-      --cancer: #c43b52;
-      --ai: #1a7aad;
-      --keto: #1f8a4c;
-      --general: #9a6b12;
-      --border: #e3e7ef;
-      --need: #3d4656;
-    }
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.45;
-    -webkit-text-size-adjust: 100%;
-    padding: 16px;
-    padding-bottom: calc(28px + env(safe-area-inset-bottom));
-  }
-  .wrap { max-width: 720px; margin: 0 auto; }
-  header {
-    margin-bottom: 18px;
-    padding: 18px 16px;
-    border-radius: 16px;
-    background: linear-gradient(160deg, #24304a 0%, #1a1d24 70%);
-    border: 1px solid var(--border);
-  }
-  @media (prefers-color-scheme: light) {
-    header { background: linear-gradient(160deg, #e8eefc 0%, #ffffff 70%); }
-  }
-  h1 {
-    font-size: 1.45rem;
-    margin: 0 0 8px;
-    letter-spacing: -0.02em;
-  }
-  .meta { color: var(--muted); font-size: 0.92rem; margin: 0; }
-  .pulse {
-    margin-top: 12px;
-    font-size: 0.95rem;
-    color: var(--need);
-  }
-  .disclaimer {
-    margin-top: 10px;
-    font-size: 0.82rem;
-    color: var(--muted);
-  }
-  nav.toc {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0 0 18px;
-  }
-  nav.toc a {
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--card);
-    color: var(--text);
-  }
-  section { margin-bottom: 22px; }
-  .section-title {
-    font-size: 1.15rem;
-    margin: 0 0 12px;
-    padding-left: 10px;
-    border-left: 4px solid var(--accent);
-  }
-  #cancer .section-title { border-color: var(--cancer); }
-  #ai .section-title { border-color: var(--ai); }
-  #keto .section-title { border-color: var(--keto); }
-  #general .section-title { border-color: var(--general); }
-  article.card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 14px 12px;
-    margin-bottom: 12px;
-  }
-  article.card h3 {
-    font-size: 1.02rem;
-    margin: 0 0 8px;
-    letter-spacing: -0.01em;
-  }
-  .scores {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin: 0 0 10px;
-  }
-  .chip {
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: rgba(122,162,255,0.15);
-    color: var(--accent);
-  }
-  ul {
-    margin: 0 0 10px;
-    padding-left: 1.15rem;
-  }
-  li { margin: 0 0 6px; font-size: 0.95rem; }
-  .need {
-    font-size: 0.9rem;
-    color: var(--need);
-    background: rgba(122,162,255,0.08);
-    border-radius: 10px;
-    padding: 10px 12px;
-    margin: 0;
-  }
-  .need strong { color: var(--text); }
-  a { color: var(--accent); word-break: break-word; }
-  .empty {
-    color: var(--muted);
-    font-size: 0.95rem;
-    padding: 12px 14px;
-    border: 1px dashed var(--border);
-    border-radius: 14px;
-    background: var(--card);
-  }
-  .also {
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-  .also li { margin-bottom: 8px; }
-  footer {
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: 0.8rem;
-    text-align: center;
-  }
-
-</style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <h1>X morning digest — Mon Sep 14, 2026</h1>
-      <p class="meta">Mobile newsletter · research / personal interest only</p>
-      <p class="pulse"><strong>Pulse:</strong> ~271 unique in-window posts from ~201 handles after Following (93 / ~66 handles, 45 scroll batches, oldest ~23h) + lists (Brain 10→7 unique after dedupe, Keto 2, AI Dev Tools 94→93, AI Influencers 70→69, Ai people 7) as @Tipodean. Priority quiet this window: OncoAlert, NeuroOnc, OpenRouter, AnthropicAI, cursor_ai, DietDoctor/KetoMojo. Ranked with Brain / Keto / AI lists preferred.</p>
-      <p class="disclaimer">Research/personal interest only — not clinical advice.</p>
-    </header>
-    <nav class="toc">
-      <a href="#cancer">Cancer</a>
-      <a href="#ai">AI</a>
-      <a href="#keto">Keto</a>
-      <a href="#general">General</a>
-      <a href="https://cozza13.github.io/x-digest/archive.html">Archive</a>
-    </nav>
-
-    <section id="cancer">
-      <h2 class="section-title">1. Cancer updates</h2>
-<h3 style="font-size:1rem;color:var(--cancer);margin:0 0 10px">Glioblastoma / neuro-oncology</h3>
-<p class="empty">No primary GBM / IDH / MGMT / EGFR-neuro-oncology science posts cleared the window. Closest adjacent: WCLC26 thoracic CNS-adjacent SCLC (TAISHAN-302) and EGFR-pathway ADC work in breast.</p>
-      <article class="card">
-        <h3>HARMONi-2: ivonescimab OS benefit confirmed at WCLC26</h3>
-        <div class="scores"><span class="chip">For you 9</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@HHorinouchi (Following / #WCLC26): Phase III ivonescimab vs pembrolizumab in 1L PD-L1+ (TPS ≥1%), EGFR/ALK WT NSCLC.</li><li>Posted OS HR 0.73 (95% CI 0.57–0.95); mOS ~30.8 mo vs pembrolizumab arm — continues yesterday’s PFS/OS thread.</li><li>Chemo-free PD-1×VEGF bispecific head-to-head remains the thoracic headline of the meeting.</li><li>Spanish #WCLC26 chatter map via @OncobitesTv × @OncoAlert also led with topotecan/osimertinib/pembrolizumab mentions.</li><li>Open: @HHorinouchi: <a href="https://x.com/HHorinouchi/status/2099490842985844946">https://x.com/HHorinouchi/status/2099490842985844946</a> — HARMONi-2 OS</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> OS confirmation after yesterday’s PFS/OS summary — still watch PD-L1 cutoffs, curves, and safety before treating as practice-changing. Personal-interest framing only.</p>
-      </article>
-
-      <article class="card">
-        <h3>TAISHAN-302: B7-H3 ADC tambotatug beats topotecan in relapsed SCLC</h3>
-        <div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div>
-        <ul>
-<li>@weoncologists quoting @OncoAlert (Following / #WCLC26): Phase III n=451 relapsed SCLC after platinum.</li><li>Tambotatug pelitecan (B7-H3–directed ADC) significantly improved outcomes vs topotecan; NEJM companion posted.</li><li>B7-H3 targeting framed as a new direction in relapsed SCLC.</li><li>Open: @weoncologists: <a href="https://x.com/weoncologists/status/2099456727091482676">https://x.com/weoncologists/status/2099456727091482676</a> — TAISHAN-302</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Major relapsed-SCLC efficacy signal at WCLC26 — file next to other ADC/IO thoracic datasets; check CNS mets subgroup if published.</p>
-      </article>
-
-      <article class="card">
-        <h3>Iza-bren (EGFR–HER3 bispecific ADC) Phase 1b in pretreated breast cancer</h3>
-        <div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@Annals_Oncology (Following): first-in-class EGFR–HER3 bispecific ADC iza-bren (BL-B01D1) Phase 1b.</li><li>Safety + antitumor activity in pretreated locally advanced/metastatic breast cancer.</li><li>DOI posted: 10.1016/j.annonc.2026.09.002.</li><li>Open: @Annals_Oncology: <a href="https://x.com/Annals_Oncology/status/2099442428914639201">https://x.com/Annals_Oncology/status/2099442428914639201</a> — iza-bren Phase 1b</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> EGFR-pathway ADC signal outside lung — useful if you track dual-EGFR/HER3 targeting more than breast SOC itself.</p>
-      </article>
-
-      <p class="also">Also noted: @theNCI Childhood Cancer Data Initiative reminder; fenbendazole anecdote posts from @DrDavidivw skipped as low-evidence engagement bait.</p>
-    </section>
-    <section id="ai">
-      <h2 class="section-title">2. AI updates</h2>
-      <article class="card">
-        <h3>Intern-S2-397B multimodal science model + day-0 vLLM support</h3>
-        <div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div>
-        <ul>
-<li>@intern_lm (AI Developer Tools): Intern-S2-397B aimed at long-horizon scientific research and scientific agents.</li><li>@vllm_project: day-0 support in vLLM for multimodal / reasoning / coding / scientific-agent workloads.</li><li>Positions as open-weight science-agent stack, not a general chat demo.</li><li>Open: @intern_lm: <a href="https://x.com/intern_lm/status/2099425184587370976">https://x.com/intern_lm/status/2099425184587370976</a> — Intern-S2 announce · @vllm_project: <a href="https://x.com/vllm_project/status/2099442543956263022">https://x.com/vllm_project/status/2099442543956263022</a> — vLLM day-0</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Highest-signal model release in the AI lists this morning — science-agent framing + immediate serving path via vLLM.</p>
-      </article>
-
-      <article class="card">
-        <h3>Pharma-trained protein AI beats public AlphaFold-like models</h3>
-        <div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div>
-        <ul>
-<li>@Ronalfa / @BioAI_NeuralNet (Following): Nature note — model trained on &gt;20k proprietary pharma protein structures.</li><li>Outperforms AlphaFold-like systems trained only on public PDB-style data.</li><li>Multiple pharma shops building molecular-design models with academic collabs called out.</li><li>Open: @Ronalfa: <a href="https://x.com/Ronalfa/status/2099485084986335725">https://x.com/Ronalfa/status/2099485084986335725</a> — pharma protein AI</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Data-moat story for drug design AI — proprietary structures as the differentiator vs open PDB training.</p>
-      </article>
-
-      <article class="card">
-        <h3>China rejects U.S. AI “pace the frontier” slowdown framing</h3>
-        <div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@Polymarket (Following): China rejects U.S. tech-leader calls to slow AI, calling warnings “fearmongering.”</li><li>@DeryaTR_ (Following + Brain people): contrasts China “open and inclusive” messaging vs U.S. closed-access control narrative.</li><li>@parmita (Ai people): flags Sama/Dario “pace the frontier” as a prisoners’ dilemma.</li><li>Open: @Polymarket: <a href="https://x.com/Polymarket/status/2099487214354809086">https://x.com/Polymarket/status/2099487214354809086</a> — China rejects slowdown · @DeryaTR_: <a href="https://x.com/DeryaTR_/status/2099491581912903732">https://x.com/DeryaTR_/status/2099491581912903732</a> — open vs closed irony</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Geopolitical counter-move to voluntary frontier slowdowns — open-vs-closed narrative hardening overnight.</p>
-      </article>
-
-      <article class="card">
-        <h3>Fable auto-spawns cheaper subagents for subtasks</h3>
-        <div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@jackfriks (Following): Fable now spawning lower-cost agents for subtasks without being asked.</li><li>Token-saving behavior attributed to @ClaudeDevs / Fable routing.</li><li>Practical agent-harness observation, not a lab paper.</li><li>Open: @jackfriks: <a href="https://x.com/jackfriks/status/2099477013496996085">https://x.com/jackfriks/status/2099477013496996085</a> — Fable subagents</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Matches how you already shift heavy work off the primary model — watch whether auto-routing is reliable or just cheaper.</p>
-      </article>
-
-      <article class="card">
-        <h3>RoupenMD: healthcare needs cheap reliable AI, not one-in-a-million diagnoses</h3>
-        <div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@RoupenMD (Brain people): health systems on single-digit margins vs AI industry token-burn bragging.</li><li>Argues healthcare needs models cheap/reliable enough for routine work, not rare diagnostic miracles.</li><li>Useful counterweight to clinical-agent hype in the same Brain timeline (Mercury demos).</li><li>Open: @RoupenMD: <a href="https://x.com/RoupenMD/status/2099499197145710603">https://x.com/RoupenMD/status/2099499197145710603</a> — margins vs tokens</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Brain-list ranking preference hit — cost/margin realism for clinical AI deployment, not a model release.</p>
-      </article>
-
-      <article class="card">
-        <h3>Mercury 2.5 diffusion LLM live on OpenRouter — clinical-agent speed demo</h3>
-        <div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@MaziyarPanahi (Following + Brain): Mercury 2.5 (~1100 tok/s claimed) via Inception API / OpenRouter / Baseten.</li><li>Clinical-agent demo: ~13s synthetic chart with 3 planted errors; follow-up claims 100+ step task in ~5 min.</li><li>Diffusion-LLM speed pitch more than a new capability frontier.</li><li>Open: @MaziyarPanahi: <a href="https://x.com/MaziyarPanahi/status/2099483313559978063">https://x.com/MaziyarPanahi/status/2099483313559978063</a> — Mercury clinical demo · @MaziyarPanahi: <a href="https://x.com/MaziyarPanahi/status/2099493798099190089">https://x.com/MaziyarPanahi/status/2099493798099190089</a> — 100+ step follow-up</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Speed + OpenRouter availability is the practical takeaway — verify on your own workloads before swapping defaults.</p>
-      </article>
-
-      <article class="card">
-        <h3>Naval amplifies Catalini: liability &amp; verification economics of AGI</h3>
-        <div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@naval (Following): quotes Catalini on verification budgets collapsing when liability → 0.</li><li>Warns deployers flood a “Runaway Risk Zone” with unmonitored agents while socializing catastrophic risk.</li><li>Continues the governance / economics thread beside China’s open-vs-closed messaging.</li><li>Open: @naval: <a href="https://x.com/naval/status/2099475957560087029">https://x.com/naval/status/2099475957560087029</a> — liability economics</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Liability-vs-capability-cap framing with a sharper economics paper — pairs with the China slowdown rejection above.</p>
-      </article>
-
-      <article class="card">
-        <h3>Temporal raises $550M Series E at $12.55B</h3>
-        <div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@temporalio (AI Developer Tools): $550M Series E at $12.55B valuation.</li><li>Durable execution / workflow infra sits under many agent production stacks.</li><li>Capital signal for agent orchestration plumbing, not a model drop.</li><li>Open: @temporalio: <a href="https://x.com/temporalio/status/2099475886844072252">https://x.com/temporalio/status/2099475886844072252</a> — Series E</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Infra money continues to chase agent reliability layers — relevant if you care what production agents actually run on.</p>
-      </article>
-
-      <p class="also">Also noted: CueMap Rust agent memory + MCP for Cursor/Claude (@EveryDevAi); Expo EAS Simulator preview for agent-tested iOS builds; MBABench agent spreadsheet evals (@SnorkelAI); “Last AI Built by Humans” recursive-self-improve paper buzz (@HowToPrompt__); causal-GNN / causal-washing caution (@biogerontology); Google Labs Dreambeans personalized AI (@GoogleAI).</p>
-    </section>
-    <section id="keto">
-      <h2 class="section-title">3. Keto updates</h2>
-      <article class="card">
-        <h3>Norwitz: lion diet / carnivore literature video</h3>
-        <div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@nicknorwitz (Following): new ~20-min video on lion diet experience + carnivore literature/social movement.</li><li>Strict 30-day lion diet (meat only; no dairy/eggs) framed as experiment + lit survey.</li><li>Keto people list otherwise quiet (only low-signal @realjordanrubin posts).</li><li>Open: @nicknorwitz: <a href="https://x.com/nicknorwitz/status/2099469334095462706">https://x.com/nicknorwitz/status/2099469334095462706</a> — lion diet video</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Metabolic-interest content for the carnivore extreme of low-carb — literature survey more than a new RCT. Not clinical advice.</p>
-      </article>
-
-      <p class="also">Also noted: DietDoctor / KetoMojo / Virta / LowCarbRD quiet in Following+lists this window.</p>
-    </section>
-    <section id="general">
-      <h2 class="section-title">4. General news</h2>
-      <article class="card">
-        <h3>Sequence + Dell family office take Baldwin Group private (~$7.7bn)</h3>
-        <div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div>
-        <ul>
-<li>@saranormous (Following): Sequence Holdings + Dell Family Office majority investment to take Baldwin Group private.</li><li>Shareholders to receive $32.50/share cash (~88% premium in the posted IR note).</li><li>Framed as private-capital ops/AI transformation in insurance brokerage.</li><li>Open: @saranormous: <a href="https://x.com/saranormous/status/2099479650829566169">https://x.com/saranormous/status/2099479650829566169</a> — Baldwin go-private</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Big private-capital “AI transformation” deal in insurance brokerage — distribution/ops AI bet more than a model release.</p>
-      </article>
-
-      <article class="card">
-        <h3>Oracle more layoffs; markets price uptick in 2026 tech cuts</h3>
-        <div class="scores"><span class="chip">For you 6</span><span class="chip">Unique 6</span></div>
-        <ul>
-<li>@Polymarket (Following): Oracle starts another layoff round after ~21k workforce reduction last fiscal year.</li><li>Polymarket ~81% chance tech layoffs are up in 2026.</li><li>Macro/labor backdrop beside AI capital raises (Temporal).</li><li>Open: @Polymarket: <a href="https://x.com/Polymarket/status/2099490989358342615">https://x.com/Polymarket/status/2099490989358342615</a> — Oracle layoffs</li>
-        </ul>
-        <p class="need"><strong>Need to know:</strong> Labor-market counterweight to AI boom headlines — useful context, not a model story.</p>
-      </article>
-
-    </section>
-
-    <footer>
-      <p>XWatcher · <a href="https://cozza13.github.io/x-digest/">latest</a> · <a href="https://cozza13.github.io/x-digest/archive.html">archive</a></p>
-    </footer>
-  </div>
-</body>
-</html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>X morning digest — Tue Sep 15, 2026</title><style>
+:root {
+color-scheme: light dark;
+--bg: #0f1115;
+--card: #1a1d24;
+--text: #f2f3f5;
+--muted: #9aa3b2;
+--accent: #7aa2ff;
+--cancer: #ff7a8a;
+--ai: #7ad4ff;
+--keto: #8dffb0;
+--general: #ffd27a;
+--border: #2a303c;
+--need: #c9d1dc;
+}
+@media (prefers-color-scheme: light) {
+:root {
+--bg: #f6f7f9;
+--card: #ffffff;
+--text: #141820;
+--muted: #5c6678;
+--accent: #2f5bdb;
+--cancer: #c43b52;
+--ai: #1a7aad;
+--keto: #1f8a4c;
+--general: #9a6b12;
+--border: #e3e7ef;
+--need: #3d4656;
+}
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background: var(--bg);
+color: var(--text);
+line-height: 1.45;
+-webkit-text-size-adjust: 100%;
+padding: 16px;
+padding-bottom: calc(28px + env(safe-area-inset-bottom));
+}
+.wrap { max-width: 720px; margin: 0 auto; }
+header {
+margin-bottom: 18px;
+padding: 18px 16px;
+border-radius: 16px;
+background: linear-gradient(160deg, #24304a 0%, #1a1d24 70%);
+border: 1px solid var(--border);
+}
+@media (prefers-color-scheme: light) {
+header { background: linear-gradient(160deg, #e8eefc 0%, #ffffff 70%); }
+}
+h1 {
+font-size: 1.45rem;
+margin: 0 0 8px;
+letter-spacing: -0.02em;
+}
+.meta { color: var(--muted); font-size: 0.92rem; margin: 0; }
+.pulse {
+margin-top: 12px;
+font-size: 0.95rem;
+color: var(--need);
+}
+.disclaimer {
+margin-top: 10px;
+font-size: 0.82rem;
+color: var(--muted);
+}
+nav.toc {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+margin: 0 0 18px;
+}
+nav.toc a {
+text-decoration: none;
+font-size: 0.85rem;
+font-weight: 600;
+padding: 8px 12px;
+border-radius: 999px;
+border: 1px solid var(--border);
+background: var(--card);
+color: var(--text);
+}
+section { margin-bottom: 22px; }
+.section-title {
+font-size: 1.15rem;
+margin: 0 0 12px;
+padding-left: 10px;
+border-left: 4px solid var(--accent);
+}
+#cancer .section-title { border-color: var(--cancer); }
+#ai .section-title { border-color: var(--ai); }
+#keto .section-title { border-color: var(--keto); }
+#general .section-title { border-color: var(--general); }
+article.card {
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 14px;
+padding: 14px 14px 12px;
+margin-bottom: 12px;
+}
+article.card h3 {
+font-size: 1.02rem;
+margin: 0 0 8px;
+letter-spacing: -0.01em;
+}
+.scores {
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+margin: 0 0 10px;
+}
+.chip {
+font-size: 0.75rem;
+font-weight: 700;
+padding: 4px 8px;
+border-radius: 999px;
+background: rgba(122,162,255,0.15);
+color: var(--accent);
+}
+ul {
+margin: 0 0 10px;
+padding-left: 1.15rem;
+}
+li { margin: 0 0 6px; font-size: 0.95rem; }
+.need {
+font-size: 0.9rem;
+color: var(--need);
+background: rgba(122,162,255,0.08);
+border-radius: 10px;
+padding: 10px 12px;
+margin: 0;
+}
+.need strong { color: var(--text); }
+a { color: var(--accent); word-break: break-word; }
+.empty {
+color: var(--muted);
+font-size: 0.95rem;
+padding: 12px 14px;
+border: 1px dashed var(--border);
+border-radius: 14px;
+background: var(--card);
+}
+.also {
+font-size: 0.9rem;
+color: var(--muted);
+}
+.also li { margin-bottom: 8px; }
+footer {
+margin-top: 8px;
+color: var(--muted);
+font-size: 0.8rem;
+text-align: center;
+}
+</style></head><body><div class="wrap"><header><h1>X morning digest — Tue Sep 15, 2026</h1><p class="meta">Mobile newsletter · research / personal interest only</p><p class="pulse"><strong>Pulse:</strong> ~170 unique in-window posts after Following (27 keepers / ~21 handles, 47 scroll batches, ~155 seen, oldest ~23h) + lists (Brain 59, Keto 6, AI Dev Tools 43, AI Influencers 31, Ai people 1) + priority spot-checks (OncoAlert/DanaFarber/theNCI/OpenRouter/pashtoonkasi/LowCarbRD; AnthropicAI/cursor_ai/DietDoctor/KetoMojo/NeuroOnc quiet this window) as @Tipodean. Ranked with Brain / Keto / AI lists preferred.</p><p class="disclaimer">Research/personal interest only — not clinical advice</p></header><nav class="toc"><a href="#cancer">Cancer</a><a href="#ai">AI</a><a href="#keto">Keto</a><a href="#general">General</a><a href="https://cozza13.github.io/x-digest/archive.html">Archive</a></nav><section id="cancer"><h2 class="section-title">1. Cancer updates</h2><h3 style="font-size:1rem;color:var(--cancer);margin:0 0 10px">Glioblastoma / neuro-oncology</h3><p class="empty">No primary GBM / IDH / MGMT / EGFR-neuro-oncology science posts cleared For-you ≥6. Skipped low-evidence GBM anecdote listicles. Closest adjacent: WCLC26 thoracic CNS-adjacent SCLC (ARTEMIS-008 discussant) and continued EGFR-pathway ADC chatter.</p><article class="card"><h3>HARMONi: updated OS for ivonescimab-chemo after EGFR-TKI resistance</h3><div class="scores"><span class="chip">For you 9</span><span class="chip">Unique 8</span></div><ul><li>@HHorinouchi (Following + Brain / #WCLC26): HARMONi oral — ivonescimab-chemo vs placebo-chemo in EGFR-TKI-resistant, EGFR-mutated NSCLC.</li><li>Western cohort mOS 17.5 vs 14.0 mo (HR 0.76); ITT mOS 16.8 vs 14.0 mo (HR 0.76); no new safety signal called out in the mini-oral card.</li><li>Continues the WCLC26 ivonescimab thread from yesterday’s HARMONi-2 PD-1×VEGF head-to-head OS confirmation — different population (EGFR-mutated, post-TKI + chemo backbone).</li><li>Link: @HHorinouchi (HARMONi OS update) — https://x.com/HHorinouchi/status/2099854183914717363</li></ul><p class="need"><strong>Need to know:</strong> Highest-signal thoracic update overnight — file separately from HARMONi-2; watch curves, CNS mets, and how bispecific+chemo lands vs prior TKI failure.</p></article><article class="card"><h3>FDA BTD: daraxonrasib + gem/nab-paclitaxel in 1L metastatic pancreatic cancer</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div><ul><li>@OncoAlert (spot-check): Breakthrough Therapy Designation for Revolution Medicines’ RASONQUE (daraxonrasib) with gemcitabine/nab-paclitaxel.</li><li>Setting: treatment-naïve metastatic pancreatic cancer; RAS-pathway targeting continues to move from rumor to regulatory heat.</li><li>Link: @OncoAlert (daraxonrasib BTD) — https://x.com/OncoAlert/status/2099810636595188071</li></ul><p class="need"><strong>Need to know:</strong> Regulatory milestone, not a full OS readout — watch companion efficacy package and RAS genotype enrichment.</p></article><article class="card"><h3>NEST3 opens: neoadjuvant BOT/BAL for MMR-proficient high-risk CRC</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div><ul><li>@pashtoonkasi (spot-check): #NEST3 open across multiple US sites via City of Hope national trial model.</li><li>Population: mismatch-repair proficient high-risk stage II/III colorectal cancer; 6 weeks neoadjuvant immunotherapy (BOT/BAL) aiming to shrink resection scope.</li><li>Builds on published NEST 1/2; thread also points to UK FoXTROT neoadjuvant colon leadership as context.</li><li>Link: @pashtoonkasi (NEST3 open) — https://x.com/pashtoonkasi/status/2099616669572464742</li></ul><p class="need"><strong>Need to know:</strong> Actionable trial-open signal in pMMR CRC neoadjuvant IO — useful if you track peri-operative immunotherapy beyond MSI-H.</p></article><article class="card"><h3>SOHO-01: acquired resistance map to sevabertinib in HER2-mutant NSCLC</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div><ul><li>@HHorinouchi (Following + Brain / #WCLC26): 85 pts with paired BL–PD plasma NGS after sevabertinib.</li><li>Resistance-associated events in 30.1%; secondary HER2 T862A 16.4%, HER2 amp 2.7%; C805S not detected.</li><li>Link: @HHorinouchi (SOHO-01) — https://x.com/HHorinouchi/status/2099691916799652133</li></ul><p class="need"><strong>Need to know:</strong> Practical resistance atlas for HER2-mutant NSCLC TKIs — T862A prominence is the takeaway if you follow HER2 lung.</p></article><article class="card"><h3>ARTEMIDE-01: rilvegostomig updated OS by PD-L1 in CPI-naïve mNSCLC</h3><div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div><ul><li>@HHorinouchi (#WCLC26 mini-oral): CPI-naïve metastatic NSCLC; PD-L1 1–49% mOS 29.6 mo; PD-L1 ≥50% mOS not reached.</li><li>Companion WCLC SCLC discussant card from @YaleCancer on Phase 3 ARTEMIS-008 primary results.</li><li>Links: @HHorinouchi (ARTEMIDE-01) — https://x.com/HHorinouchi/status/2099848655381622991; @YaleCancer (ARTEMIS-008) — https://x.com/YaleCancer/status/2099530570174738688</li></ul><p class="need"><strong>Need to know:</strong> PD-1×TIGIT-class readout still early on curves; keep PD-L1 strata and SCLC ARTEMIS-008 discussant notes together for the WCLC lung IO stack.</p></article><article class="card"><h3>Iza-bren (EGFR–HER3 bispecific ADC) still circulating — breast subtypes</h3><div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 6</span></div><ul><li>@OncoAlert reprises first-in-class EGFR–HER3 bispecific ADC iza-bren (BL-B01D1) antitumor activity across biologically distinct breast subtypes.</li><li>Same molecule as yesterday’s Annals Phase 1b breast note — cross-subtype framing is the new angle.</li><li>Link: @OncoAlert (iza-bren) — https://x.com/OncoAlert/status/2099802718831304836</li></ul><p class="need"><strong>Need to know:</strong> Follow-on amplification of yesterday’s ADC signal; useful if dual EGFR/HER3 targeting is on your watchlist.</p></article><p class="also">Also noted: Also noted: leucovorin 200 vs 400 mg/m² shortage dosing in mCRC (@DrAllanPereira / JCO GO); membranous NECTIN4 predictive for EV (@niklas_kluemper); Dana-Farber/Boston Children’s #1 pediatric cancer US News; skipped fenbendazole/ivermectin and GBM anecdote bait from @DrDavidivw.</p></section><section id="ai"><h2 class="section-title">2. AI updates</h2><article class="card"><h3>Hugging Face as first public agent-cyberattack victim — Clem’s policy writeup</h3><div class="scores"><span class="chip">For you 9</span><span class="chip">Unique 9</span></div><ul><li>@ClementDelangue (Following): HF as first publicly disclosed agent cyberattack victim; formalized thinking ahead of DC / Politico Decoded.</li><li>@jessalanfields: credits HF open-weight security messaging for not letting closed labs monopolize the narrative.</li><li>@travisk quotes 1501 print-control language as historical rhyme for AI distribution control.</li><li>Link: @ClementDelangue — https://x.com/ClementDelangue/status/2099858032951791721</li></ul><p class="need"><strong>Need to know:</strong> Agent-security story of the morning — shifts ‘alignment’ talk into concrete offensive use of agents against open infra.</p></article><article class="card"><h3>Boltz as programmable protein editor (Codex Rosalind + Protenix/SimpleFold)</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div><ul><li>@JacobMolBio (Following): GFP barrel–guided inpainting inserting an ALFA nanobody tag via Boltz in Codex Rosalind Workbench.</li><li>Follow-checks with ByteDance Protenix and Apple SimpleFold called out in-thread.</li><li>Link: @JacobMolBio — https://x.com/JacobMolBio/status/2099752750494163383</li></ul><p class="need"><strong>Need to know:</strong> Structure-design tooling moving from binder demos toward editable protein surgery — adjacent to yesterday’s pharma-protein AI moat story.</p></article><article class="card"><h3>OpenEvidence expands to Penn Medicine (+ Botswana-UPenn)</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div><ul><li>@OpenEvidence (Brain): partnership to put medical evidence tooling across Penn Medicine clinicians and Botswana-UPenn.</li><li>Fits the Brain-list clinical-AI thread (cheap/reliable bedside evidence vs token-burn demos).</li><li>Link: @OpenEvidence — https://x.com/OpenEvidence/status/2099863768595378331</li></ul><p class="need"><strong>Need to know:</strong> Distribution win for clinical evidence agents — more interesting than another model card if you care about real health-system deployment.</p></article><article class="card"><h3>Harrison Chase: why agent memory still doesn’t stick</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 7</span></div><ul><li>@hwchase17 (Following): memory is hot for ~2 years but products don’t stick.</li><li>Core claim: update+use of memory must be tightly integrated with the harness — hard to bolt on as a separate product.</li><li>Link: @hwchase17 — https://x.com/hwchase17/status/2099858455079026817</li></ul><p class="need"><strong>Need to know:</strong> Harness-integration diagnosis matches how durable memory actually behaves in agent stacks — watch for products that own the loop, not memory APIs alone.</p></article><article class="card"><h3>Fable 5.1 ‘Web to App’ + Claude-on-Mac agent demos</h3><div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div><ul><li>@shipper_now / @chhddavid (AI Dev Tools): Fable 5.1 turns a URL into a native mobile app by driving the Mac, then App Store submit path claimed.</li><li>Influencer layer also pushing ‘GPT-6 Astra + Fable 5.1’ prompt-list spam — treat demos as harness spectacle more than capability frontier.</li><li>Link: @shipper_now — https://x.com/shipper_now/status/2099863812740637002</li></ul><p class="need"><strong>Need to know:</strong> Continues the agent-OS theme; verify what actually ships vs marketing before changing your stack.</p></article><article class="card"><h3>VS Code agent plugins + OJ (Vite-eating agent runner) moves to Lovable</h3><div class="scores"><span class="chip">For you 7</span><span class="chip">Unique 7</span></div><ul><li>@code (AI Dev Tools): agent plugins to share skills, MCP servers, custom agents across projects/teams.</li><li>@raphamorims: OJ open-sourced under Lovable after Vite disk blowups under agents — https://github.com/lovablelabs/oj</li><li>Links: @code — https://x.com/code/status/2099862047777562660; @raphamorims — https://x.com/raphamorims/status/2099838815766503745</li></ul><p class="need"><strong>Need to know:</strong> Practical agent-infra plumbing day — plugins for sharing + a runner aimed at agent-induced build bloat.</p></article><p class="also">Also noted: Also noted: Healthcare AI Guy weekly (pacing debate + ARPA-H autonomous clinical AI); DeryaTR_ ‘alignment aristocracy’ (GPT-6 Pro); OpenRouter OpenAI ‘celestial body’ latest aliases + Sol 50% off; MIT campus-AI learning warning circulating on Influencers; lots of AI-list promo noise skipped.</p></section><section id="keto"><h2 class="section-title">3. Keto updates</h2><article class="card"><h3>Norwitz: keto (&gt;5× sat fat, 50× cholesterol) still lowered LDL &amp; ApoB vs plant-based</h3><div class="scores"><span class="chip">For you 9</span><span class="chip">Unique 8</span></div><ul><li>@nicknorwitz (Keto list): threads the counterintuitive lipid result from a keto vs Mediterranean/plant-style comparison.</li><li>Frames saturated fat/cholesterol load as not destiny for ApoB in that trial context.</li><li>Link: @nicknorwitz — https://x.com/nicknorwitz/status/2099607095297401084</li></ul><p class="need"><strong>Need to know:</strong> Highest-signal metabolic post overnight for your lipid/keto watch — read the actual trial arms before generalizing.</p></article><article class="card"><h3>Bikman: TZD diabetes drugs — gain fat, get healthier (smaller fat cells)</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 8</span></div><ul><li>@BenBikmanPhD (Keto): thiazolidinediones as metabolic paradox — fat mass up, metabolic health markers improved.</li><li>Mechanism framed as more/smaller adipocytes rather than hypertrophic storage.</li><li>Link: @BenBikmanPhD — https://x.com/BenBikmanPhD/status/2099645123953045819</li></ul><p class="need"><strong>Need to know:</strong> Useful counter to ‘all fat gain = worse’ heuristics — pharmacology angle, not a diet protocol.</p></article><article class="card"><h3>Ketones/Alzheimer’s: BHB measured in brain, metabolism shifted</h3><div class="scores"><span class="chip">For you 8</span><span class="chip">Unique 7</span></div><ul><li>@goBHBLabs (Keto): cites work directly measuring BHB in brain and altered cerebral metabolism.</li><li>Positions ketone delivery as moving past pure theory into measurable CNS exposure.</li><li>Link: @goBHBLabs — https://x.com/goBHBLabs/status/2099607851996233747</li></ul><p class="need"><strong>Need to know:</strong> Neurodegeneration/metabolic crossover (not GBM therapy) — same bucket as prior Tau-PET clarification: brain energy, not tumor protocol.</p></article><p class="also">Also noted: Keto list thin overnight; DietDoctor/KetoMojo/Virta quiet on spot-check. Gary Brecka Italy folic-acid/discomfort posts noted as lifestyle noise.</p></section><section id="general"><h2 class="section-title">4. General news</h2><article class="card"><h3>Anagen hair-lab pipeline: TWIST1i → mice; Dutasteride India trial; diazoxide formulation</h3><div class="scores"><span class="chip">For you 6</span><span class="chip">Unique 7</span></div><ul><li>@anagenxyz (Following): TWIST1i finishing cell culture then mice; precision dutasteride import license for 60-person India trial; diazoxide formulation quotes.</li><li>Link: @anagenxyz — https://x.com/anagenxyz/status/2099847651193700411</li></ul><p class="need"><strong>Need to know:</strong> Niche longevity/derm pipeline update — only if you still track Anagen.</p></article><article class="card"><h3>Print-era control rhetoric as AI-distribution rhyme (Kalanick)</h3><div class="scores"><span class="chip">For you 6</span><span class="chip">Unique 7</span></div><ul><li>@travisk quotes Pope Alexander VI (1501) on controlling printers while useful books circulate — paired with today’s open-vs-closed AI fights.</li><li>Link: @travisk — https://x.com/travisk/status/2099856096529883410</li></ul><p class="need"><strong>Need to know:</strong> Color for the HF agent-attack / open-weights debate, not a product release.</p></article></section><footer><p>XWatcher · <a href="https://cozza13.github.io/x-digest/">latest</a> · <a href="https://cozza13.github.io/x-digest/archive.html">archive</a></p></footer></div></body></html>
