@@ -1,1 +1,43 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>X morning digest — Thu Sep 24, 2026</title>
+<style>
+:root{color-scheme:light dark;--bg:#0f1115;--card:#1a1d24;--text:#f2f3f5;--muted:#9aa3b2;--accent:#7aa2ff;--cancer:#ff7a8a;--ai:#7ad4ff;--keto:#8dffb0;--general:#ffd27a;--border:#2a303c;--need:#c9d1dc}
+@media(prefers-color-scheme:light){:root{--bg:#f6f7f9;--card:#fff;--text:#141820;--muted:#5c6678;--accent:#2f5bdb;--cancer:#c43b52;--ai:#1a7aad;--keto:#1f8a4c;--general:#9a6b12;--border:#e3e7ef;--need:#3d4656}}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;padding:16px;padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+.wrap{max-width:720px;margin:0 auto}header{margin-bottom:18px;padding:18px 16px;border-radius:16px;background:linear-gradient(160deg,#24304a 0%,#1a1d24 70%);border:1px solid var(--border)}
+@media(prefers-color-scheme:light){header{background:linear-gradient(160deg,#e8eefc 0%,#fff 70%)}}
+h1{font-size:1.45rem;margin:0 0 8px}.meta,.disclaimer,.also{color:var(--muted);font-size:.9rem}.pulse{margin-top:12px;color:var(--need)}
+nav.toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}nav.toc a{text-decoration:none;font-size:.85rem;font-weight:600;padding:8px 12px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--text)}
+.section-title{font-size:1.15rem;margin:0 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+#cancer .section-title{border-color:var(--cancer)}#ai .section-title{border-color:var(--ai)}#keto .section-title{border-color:var(--keto)}#general .section-title{border-color:var(--general)}
+article.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+article.card h3{font-size:1.02rem;margin:0 0 8px}.scores{display:flex;gap:6px;margin:0 0 10px;flex-wrap:wrap}
+.chip{font-size:.75rem;font-weight:700;padding:4px 8px;border-radius:999px;background:rgba(122,162,255,.15);color:var(--accent)}
+ul{margin:0 0 10px;padding-left:1.15rem}li{margin:0 0 6px;font-size:.95rem}
+.need{font-size:.9rem;color:var(--need);background:rgba(122,162,255,.08);border-radius:10px;padding:10px 12px;margin:0}
+.need strong{color:var(--text)}a{color:var(--accent);word-break:break-word}
+footer{margin-top:8px;color:var(--muted);font-size:.8rem;text-align:center}
+</style></head><body><div class="wrap" id="app"><p class="meta">Loading…</p></div>
+<script>
+const DATA_URL=new URL('2026-09-24-data.json',location.href).href;
+const ESC=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const card=it=>{
+  const links=(it.links||[]).map(L=>`${ESC(L.handle)}: <a href="${ESC(L.url)}">${ESC(L.url)}</a>${L.note?' — '+ESC(L.note):''}`).join(' · ');
+  return `<article class="card"><h3>${ESC(it.title)}</h3><div class="scores"><span class="chip">For you ${+it.for_you}</span><span class="chip">Unique ${+it.unique}</span></div><ul>${(it.bullets||[]).map(b=>`<li>${ESC(b)}</li>`).join('')}${links?`<li>Open: ${links}</li>`:''}</ul><p class="need"><strong>Need to know:</strong> ${ESC(it.need_to_know||'')}</p></article>`;
+};
+fetch(DATA_URL).then(r=>r.json()).then(d=>{
+  const order=[['cancer','1. Cancer updates','Cancer'],['ai','2. AI updates','AI'],['keto','3. Keto updates','Keto'],['general','4. General news','General']];
+  let toc='', secs='';
+  for(const [id,title,short] of order){
+    const block=d.sections?.[id]; if(!block?.items?.length) continue;
+    toc+=`<a href="#${id}">${short}</a>`;
+    const main=block.items.filter(i=>!i.gbm_subsection);
+    const gbm=block.items.filter(i=>i.gbm_subsection);
+    secs+=`<section id="${id}"><h2 class="section-title">${ESC(title)}</h2>${main.map(card).join('')}${gbm.length?`<h3 style="font-size:1rem;color:var(--cancer);margin:12px 0 10px">Glioblastoma / neuro-oncology</h3>${gbm.map(card).join('')}`:''}${block.also_noted?`<p class="also">Also noted: ${ESC(block.also_noted)}</p>`:''}</section>`;
+  }
+  document.getElementById('app').innerHTML=`<header><h1>X morning digest — ${ESC(d.weekday_title)}</h1><p class="meta">Mobile newsletter · research / personal interest only</p><p class="pulse"><strong>Pulse:</strong> ${ESC(d.pulse)}</p><p class="disclaimer">${ESC(d.disclaimer||'')}</p></header><nav class="toc">${toc}<a href="https://cozza13.github.io/x-digest/archive.html">Archive</a></nav>${secs}<footer><p>XWatcher · <a href="https://cozza13.github.io/x-digest/">latest</a> · <a href="https://cozza13.github.io/x-digest/archive.html">archive</a></p></footer>`;
+  document.title='X morning digest — '+d.weekday_title;
+}).catch(e=>{document.getElementById('app').innerHTML='<p class="meta">Failed to load digest data.</p>';console.error(e);});
+</script></body></html>
