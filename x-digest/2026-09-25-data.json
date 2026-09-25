@@ -1,0 +1,291 @@
+{
+  "date": "2026-09-25",
+  "weekday_title": "Fri Sep 25, 2026",
+  "pulse": "~478 unique in-window posts / ~329 handles after Following (138/116, 36 scrolls) + lists (Brain 55/22, Keto 5/3, AI Dev Tools 159/121, AI Influencers 158/125, Ai people 8/4) + spot-check 37/14",
+  "disclaimer": "Research/personal interest only — not clinical advice",
+  "sections": {
+    "cancer": {
+      "items": [
+        {
+          "title": "FDA approves belzutifan + lenvatinib for advanced clear-cell RCC after PD-1/PD-L1 — LITESPARK-011",
+          "for_you": 9,
+          "unique": 8,
+          "bullets": [
+            "@OncoAlert / @drenriquegrande / @CancerNetwrk (Brain + Following): FDA on Sep 24, 2026 approved belzutifan plus lenvatinib for adults with advanced RCC with a clear-cell component after prior PD-1/PD-L1 inhibitor therapy.",
+            "LITESPARK-011 vs cabozantinib: median PFS 14.6 vs 10.6 months (HR 0.74); OS not significantly different at final analysis — PFS win with the expected OS-debate framing.",
+            "Clearest new oncology label overnight vs Sep 24’s lirafugratinib CCA beat — post–checkpoint kidney-cancer option."
+          ],
+          "need_to_know": "Top cancer overnight: FDA green-lights belzutifan + lenvatinib for advanced clear-cell RCC after PD-1/PD-L1 progression on LITESPARK-011 PFS data.",
+          "links": [
+            {
+              "handle": "@OncoAlert",
+              "url": "https://x.com/OncoAlert/status/2103216330820174245",
+              "note": "FDA LITESPARK-011 / belzutifan + lenvatinib RCC"
+            },
+            {
+              "handle": "@drenriquegrande",
+              "url": "https://x.com/drenriquegrande/status/2103425130516902153",
+              "note": "PFS 14.6 vs 10.6 / OS NS framing"
+            },
+            {
+              "handle": "@CancerNetwrk",
+              "url": "https://x.com/CancerNetwrk/status/2103208776232780027",
+              "note": "CancerNetwork LITESPARK-011 write-up"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "Cell: CD4 T cells + synthetic cytokines turn KRAS responses into durable PDAC remissions",
+          "for_you": 8,
+          "unique": 9,
+          "bullets": [
+            "@Aiims1742 (Brain/OncoAlert): new Cell paper from Stephanie Dougan (Dana-Farber) with Nobel laureate David Baker.",
+            "CD4 T cells convert transient responses to KRAS inhibition into durable remissions in pancreatic cancer — synthetic cytokines highlighted.",
+            "Highest-signal PDAC biology overnight, distinct from Sep 24’s hepatocytes/serine liver-met Nature and daraxonrasib literacy cluster."
+          ],
+          "need_to_know": "Brain-list Cell beat: Dougan/Baker show CD4 T-cell/synthetic-cytokine help can lock in durable KRAS-inhibitor remissions in pancreatic cancer.",
+          "links": [
+            {
+              "handle": "@Aiims1742",
+              "url": "https://x.com/Aiims1742/status/2103272020171759854",
+              "note": "Cell CD4 / KRAS / PDAC durable remissions"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "Lancet Oncology Commission: equitable cancer genomics & precision oncology roadmap",
+          "for_you": 7,
+          "unique": 7,
+          "bullets": [
+            "@quimmateo / @DrYukselUrun (Brain/OncoAlert): The Lancet Oncology Commission on Cancer Genomics and Precision Oncology is out.",
+            "Framed as a global roadmap for equitable, rational, evidence-based -omics implementation — access vs privilege theme.",
+            "Policy/implementation beat rather than a single-drug label."
+          ],
+          "need_to_know": "Oncology equity/implementation signal: Lancet Oncology Commission publishes a global cancer-genomics and precision-oncology roadmap.",
+          "links": [
+            {
+              "handle": "@quimmateo",
+              "url": "https://x.com/quimmateo/status/2103379839210451082",
+              "note": "Lancet Oncol Commission announcement"
+            },
+            {
+              "handle": "@DrYukselUrun",
+              "url": "https://x.com/DrYukselUrun/status/2103402505229021601",
+              "note": "Precision without access is privilege"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "Health Canada NOC: epcoritamab + lenalidomide + rituximab in R/R follicular lymphoma",
+          "for_you": 7,
+          "unique": 7,
+          "bullets": [
+            "@CancerNetwrk (Following): Health Canada Notice of Compliance for epcoritamab with lenalidomide and rituximab in R/R grade 1–3a follicular lymphoma after ≥1 prior systemic line.",
+            "Backed by EPCORE FL-1 trial framing in the CancerNetwork write-up.",
+            "Second fresh regulatory lymphoma beat alongside the US belzutifan RCC approval."
+          ],
+          "need_to_know": "Canadian lymphoma regulatory beat: epcoritamab triplet gets Health Canada clearance in relapsed/refractory follicular lymphoma.",
+          "links": [
+            {
+              "handle": "@CancerNetwrk",
+              "url": "https://x.com/CancerNetwrk/status/2103424519801081982",
+              "note": "Epcoritamab combo Canadian approval"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "Seyfried lab: ketogenic metabolic therapy framed for pediatric high-grade gliomas",
+          "for_you": 8,
+          "unique": 8,
+          "bullets": [
+            "@tnseyfried (Brain): new research claims ketogenic metabolic therapy as a novel non-toxic strategy for managing pediatric high-grade gliomas.",
+            "Posted with a Cancer Metabolism News / Substack link — metabolic-therapy neuro-oncology signal, not a large Phase 3 label.",
+            "Clearest GBM/HGG-relevant overnight item; DCVax patient-advocacy content continues but remains non–peer-reviewed access framing (near-dup of Sep 24)."
+          ],
+          "need_to_know": "Top GBM/HGG overnight: Seyfried group highlights ketogenic metabolic therapy research aimed at pediatric high-grade gliomas.",
+          "links": [
+            {
+              "handle": "@tnseyfried",
+              "url": "https://x.com/tnseyfried/status/2103447356012368018",
+              "note": "KMT / pediatric high-grade gliomas"
+            }
+          ],
+          "gbm_subsection": true
+        }
+      ],
+      "also_noted": "Skipped Galleri/MCED near-dups; DCVax advocacy continues without a new peer-reviewed GBM paper beyond the Seyfried KMT note."
+    },
+    "ai": {
+      "items": [
+        {
+          "title": "C5R: AI-run research facility (SciUniverse) — design, execute, observe experiments end-to-end",
+          "for_you": 8,
+          "unique": 8,
+          "bullets": [
+            "@donaldjewkes / @c5rcorp (Following, OpenAI Developers circuit): claim of a research facility built in ~12 weeks and run entirely by AI across biology, chemistry, and materials.",
+            "One model framed as controlling equipment, researchers, and inventory; SciUniverse benchmark introduced for real-world scientific ability.",
+            "Biggest net-new AI-science-ops story overnight — not another Opus 5.5 demo reel."
+          ],
+          "need_to_know": "Top AI overnight: C5R pitches an AI-operated wet-lab/facility stack plus SciUniverse as a real-world science benchmark.",
+          "links": [
+            {
+              "handle": "@donaldjewkes",
+              "url": "https://x.com/donaldjewkes/status/2103214063832694819",
+              "note": "C5R AI facility / SciUniverse walkthrough"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "Ember-1 (Fireworks / Kimi K3): same quality, ~40% fewer reasoning tokens",
+          "for_you": 7,
+          "unique": 8,
+          "bullets": [
+            "@sophiamyang / @FireworksAI_HQ (Ai people): Ember-1 trained on Kimi K3 specifically to stop over-reasoning.",
+            "Pitch: shorter reasoning traces, roughly 40% fewer tokens, maintained answer quality — cost/latency lever for agent stacks.",
+            "Clearest efficiency-model ship overnight vs pure Opus 5.5 capability demos."
+          ],
+          "need_to_know": "Efficiency beat: Fireworks Ember-1 on Kimi K3 cuts reasoning-token spend ~40% without claimed quality loss.",
+          "links": [
+            {
+              "handle": "@sophiamyang",
+              "url": "https://x.com/sophiamyang/status/2103133938445062470",
+              "note": "Ember-1 intro / 40% fewer tokens"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "OpenRouter Server Tools Marketplace — web search, Shell, tool search, more",
+          "for_you": 7,
+          "unique": 7,
+          "bullets": [
+            "@OpenRouter (spot-check): Server Tools Marketplace positioned as a one-stop shop to ground agents.",
+            "Called out tools include web search APIs, Shell, tool search, and more.",
+            "Directly relevant to Chris’s OpenRouter/Grok Bot agent stack — practical tooling, not launch hype."
+          ],
+          "need_to_know": "OpenRouter product beat: Server Tools Marketplace ships grounding tools (search, Shell, tool search) for agents.",
+          "links": [
+            {
+              "handle": "@OpenRouter",
+              "url": "https://x.com/OpenRouter/status/2103157607762698444",
+              "note": "Server Tools Marketplace"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "Google Project Suncatcher: TPUs to space on SpaceX Transporter-18",
+          "for_you": 7,
+          "unique": 7,
+          "bullets": [
+            "@sundarpichai (Following; amplified by @elonmusk): Project Suncatcher tests whether TPUs can survive and operate in space.",
+            "Prototype satellite riding SpaceX Transporter-18, built with Planet.",
+            "Compute-infrastructure stunt with real orbital test hardware — distinct from model-release chatter."
+          ],
+          "need_to_know": "Google infra beat: Suncatcher puts TPU prototypes on a SpaceX rideshare to test space operation.",
+          "links": [
+            {
+              "handle": "@sundarpichai",
+              "url": "https://x.com/sundarpichai/status/2103209164072010051",
+              "note": "Project Suncatcher / TPUs in space"
+            },
+            {
+              "handle": "@elonmusk",
+              "url": "https://x.com/elonmusk/status/2103351799130579033",
+              "note": "Elon quote-RT of Suncatcher"
+            }
+          ],
+          "gbm_subsection": false
+        },
+        {
+          "title": "Elon: SpaceX Fable/GPT-6–level model in 2–3 months; OpenAI DevDay Tuesday tease",
+          "for_you": 7,
+          "unique": 7,
+          "bullets": [
+            "@elonmusk (quoted overnight): cautiously optimistic SpaceX will have a Fable/GPT-6–level model in 2 to 3 months.",
+            "@thsottiaux (OpenAI): internal Slack quiet while locked in on DevDay — “Tuesday will be fun.”",
+            "Competitive roadmap signal cluster; skipped pure Opus 5.5 motion-design/coding demo rehash from Sep 23–24."
+          ],
+          "need_to_know": "Frontier roadmap chatter: Elon floats a near-term Fable/GPT-6–class SpaceX model while OpenAI teases DevDay next Tuesday.",
+          "links": [
+            {
+              "handle": "@DanDr1s",
+              "url": "https://x.com/DanDr1s/status/2103169531283742928",
+              "note": "Thread quoting Elon Fable/GPT-6 timeline"
+            },
+            {
+              "handle": "@thsottiaux",
+              "url": "https://x.com/thsottiaux/status/2103375711797211460",
+              "note": "OpenAI DevDay Tuesday tease"
+            }
+          ],
+          "gbm_subsection": false
+        }
+      ],
+      "also_noted": "Skipped Opus 5.5 demo rehash (motion design, game clones, civilization videos)."
+    },
+    "keto": {
+      "items": [
+        {
+          "title": "Bikman: RDA protein (0.8 g/kg) is a muscle-loss trap after 50",
+          "for_you": 7,
+          "unique": 7,
+          "bullets": [
+            "@BenBikmanPhD (Keto people + Following): argues the protein RDA wasn’t designed to protect muscle, so older adults eating exactly 0.8 g/kg slowly lose muscle.",
+            "Strongest fresh metabolic signal on a still-thin Keto-list overnight (only ~5 in-window list posts).",
+            "Pairs with his separate creatine-for-lifters-over-50 note as a practical muscle-preservation cluster."
+          ],
+          "need_to_know": "Keto-list metabolic literacy: Bikman says meeting only the protein RDA after 50 is a slow path to sarcopenia.",
+          "links": [
+            {
+              "handle": "@BenBikmanPhD",
+              "url": "https://x.com/BenBikmanPhD/status/2103325477486137392",
+              "note": "Protein RDA / muscle loss after 50"
+            }
+          ],
+          "gbm_subsection": false
+        }
+      ],
+      "also_noted": "Keto people list still thin on fresh posts (~5 in-window); Seyfried KMT featured under Glioblastoma."
+    },
+    "general": {
+      "items": [
+        {
+          "title": "Tesla Semi enters high-volume production",
+          "for_you": 7,
+          "unique": 7,
+          "bullets": [
+            "@Tesla / @tesla_semi (Following): announcement that Semi high-volume production is launching, with a rollout thread.",
+            "@elonmusk congratulated the Semi team on engineering and bringing the truck to production.",
+            "Highest-reach non-AI/oncology hardware/industrial signal overnight."
+          ],
+          "need_to_know": "General industrial pulse: Tesla says Semi high-volume production is underway.",
+          "links": [
+            {
+              "handle": "@Tesla",
+              "url": "https://x.com/Tesla/status/2103290825618960607",
+              "note": "Semi high-volume production"
+            },
+            {
+              "handle": "@elonmusk",
+              "url": "https://x.com/elonmusk/status/2103322398862778827",
+              "note": "Elon congratulations to Semi team"
+            }
+          ],
+          "gbm_subsection": false
+        }
+      ]
+    }
+  },
+  "skipped_near_duplicates": [
+    "NEJM Galleri / MCED clinical-utility posts still circulating on OncoAlert — featured Sep 23–24",
+    "Opus 5.5 motion-design / Pokemon / Mario Kart / Western Civilization video demos — launch-echo cluster from Sep 23–24",
+    "Daraxonrasib Dana-Farber briefing still in spot-check window — featured Sep 24",
+    "DCVax / advocacy facility tour — advocacy near-dup of Sep 24; no new peer-reviewed GBM catalyst beyond Seyfried KMT note"
+  ]
+}
